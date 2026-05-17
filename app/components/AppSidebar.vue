@@ -11,16 +11,26 @@ const items = [
 
 const ui = computed(() => ({
   link: `py-3 text-base text-white/70 hover:text-white hover:before:bg-white/10 ${collapsed.value ? 'justify-center' : 'px-2'}`,
-  linkLeadingIcon: 'shrink-0 size-5 text-white/50 group-hover:text-white',
+  linkLeadingIcon: `shrink-0 text-white/50 group-hover:text-white ${collapsed.value ? 'size-7' : 'size-5'}`,
 }))
 </script>
 
 <template>
   <aside
-    class="min-h-screen bg-[#0d1b4b] flex flex-col pt-2 pb-8 border-r border-[#1a2d6b] transition-all duration-300"
+    class="relative min-h-screen bg-[#0d1b4b] flex flex-col pt-2 pb-8 border-r border-[#1a2d6b] transition-all duration-300"
     :class="collapsed ? 'w-28' : 'w-64 px-4'"
   >
-    <div class="flex items-center mb-8 px-2" :class="collapsed ? 'justify-center' : 'justify-between'">
+    <button
+      class="absolute -right-4 top-8 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#0d1b4b] border border-[#1a2d6b] text-white/70 hover:text-white hover:border-white/40 transition-all duration-200 shadow-md cursor-pointer"
+      @click="collapsed = !collapsed"
+    >
+      <UIcon
+        :name="collapsed ? 'i-heroicons-arrow-right-on-rectangle' : 'i-heroicons-arrow-left-on-rectangle'"
+        class="size-4"
+      />
+    </button>
+
+    <div class="flex items-center justify-center mb-6 px-2">
       <img
         v-if="!collapsed"
         src="/conecta-icon.png"
@@ -33,24 +43,7 @@ const ui = computed(() => ({
         alt="ConectaVet"
         class="h-16 w-auto object-contain"
       />
-      <UButton
-        v-if="!collapsed"
-        color="neutral"
-        variant="ghost"
-        icon="i-heroicons-chevron-left"
-        class="text-white/60 hover:text-white hover:bg-white/10"
-        @click="collapsed = !collapsed"
-      />
     </div>
-
-    <UButton
-      v-if="collapsed"
-      color="neutral"
-      variant="ghost"
-      icon="i-heroicons-chevron-right"
-      class="text-white/60 hover:text-white hover:bg-white/10 mb-4 mx-auto"
-      @click="collapsed = !collapsed"
-    />
 
     <UNavigationMenu
       orientation="vertical"
