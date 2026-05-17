@@ -17,19 +17,40 @@ const ui = computed(() => ({
 
 <template>
   <aside
-    class="min-h-screen bg-[#0d1b4b] flex flex-col py-8 border-r border-[#1a2d6b] transition-all duration-300"
-    :class="collapsed ? 'w-16 px-2' : 'w-64 px-4'"
+    class="min-h-screen bg-[#0d1b4b] flex flex-col pt-2 pb-8 border-r border-[#1a2d6b] transition-all duration-300"
+    :class="collapsed ? 'w-28' : 'w-64 px-4'"
   >
     <div class="flex items-center mb-8 px-2" :class="collapsed ? 'justify-center' : 'justify-between'">
-      <span v-if="!collapsed" class="text-white text-xl font-bold tracking-wide">connectavet</span>
+      <img
+        v-if="!collapsed"
+        src="/conecta-icon.png"
+        alt="ConectaVet"
+        class="h-40 w-auto object-contain"
+      />
+      <img
+        v-else
+        src="/conecta-icon.png"
+        alt="ConectaVet"
+        class="h-16 w-auto object-contain"
+      />
       <UButton
+        v-if="!collapsed"
         color="neutral"
         variant="ghost"
-        :icon="collapsed ? 'i-heroicons-chevron-right' : 'i-heroicons-chevron-left'"
+        icon="i-heroicons-chevron-left"
         class="text-white/60 hover:text-white hover:bg-white/10"
         @click="collapsed = !collapsed"
       />
     </div>
+
+    <UButton
+      v-if="collapsed"
+      color="neutral"
+      variant="ghost"
+      icon="i-heroicons-chevron-right"
+      class="text-white/60 hover:text-white hover:bg-white/10 mb-4 mx-auto"
+      @click="collapsed = !collapsed"
+    />
 
     <UNavigationMenu
       orientation="vertical"
