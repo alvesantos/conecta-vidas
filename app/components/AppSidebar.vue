@@ -11,7 +11,9 @@ const items = [
 
 const ui = computed(() => ({
   link: `py-3 text-base text-white/70 hover:text-white hover:before:bg-white/10 ${collapsed.value ? 'justify-center' : 'px-2'}`,
-  linkLeadingIcon: `shrink-0 text-white/50 group-hover:text-white ${collapsed.value ? 'size-7' : 'size-5'}`,
+  linkLeadingIcon: `shrink-0 text-white/50 group-hover:text-white ${collapsed.value ? 'size-6' : 'size-5'}`,
+  linkLabel: collapsed.value ? 'hidden' : '',
+  linkTrailing: collapsed.value ? 'hidden' : '',
 }))
 </script>
 
@@ -32,16 +34,10 @@ const ui = computed(() => ({
 
     <div class="flex items-center justify-center mb-6 px-2">
       <img
-        v-if="!collapsed"
         src="/conecta-icon.png"
         alt="ConectaVet"
-        class="h-40 w-auto object-contain"
-      />
-      <img
-        v-else
-        src="/conecta-icon.png"
-        alt="ConectaVet"
-        class="h-16 w-auto object-contain"
+        class="w-auto object-contain transition-all duration-300"
+        :class="collapsed ? 'h-20 w-20' : 'h-40'"
       />
     </div>
 
