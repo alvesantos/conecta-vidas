@@ -1,8 +1,7 @@
 <template>
-  <div class="flex min-h-screen">
-    <AppSidebar />
-    <main class="flex-1 p-10">
+  <div class="min-h-screen bg-foreground">
+    <NuxtLayout>
       <NuxtPage />
-    </main>
+    </NuxtLayout>
   </div>
 </template>
