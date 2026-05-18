@@ -2,6 +2,7 @@
 const collapsed = ref(false);
 
 const items = [
+  { label: "Início", to: "/", icon: "i-heroicons-home" },
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
     label: "Login",

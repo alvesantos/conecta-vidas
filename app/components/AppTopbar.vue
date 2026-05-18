@@ -2,6 +2,7 @@
 const menuOpen = ref(false)
 
 const items = [
+  { label: "Início", to: "/", icon: "i-heroicons-home" },
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   { label: "Login", to: "/login", icon: "i-heroicons-arrow-right-on-rectangle" },
   {
