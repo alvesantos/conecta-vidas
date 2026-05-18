@@ -1,20 +1,28 @@
 <script setup lang="ts">
-const collapsed = ref(false)
+const collapsed = ref(false);
 
 const items = [
-  { label: 'Cadastro', to: '/cadastro', icon: 'i-heroicons-user-plus' },
-  { label: 'Login', to: '/login', icon: 'i-heroicons-arrow-right-on-rectangle' },
-  { label: 'E-commerce', to: 'https://loja.conectavet.com.br', target: '_blank', icon: 'i-heroicons-shopping-bag' },
-  { label: 'Assinaturas', to: '/assinaturas', icon: 'i-heroicons-credit-card' },
-  { label: 'Suporte', to: '/suporte', icon: 'i-heroicons-lifebuoy' },
-]
+  { label: "Início", to: "/", icon: "i-heroicons-home" },
+  { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
+  {
+    label: "Login",
+    to: "/login",
+    icon: "i-heroicons-arrow-right-on-rectangle",
+  },
+  {
+    label: "E-commerce",
+    to: "https://loja.conectavet.com.br",
+    target: "_blank",
+    icon: "i-heroicons-shopping-bag",
+  },
+  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
+  { label: "Suporte", to: "/suporte", icon: "i-heroicons-lifebuoy" },
+];
 
 const ui = computed(() => ({
-  link: `py-3 text-base text-white/70 hover:text-white hover:before:bg-white/10 ${collapsed.value ? 'justify-center' : 'px-2'}`,
-  linkLeadingIcon: `shrink-0 text-white/50 group-hover:text-white ${collapsed.value ? 'size-6' : 'size-5'}`,
-  linkLabel: collapsed.value ? 'hidden' : '',
-  linkTrailing: collapsed.value ? 'hidden' : '',
-}))
+  link: `py-3 hover:text-white hover:before:bg-white/10 ${collapsed.value ? "justify-center" : "px-2"}`,
+  linkLeadingIcon: `shrink-0 group-hover:text-white ${collapsed.value ? "size-6" : "size-5"}`,
+}));
 </script>
 
 <template>
@@ -27,7 +35,11 @@ const ui = computed(() => ({
       @click="collapsed = !collapsed"
     >
       <UIcon
-        :name="collapsed ? 'i-heroicons-arrow-right-on-rectangle' : 'i-heroicons-arrow-left-on-rectangle'"
+        :name="
+          collapsed
+            ? 'i-heroicons-arrow-right-on-rectangle'
+            : 'i-heroicons-arrow-left-on-rectangle'
+        "
         class="size-4"
       />
     </button>
