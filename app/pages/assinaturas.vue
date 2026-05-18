@@ -64,7 +64,7 @@ const plans = [
             v-if="plan.name === activePlan.name"
             label="Gerenciar Assinatura"
             size="sm"
-            class="w-full justify-center bg-white/20 hover:bg-white/30 text-white border border-white/30"
+            class="w-full justify-center bg-white/20 hover:bg-white/30 text-white border border-white/30 cursor-pointer"
             variant="ghost"
             icon="i-heroicons-cog-6-tooth"
           />
@@ -72,7 +72,7 @@ const plans = [
             v-else
             label="Assinar"
             size="sm"
-            class="w-full justify-center"
+            class="w-full justify-center cursor-pointer"
             variant="solid"
           />
         </template>
