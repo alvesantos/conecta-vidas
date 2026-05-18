@@ -19,11 +19,11 @@ const ui = computed(() => ({
 
 <template>
   <aside
-    class="relative min-h-screen bg-[#0d1b4b] flex flex-col pt-2 pb-8 border-r border-[#1a2d6b] transition-all duration-300"
+    class="relative min-h-screen bg-primary flex flex-col pt-2 pb-8 border-r border-accent transition-all duration-300"
     :class="collapsed ? 'w-28' : 'w-64 px-4'"
   >
     <button
-      class="absolute -right-4 top-8 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#0d1b4b] border border-[#1a2d6b] text-white/70 hover:text-white hover:border-white/40 transition-all duration-200 shadow-md cursor-pointer"
+      class="absolute -right-4 top-8 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-primary border border-accent text-white/70 hover:text-white hover:border-white/40 transition-all duration-200 shadow-md cursor-pointer"
       @click="collapsed = !collapsed"
     >
       <UIcon
