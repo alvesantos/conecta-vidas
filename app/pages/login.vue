@@ -44,6 +44,13 @@ const showPassword = ref(false)
         size="lg"
         class="w-full justify-center bg-accent text-white"
       />
+
+      <p class="text-center text-sm text-gray-500">
+        Não tem uma conta?
+        <NuxtLink to="/cadastro" class="text-accent font-medium hover:underline">
+          Cadastre-se
+        </NuxtLink>
+      </p>
     </div>
   </div>
 </template>
