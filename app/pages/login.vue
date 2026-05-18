@@ -26,9 +26,17 @@ const showPassword = ref(false)
           placeholder="Senha"
           size="lg"
           icon="i-heroicons-lock-closed"
-          :trailing-icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-          @click-trailing="showPassword = !showPassword"
-        />
+        >
+          <template #trailing>
+            <UButton
+              color="neutral"
+              variant="link"
+              :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+              class="cursor-pointer"
+              @click="showPassword = !showPassword"
+            />
+          </template>
+        </UInput>
       </div>
 
       <UButton
