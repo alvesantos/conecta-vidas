@@ -28,7 +28,7 @@
 
               <p class="pt-3 text-white/80 leading-snug">
                 Saber agir quando seu filho de quatro patas
-                mais precisar pode custar apenas 1 real por dia!
+                mais precisar pode custar menos de dois reais por dia!
               </p>
             </div>
           </div>

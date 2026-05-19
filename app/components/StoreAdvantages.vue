@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-const advantageColumns = [1, 2, 3, 4]
+const advantageColumns = [
+  '/dot_k_check_shield.png',
+  '/dot_k_clock.png',
+  '/dot_k_heart.png',
+  '/dot_k_house.png',
+]
 </script>
 
 <template>
