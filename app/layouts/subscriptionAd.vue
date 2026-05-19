@@ -37,7 +37,27 @@
 
       <!-- CHIP -->
       <div class="text-white">
-        <UCard />
+        <UCard 
+          :ui="{body: 'bg-foreground'}"
+          >
+          <div class="flex items-center gap-4">
+            <!-- ICON -->
+            <div class="shrink-0">
+              <UAvatar src="/cute_dog_doctor.png" size="3xl"/>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="min-w-0">
+              <p class="text-2xl font-semibold leading-tight text-primary">
+                Atendimento com médicos veterinários <span class="text-accent">qualificados</span>
+              </p>
+
+              <p class="pt-3 text-primary/80 leading-snug">
+                Entre em contato conosco através do WhatsApp
+              </p>
+            </div>
+          </div>
+        </UCard>
       </div>
     </div>
 

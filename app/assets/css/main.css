@@ -11,6 +11,8 @@
 /*APP DEFAULT COLORS STYLING*/
 @layer base {
   html, body {
+    --ui-bg-elevated: var(--color-accent);
+    
     background-color: var(--color-foreground);
     color: var(--color-primary);
   }
