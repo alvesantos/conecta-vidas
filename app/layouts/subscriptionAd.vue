@@ -4,7 +4,7 @@
 <template>
   <div class="px-2 lg:px-6">
     <!-- DESKTOP -->
-    <div class="flex justify-between hidden lg:flex">
+    <div class="justify-between items-center hidden lg:flex">
       <!-- CARD -->
       <div class="max-w-[30%] pb-1">
         <UCard 
@@ -36,24 +36,20 @@
       </div>
 
       <!-- CHIP -->
-      <div class="text-white">
+      <div class="text-white max-w-75">
         <UCard 
           :ui="{body: 'bg-foreground'}"
           >
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-x-2">
             <!-- ICON -->
             <div class="shrink-0">
-              <UAvatar src="/cute_dog_doctor.png" size="3xl"/>
+              <UAvatar class="border-2 border-accent" src="/cute_dog_doctor.png" size="3xl"/>
             </div>
 
             <!-- CONTENT -->
             <div class="min-w-0">
-              <p class="text-2xl font-semibold leading-tight text-primary">
+              <p class=" font-semibold leading-tight text-primary">
                 Atendimento com médicos veterinários <span class="text-accent">qualificados</span>
-              </p>
-
-              <p class="pt-3 text-primary/80 leading-snug">
-                Entre em contato conosco através do WhatsApp
               </p>
             </div>
           </div>
