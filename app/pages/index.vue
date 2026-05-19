@@ -49,9 +49,9 @@ definePageMeta({
       </section>
     </div>
 
-    <div>
+    <div class="h-full">
       <!-- BENEFITS AND WHATSAPP BANNER -->
-      <section class=" pt-4 px-4 lg:px-6">
+      <section class="pt-4 px-4 lg:px-6">
         <StoreAdvantages />
       </section>
     </div>

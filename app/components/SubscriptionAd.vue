@@ -37,7 +37,7 @@
 
       <!-- CHIP -->
       <div class="text-white max-w-75">
-        <UCard 
+        <UCard class="p-0"
           :ui="{body: 'bg-foreground'}"
           >
           <div class="flex items-center gap-x-2">
@@ -48,7 +48,7 @@
 
             <!-- CONTENT -->
             <div class="min-w-0">
-              <p class=" font-semibold leading-tight text-primary">
+              <p class=" font-semibold leading-tight text-primary text-center">
                 Atendimento com médicos veterinários <span class="text-accent">qualificados</span>
               </p>
             </div>
