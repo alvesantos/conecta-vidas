@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import subscriptionAd from '~/layouts/subscriptionAd.vue';
+import subscriptionAd from '~/components/SubscriptionAd.vue';
 
 definePageMeta({
   noPadding: true
@@ -52,16 +52,7 @@ definePageMeta({
     <div>
       <!-- BENEFITS AND WHATSAPP BANNER -->
       <section class=" pt-4 px-4 lg:px-6">
-        <UCard 
-          :ui="{body: 'bg-foreground'}"
-          >
-          <div class="grid grid-cols-4 gap-2 bg-primary-400">
-            <div class="bg-black p-4 text-center">1</div>
-            <div class="bg-black p-4 text-center">2</div>
-            <div class="bg-black p-4 text-center">3</div>
-            <div class="bg-black p-4 text-center">4</div>
-          </div>
-        </UCard>
+        <StoreAdvantages />
       </section>
     </div>
   </div>
