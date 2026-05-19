@@ -1,8 +1,17 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+/*TAILWIND COLORS*/
 @theme {
-  --color-primary: #01193a;
+  --color-primary: #01193A;
   --color-accent: #014496;
   --color-foreground: #FAF9F6;
+}
+
+/*APP DEFAULT COLORS STYLING*/
+@layer base {
+  html, body {
+    background-color: var(--color-foreground);
+    color: var(--color-primary);
+  }
 }

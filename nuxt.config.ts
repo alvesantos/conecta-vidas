@@ -17,5 +17,9 @@ export default defineNuxtConfig({
         '@vue/devtools-kit',
       ]
     }
+  },
+
+  devServer: {
+    host: '[IP_ADDRESS]'
   }
 })
