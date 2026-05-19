@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="px-2 lg:px-6">
+  <div class="px-4 lg:px-6">
     <!-- DESKTOP -->
     <div class="justify-between items-center hidden lg:flex">
       <!-- CARD -->
