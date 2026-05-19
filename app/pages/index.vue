@@ -8,7 +8,7 @@ definePageMeta({
   <div class="relative">
     <header>
       <img 
-        class="max-w-[50%] md:max-w-[20%] p-6 md:p-10 hidden md:block"
+        class="max-w-[50%] md:max-w-[20%] pt-6 px-6 md:pt-10 hidden md:block"
         src="/conectavet-extended-icon.png"
         alt="conectavet" />
     </header>
@@ -16,23 +16,35 @@ definePageMeta({
     <section class="flex flex-col">
       <!-- DOG BACKGROUND -->
       <div class="absolute right-0 top-0">
-        <img 
-          class="conectavet-dog min-w-[100vw] lg:min-w-auto lg:max-w-[58vw]"
+        <img
+          class="conectavet-dog w-screen lg:w-[58vw]"
           src="/cute_dog.png"
           alt="doggo" />
       </div>
 
       <!-- SIDE CONTENT -->
-      <p class="lg:p-6 p-2 max-w-[48%] lg:max-w-[35%] side-content">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
+      <div class="lg:p-6 px-2 max-w-[48%] lg:max-w-[35%] side-content">
+        <!-- TITLE -->
+        <p class="lg:text-[2.5rem] text-[1rem] text-center pt-4 lg:text-start">
+          Seu pet merece o melhor cuidado,
+          <span class="text-accent underline">onde você estiver</span>
+        </p>
+
+        <!-- DESCRIPTION -->
+        <p class="px-2 py-4 lg:text-lg text-[.6rem]">
+          Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
+        </p>
+      </div>
     </section>
   </div>
 </template>
 
 <style scoped>
 .side-content {
-  text-overflow: ellipsis;
+  & > :first-child {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+  }
 }
 
 /* Desktop */
