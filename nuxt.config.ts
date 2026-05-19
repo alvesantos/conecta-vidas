@@ -3,7 +3,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   modules: ["@nuxt/ui"],
-  colorMode: false,
+  ui: {
+    colorMode: false,
+  },
   app: {
     head: {
       title: "ConectaVet - Telemedicina Veterinária",
