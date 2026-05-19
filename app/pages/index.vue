@@ -55,7 +55,12 @@ definePageMeta({
         <UCard 
           :ui="{body: 'bg-foreground'}"
           >
-          <div>hi</div>
+          <div class="grid grid-cols-4 gap-2 bg-primary-400">
+            <div class="bg-black p-4 text-center">1</div>
+            <div class="bg-black p-4 text-center">2</div>
+            <div class="bg-black p-4 text-center">3</div>
+            <div class="bg-black p-4 text-center">4</div>
+          </div>
         </UCard>
       </section>
     </div>
