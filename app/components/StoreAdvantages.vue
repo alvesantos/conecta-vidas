@@ -32,41 +32,50 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
 </script>
 
 <template>
-  <section>
-    <UCard :ui="{ body: 'bg-foreground' }">
+  <div>
+    <section>
+      <UCard :ui="{ body: 'bg-foreground' }">
 
-      <!-- MOBILE -->
-      <UCarousel
-        class="lg:hidden"
-        v-slot="{ item }"
-        loop
-        dots
-        :autoplay="{ delay: 2000 }"
-        :items="advantageIcons"
-        :ui="{ 
-          item: 'basis-full',
-          dot: 'data-[state=active]:bg-accent size-3'
-        }"
-      >
-        <AdvantageItem
-          :icon="item.icon"
-          :label="item.label"
-        />
-      </UCarousel>
+        <!-- MOBILE -->
+        <UCarousel
+          class="lg:hidden"
+          v-slot="{ item }"
+          loop
+          dots
+          :autoplay="{ delay: 2000 }"
+          :items="advantageIcons"
+          :ui="{ 
+            item: 'basis-full',
+            dot: 'data-[state=active]:bg-accent size-3'
+          }"
+        >
+          <AdvantageItem
+            :icon="item.icon"
+            :label="item.label"
+          />
+        </UCarousel>
 
-      <div class="text-transparent lg:hidden">a</div>
+        <div class="text-transparent lg:hidden">a</div>
 
-      <!-- DESKTOP ==================== -->
-      <div class="hidden lg:grid grid-cols-4 gap-px bg-gray-300">
-        <AdvantageItem
-          v-for="item in advantageIcons"
-          :key="item.label"
-          :icon="item.icon"
-          :label="item.label"
-        />
-      </div>
-    </UCard>
-  </section>
+        <!-- DESKTOP ==================== -->
+        <div class="hidden lg:grid grid-cols-4 gap-px bg-gray-300">
+          <AdvantageItem
+            v-for="item in advantageIcons"
+            :key="item.label"
+            :icon="item.icon"
+            :label="item.label"
+          />
+        </div>
+      </UCard>
+    </section>
+
+    <!-- WHATSAPP BANNER -->
+    <section class="pt-4">
+      <UCard :ui="{ body: 'bg-primary' }">
+        <div class="min-h-42">hey</div>
+      </UCard>
+    </section>
+  </div>
 </template>
 <style scoped>
 </style>
