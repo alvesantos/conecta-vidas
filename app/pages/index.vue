@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import subscriptionAd from '~/layouts/subscriptionAd.vue';
+
 definePageMeta({
   noPadding: true
 })
@@ -8,41 +10,53 @@ definePageMeta({
   <div class="relative">
     <header>
       <img 
-        class="max-w-[50%] md:max-w-[20%] pt-6 px-6 md:pt-10 hidden md:block"
+        class="max-w-[50%] md:max-w-[20%] pt-6 px-6 md:pt-10 hidden md:block absolute"
         src="/conectavet-extended-icon.png"
         alt="conectavet" />
     </header>
 
-    <section class="flex flex-col">
-      <!-- DOG BACKGROUND -->
-      <div class="absolute right-0 top-0">
-        <img
-          class="conectavet-dog w-screen lg:w-[58vw]"
-          src="/cute_dog.png"
-          alt="doggo" />
-      </div>
-
+    <div>
+      <section class="flex w-full justify-between">
       <!-- SIDE CONTENT -->
-      <div class="lg:p-6 px-2 max-w-[48%] lg:max-w-[35%] side-content">
-        <!-- TITLE -->
-        <p class="lg:text-[2.5rem] text-[1rem] text-center pt-4 lg:text-start">
-          Seu pet merece o melhor cuidado,
-          <span class="text-accent underline">onde você estiver</span>
-        </p>
+        <div class="lg:max-w-[30%] max-w-[50%] max-h-full lg:pt-[150px] lg:px-4 flex flex-col justify-between">
+          <div class="side-content pt-2 pl-2">
+            <!-- TITLE -->
+            <p class="text-lg lg:text-5xl">
+              Seu pet merece o melhor cuidado,
+              <span class="text-accent underline">onde você estiver</span>
+            </p>
 
-        <!-- DESCRIPTION -->
-        <p class="px-2 py-4 lg:text-lg text-[.6rem]">
-          Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
-        </p>
-      </div>
+            <!-- DESCRIPTION -->
+            <p class="lg:text-lg text-[.6rem] lg:pt-[2rem] pt-[1.5rem]">
+              Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
+            </p>
+          </div>
+        </div>
+        
+        <!-- DOG BACKGROUND -->
+        <div class="lg:max-w-[70%] max-w-[50%] shrink-0 overflow-hidden">
+          <img
+            class="conectavet-dog w-full h-full object-cover object-[65%_center] scale-130 lg:scale-100"
+            src="/cute_dog.png"
+            alt="doggo" />
+        </div>
+      </section>
+    </div>
+
+    <section class="w-full lg:absolute lg:bottom-0 static">
+      <subscriptionAd />
     </section>
+
+    <!-- BENEFITS AND WHATSAPP BANNER -->
+    <section></section>
   </div>
 </template>
 
 <style scoped>
 .side-content {
   & > :first-child {
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-family:
+      "Recoleta", "DM Serif Display", Georgia, serif;
     font-weight: 600;
   }
 }
@@ -78,16 +92,16 @@ definePageMeta({
       linear-gradient(
         to left,
         white 0%,
-        white 47%,
-        transparent 60%
+        white 60%,
+        transparent 85%
       );
 
     -webkit-mask-image:
       linear-gradient(
         to left,
         white 0%,
-        white 47%,
-        transparent 55%
+        white 60%,
+        transparent 85%
       );
   }
 }
