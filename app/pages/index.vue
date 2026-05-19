@@ -48,7 +48,7 @@ definePageMeta({
 
         <div>
         <!-- DESCRIPTION MOBILE -->
-        <p class="lg:text-lg text-[.6rem] px-4 pt-4">
+        <p class="lg:hidden lg:text-lg text-[.6rem] px-4 pt-4">
           Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
         </p>
       </div>
