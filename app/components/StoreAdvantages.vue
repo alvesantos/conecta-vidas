@@ -11,12 +11,12 @@ const advantageColumns = [1, 2, 3, 4]
         class="lg:hidden"
         v-slot="{ item }"
         loop
-        dots 
-        arrows
+        dots
         :autoplay="{ delay: 2000 }"
         :items="advantageColumns"
         :ui="{ 
           item: 'basis-full',
+          dot: 'data-[state=active]:bg-accent size-3'
         }"
       >
         <div class="bg-foreground p-4 text-center">
@@ -39,3 +39,5 @@ const advantageColumns = [1, 2, 3, 4]
     </UCard>
   </section>
 </template>
+<style scoped>
+</style>
