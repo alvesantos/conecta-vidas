@@ -5,6 +5,7 @@ export interface Perk {
 
 export interface Plan {
   title: string
+  color: string
   focus: string
   focus_desc: string
   price: number
