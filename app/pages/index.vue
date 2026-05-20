@@ -75,10 +75,22 @@ definePageMeta({
     <!-- PAYMENT METHODS -->
     <div class=" pt-4 px-4 lg:px-6">
       <div class="grid grid-cols-4 p-4 gap-px border rounded-xl border-accent/70" >
-        <div>TODO Pagamento seguro</div>
-        <div>TODO pix</div>
-        <div>TODO cartão de crédito</div>
-        <div>TODO boleto</div>
+        <div>
+          <UIcon name="i-ph-lock" />
+          TODO Pagamento seguro
+        </div>
+        <div>
+          <UIcon name="" />
+          TODO pix
+        </div>
+        <div>
+          <UIcon name="" />
+          TODO cartão de crédito
+        </div>
+        <div>
+          <UIcon name="" />
+          TODO boleto
+        </div>
       </div>
     </div>
   </div>
