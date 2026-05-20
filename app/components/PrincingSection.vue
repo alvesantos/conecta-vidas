@@ -81,10 +81,13 @@ const plans: Plan[] = [
         <div class="grid lg:grid-cols-3 gap-6">
           <div v-for="plan in plans" :key="plan.title">
             <!-- Card wrapper -->
-            <div class="p-6 relative">
+            <div 
+              class="relative border-2 rounded-2xl shadow-lg"
+              :style="{ borderColor: plan.color }"
+            >
               <!-- Title -->
               <div 
-                class=" font-bold text-xl mb-4 rounded-md px-2 py-3 flex justify-center gap-2"
+                class=" font-bold text-xl mb-4 rounded-t-xl px-2 py-3 flex justify-center gap-2"
                 :class="plan.title !== 'Essencial' ? 'text-foreground' : 'text-primary'"
                 :style="{ backgroundColor: plan.color }"
               >
@@ -97,22 +100,24 @@ const plans: Plan[] = [
                 </span>
               </div>
 
-              <!-- Focus / description -->
-              <h4 class="text-primary font-semibold text-lg mb-2">{{ plan.focus }}</h4>
-              <p class="text-primary/60 mb-4">{{ plan.focus_desc }}</p>
+              <div class="px-4">
+                <!-- Focus / description -->
+                <h4 class="text-primary font-semibold text-lg mb-2">{{ plan.focus }}</h4>
+                <p class="text-primary/60 mb-4">{{ plan.focus_desc }}</p>
 
-              <!-- Price -->
-              <p class="text-primary text-2xl font-bold mb-4">R$ {{ plan.price.toFixed(2) }}/mês</p>
+                <!-- Price -->
+                <p class="text-primary text-2xl font-bold mb-4">R$ {{ plan.price.toFixed(2) }}/mês</p>
 
-              <!-- Perks -->
-              <ul class="space-y-2">
-                <li v-for="perk in plan.perks" :key="perk.label" class="flex items-center gap-2">
-                  <!-- Icon placeholder -->
-                  <UIcon v-if="perk.icon" :name="perk.icon" class="size-6 text-primary" />
-                  <!-- Text -->
-                  <span class="text-primary">{{ perk.label }}</span>
-                </li>
-              </ul>
+                <!-- Perks -->
+                <ul class="space-y-2">
+                  <li v-for="perk in plan.perks" :key="perk.label" class="flex items-center gap-2">
+                    <!-- Icon placeholder -->
+                    <UIcon v-if="perk.icon" :name="perk.icon" class="size-6 text-primary" />
+                    <!-- Text -->
+                    <span class="text-primary">{{ perk.label }}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -120,3 +125,6 @@ const plans: Plan[] = [
     </UCard>
   </div>
 </template>
+
+<style scoped>
+</style>
