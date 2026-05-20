@@ -67,8 +67,19 @@ definePageMeta({
       </section>
     </div>
 
+    <!-- PRICES -->
     <div ref="pricingSection" id="pricingSection" class="pt-4 px-4 lg:px-6">
       <PrincingSection />
+    </div>
+
+    <!-- PAYMENT METHODS -->
+    <div class=" pt-4 px-4 lg:px-6">
+      <div class="grid grid-cols-4 p-4 gap-px border rounded-xl border-accent/70" >
+        <div>TODO Pagamento seguro</div>
+        <div>TODO pix</div>
+        <div>TODO cartão de crédito</div>
+        <div>TODO boleto</div>
+      </div>
     </div>
   </div>
 </template>
