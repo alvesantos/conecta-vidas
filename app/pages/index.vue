@@ -74,11 +74,31 @@ definePageMeta({
 
     <!-- PAYMENT METHODS -->
     <div class=" pt-4 px-4 lg:px-6">
-      <div class="grid grid-cols-4 p-4 gap-px border rounded-xl border-accent/70" >
-        <div>TODO Pagamento seguro</div>
-        <div>TODO pix</div>
-        <div>TODO cartão de crédito</div>
-        <div>TODO boleto</div>
+      <div class="grid grid-cols-4 p-4 gap-px border items-center text-center rounded-xl border-accent/70 divide-x divide-accent/70" >
+        <div>
+          <UIcon name="i-ph-lock" class="size-7 lg:size-8" />
+          <div class="text-center sm:text-sm text-xs">
+            100% seguro
+          </div>
+        </div>
+        <div>
+          <UIcon name="i-ph-pix-logo" class="size-7 lg:size-8" />
+          <div class="text-center sm:text-sm text-xs">
+            Pix
+          </div>
+        </div>
+        <div>
+          <UIcon name="i-ph-credit-card" class="size-7 lg:size-8" />
+          <div class="text-center sm:text-sm text-xs">
+            Cartão de crédito
+          </div>
+        </div>
+        <div>
+          <UIcon name="i-ph-barcode" class="size-7 lg:size-8" />
+          <div class="text-center sm:text-sm text-xs">
+            Boleto bancário
+          </div>
+        </div>
       </div>
     </div>
   </div>
