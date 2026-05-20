@@ -68,7 +68,7 @@ definePageMeta({
       </section>
     </div>
 
-    <div ref="pricingSection" class="pt-4 px-4 lg:px-6">
+    <div ref="pricingSection" id="pricingSection" class="pt-4 px-4 lg:px-6">
       <PrincingSection />
     </div>
   </div>

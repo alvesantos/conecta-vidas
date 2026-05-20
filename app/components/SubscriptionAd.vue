@@ -1,4 +1,10 @@
 <script setup lang="ts">
+const handleScrollToPricing = () => {
+  document.getElementById('pricingSection')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
 </script>
 
 <template>
@@ -6,7 +12,7 @@
     <!-- DESKTOP -->
     <div class="justify-between items-center hidden lg:flex">
       <!-- CARD -->
-      <div class="max-w-[30%] pb-1">
+      <div class="max-w-[30%] pb-1 cursor-pointer" @click="handleScrollToPricing">
         <UCard 
           :ui="{body: 'bg-accent'}"
           >
@@ -61,7 +67,7 @@
      <div class="lg:hidden ">
       <div>
         <!-- CARD -->
-        <div class="pt-4">
+        <div class="pt-4 cursor-pointer" @click="handleScrollToPricing">
           <UCard 
             :ui="{body: 'bg-accent'}"
             >
