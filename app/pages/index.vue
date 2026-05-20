@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { P } from 'vue-router/dist/useApi-D6ckOsFy.js';
 import subscriptionAd from '~/components/SubscriptionAd.vue';
 
 definePageMeta({
