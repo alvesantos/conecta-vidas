@@ -7,11 +7,12 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  modules: ["@nuxt/ui"],
+  modules: ["@nuxt/ui", "@nuxt/icons"],
   ui: {
     colorMode: false,
   },
   icon: {
+    collections: ["heroicons", "mdi", "ph"],
     serverBundle: {
       collections: ["heroicons", "mdi", "ph"],
     },
@@ -30,7 +31,14 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   vite: {
     optimizeDeps: {
-      include: ["@vue/devtools-core", "@vue/devtools-kit"],
+      include: [
+        "@vue/devtools-core",
+        "@vue/devtools-kit",
+        "maska/vue",
+        "@iconify-json/mdi",
+        "@iconify-json/heroicons",
+        "@iconify-json/ph"
+      ],
     },
   },
 
