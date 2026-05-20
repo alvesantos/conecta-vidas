@@ -74,7 +74,7 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
     </section>
 
     <!-- WHATSAPP BANNER -->
-    <section class="pt-4 cursor-pointer" @click="handleBannerClick">
+    <section class="pt-4" @click="handleBannerClick">
       <UCard :ui="{ body: 'bg-primary relative' }">
         <img
           src="/dog_banner.png"
@@ -95,8 +95,16 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
           </div>
 
           <!-- right -->
-          <div class="text-foreground text-bottom">
-            button
+          <div class="text-foreground">
+            <UButton
+              size="xl"
+              class="bg-[#18c256] hover:bg-[#139645] text-white flex items-center gap-2 rounded-lg px-6 py-4 cursor-pointer"
+            >
+              <!-- WhatsApp icon -->
+              <UIcon name="ph-whatsapp-logo" class="size-8" />
+              <!-- Button text -->
+              <span>Falar no WhatsApp</span>
+            </UButton>
           </div>
         </div>
       </UCard>
