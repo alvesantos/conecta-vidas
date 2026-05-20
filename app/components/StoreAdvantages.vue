@@ -74,8 +74,8 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
     </section>
 
     <!-- WHATSAPP BANNER -->
-    <section class="pt-4" @click="handleBannerClick">
-      <UCard :ui="{ body: 'bg-primary relative' }">
+    <section class="pt-4">
+      <UCard @click="handleBannerClick" :ui="{ body: 'bg-primary relative' }">
         <img
           src="/dog_banner.png"
           alt="Dog Banner Background"
