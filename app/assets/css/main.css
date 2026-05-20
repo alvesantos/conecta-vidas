@@ -12,7 +12,6 @@
 @layer base {
   html, body {
     font-family: 'Inter', sans-serif;
-
     background-color: var(--color-foreground);
     color: var(--color-primary);
   }
