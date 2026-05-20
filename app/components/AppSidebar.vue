@@ -106,7 +106,7 @@ const userInitials = computed(() => {
         @click="collapsed = !collapsed"
       >
         <UIcon
-          :name="collapsed ? 'i-heroicons-arrow-right-on-rectangle' : 'i-heroicons-arrow-left-on-rectangle'"
+          :name="collapsed ? 'i-heroicons-chevron-double-right' : 'i-heroicons-chevron-double-left'"
           class="size-5 shrink-0"
         />
         <span v-if="!collapsed" class="text-sm">Recolher menu</span>
