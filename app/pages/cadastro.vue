@@ -1,4 +1,5 @@
 <script setup lang="ts">
+definePageMeta({ noPadding: true })
 import { vMaska } from 'maska/vue'
 
 const { api } = useApi()

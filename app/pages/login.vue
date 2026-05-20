@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ noPadding: true })
+
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
