@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { P } from 'vue-router/dist/useApi-D6ckOsFy.js';
 import subscriptionAd from '~/components/SubscriptionAd.vue';
 
 definePageMeta({
@@ -65,6 +66,10 @@ definePageMeta({
       <section class="pt-4 px-4 lg:px-6">
         <StoreAdvantages />
       </section>
+    </div>
+
+    <div ref="pricingSection" class="pt-4 px-4 lg:px-6">
+      <PrincingSection />
     </div>
   </div>
 </template>

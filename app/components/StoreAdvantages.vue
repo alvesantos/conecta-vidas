@@ -72,7 +72,11 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
     <!-- WHATSAPP BANNER -->
     <section class="pt-4">
       <UCard :ui="{ body: 'bg-primary' }">
-        <div class="min-h-42">hey</div>
+        <div class="min-h-42 flex justify-between">
+          <div class="text-foreground">image 100px</div>
+          <div class="text-foreground">text grow</div>
+          <div class="text-foreground">button</div>
+        </div>
       </UCard>
     </section>
   </div>
