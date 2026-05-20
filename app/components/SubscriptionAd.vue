@@ -15,7 +15,7 @@
             <div class="shrink-0">
               <img
                 class="w-20 h-20 object-contain"
-                src="/dot_k_icons/dot_k_pet_shield.png"
+                src="/eneli_studio_icons/eneli_studio_pet_shield.png"
                 alt="dog-shield"
               />
             </div>
@@ -58,19 +58,19 @@
     </div>
 
     <!-- MOBILE =================================== -->
-     <div class="lg:hidden">
+     <div class="lg:hidden ">
       <div>
         <!-- CARD -->
         <div class="pt-4">
           <UCard 
             :ui="{body: 'bg-accent'}"
             >
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 ">
               <!-- ICON -->
               <div class="shrink-0">
                 <img
                   class="w-10 h-10 object-contain"
-                  src="/dot_k_icons/dot_k_pet_shield.png"
+                  src="/eneli_studio_icons/eneli_studio_pet_shield.png"
                   alt="dog-shield"
                 />
               </div>

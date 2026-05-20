@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 const advantageIcons = [
   {
-    icon: '/dot_k_icons/dot_k_clock.png',
+    icon: '/eneli_studio_icons/eneli_studio_clock.png',
     label: 'Atendimento rápido'
   },
   {
-    icon: '/dot_k_icons/dot_k_house.png',
+    icon: '/eneli_studio_icons/eneli_studio_house.png',
     label: 'Sem sair de casa'
   },
   {
-    icon: '/dot_k_icons/dot_k_check_shield.png',
+    icon: '/eneli_studio_icons/eneli_studio_check_shield.png',
     label: 'Orientação segura'
   },
   {
-    icon: '/dot_k_icons/dot_k_heart.png',
+    icon: '/eneli_studio_icons/eneli_studio_heart.png',
     label: 'Mais cuidado, menos preocupação'
   }
 ]
