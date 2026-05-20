@@ -85,17 +85,17 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
         <div class="lg:min-h-50 min-h-42 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-4 z-10 relative">
           <!-- left -->
           <div class="text-foreground">
-            <img src="/eneli_studio_icons/eneli_studio_paw_inverted.png" />
+            <img src="/eneli_studio_icons/eneli_studio_paw_inverted.png" class="lg:w-full w-[20%]" />
           </div>
 
           <!-- middle -->
-          <div class="text-foreground lg:text-2xl text-start">
-            <h4>Fale agora com um médico veterinário e tire suas dúvidas!</h4>
-            <p class="text-lg text-foreground/60">Orientação profissional na palma da sua mão.</p>
+          <div class="text-foreground lg:text-2xl text-start pb-4">
+            <h4 class="pt-2">Fale agora com um médico veterinário e tire suas dúvidas!</h4>
+            <p class="lg:text-lg text-sm text-foreground/60">Orientação profissional na palma da sua mão.</p>
           </div>
 
           <!-- right -->
-          <div class="text-foreground">
+          <div class="text-foreground w-full flex justify-center">
             <UButton
               size="xl"
               class="bg-[#18c256] hover:bg-[#139645] text-white flex items-center gap-2 rounded-lg px-6 py-4 cursor-pointer"
