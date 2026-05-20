@@ -1,4 +1,10 @@
 <script setup lang="ts">
+const handleScrollToPricing = () => {
+  document.getElementById('pricingSection')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
 </script>
 
 <template>
@@ -6,7 +12,7 @@
     <!-- DESKTOP -->
     <div class="justify-between items-center hidden lg:flex">
       <!-- CARD -->
-      <div class="max-w-[30%] pb-1">
+      <div class="max-w-[30%] pb-1 cursor-pointer" @click="handleScrollToPricing">
         <UCard 
           :ui="{body: 'bg-accent'}"
           >
@@ -15,7 +21,7 @@
             <div class="shrink-0">
               <img
                 class="w-20 h-20 object-contain"
-                src="/dot_k_icons/dot_k_pet_shield.png"
+                src="/eneli_studio_icons/eneli_studio_pet_shield.png"
                 alt="dog-shield"
               />
             </div>
@@ -28,7 +34,7 @@
 
               <p class="pt-3 text-white/80 leading-snug">
                 Saber agir quando seu filho de quatro patas
-                mais precisar pode custar apenas 1 real por dia!
+                mais precisar pode custar menos de dois reais por dia!
               </p>
             </div>
           </div>
@@ -58,19 +64,19 @@
     </div>
 
     <!-- MOBILE =================================== -->
-     <div class="lg:hidden">
+     <div class="lg:hidden ">
       <div>
         <!-- CARD -->
-        <div class="pt-4">
+        <div class="pt-4 cursor-pointer" @click="handleScrollToPricing">
           <UCard 
             :ui="{body: 'bg-accent'}"
             >
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 ">
               <!-- ICON -->
               <div class="shrink-0">
                 <img
                   class="w-10 h-10 object-contain"
-                  src="/dot_k_icons/dot_k_pet_shield.png"
+                  src="/eneli_studio_icons/eneli_studio_pet_shield.png"
                   alt="dog-shield"
                 />
               </div>
@@ -83,7 +89,7 @@
 
                 <p class="pt-3 text-white/80 leading-snug text-sm">
                   Saber agir quando seu filho de quatro patas
-                  mais precisar pode custar apenas 1 real por dia!
+                  mais precisar pode custar menos de dois reais por dia!
                 </p>
               </div>
             </div>

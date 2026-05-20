@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { P } from 'vue-router/dist/useApi-D6ckOsFy.js';
 import subscriptionAd from '~/components/SubscriptionAd.vue';
 
 definePageMeta({
@@ -20,20 +21,23 @@ definePageMeta({
         <section class="flex w-full justify-between">
         <!-- SIDE CONTENT -->
           <div class="lg:max-w-[30%] max-w-[50%] max-h-full lg:pt-[150px] lg:px-4 flex flex-col justify-between">
-            <div class="side-content pt-2 pl-2">
+            <div class="side-content pl-4">
+              <div class="lg:hidden">
+                <img src="/icon-com-texto.png" />
+              </div>
+
               <!-- TITLE -->
               <p class="text-lg lg:text-5xl">
                 Seu pet merece o melhor cuidado,
                 <span class="text-accent underline">onde você estiver</span>
               </p>
 
-              <!-- DESCRIPTION -->
-              <p class="lg:text-lg text-[.6rem] lg:pt-8 pt-6">
+              <!-- DESCRIPTION DESKTOP -->
+              <p class="lg:text-lg text-[.6rem] px-4 pt-8 hidden lg:block">
                 Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
               </p>
             </div>
           </div>
-          
           <!-- DOG BACKGROUND -->
           <div class="lg:max-w-[70%] max-w-[50%] shrink-0 overflow-hidden">
             <img
@@ -42,7 +46,15 @@ definePageMeta({
               alt="doggo" />
           </div>
         </section>
+
+        <div>
+        <!-- DESCRIPTION MOBILE -->
+        <p class="lg:hidden lg:text-lg text-[.6rem] px-4 pt-4">
+          Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
+        </p>
       </div>
+      </div>
+
 
       <section class="w-full lg:absolute lg:bottom-0 static">
         <subscriptionAd />
@@ -55,12 +67,16 @@ definePageMeta({
         <StoreAdvantages />
       </section>
     </div>
+
+    <div ref="pricingSection" id="pricingSection" class="pt-4 px-4 lg:px-6">
+      <PrincingSection />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .side-content {
-  & > :first-child {
+  & > :nth-child(2) {
     font-family:
       "Recoleta", "DM Serif Display", Georgia, serif;
     font-weight: 600;
