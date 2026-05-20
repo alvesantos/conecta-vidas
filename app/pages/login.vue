@@ -2,6 +2,29 @@
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
+const loading = ref(false)
+const errorMsg = ref('')
+
+const { login } = useAuth()
+
+async function handleLogin() {
+  if (!email.value || !password.value) {
+    errorMsg.value = 'Preencha e-mail e senha.'
+    return
+  }
+
+  loading.value = true
+  errorMsg.value = ''
+
+  try {
+    await login(email.value, password.value)
+    await navigateTo('/')
+  } catch (err) {
+    errorMsg.value = err instanceof Error ? err.message : 'Erro ao fazer login.'
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -19,6 +42,7 @@ const showPassword = ref(false)
           placeholder="E-mail"
           size="lg"
           icon="i-heroicons-envelope"
+          :disabled="loading"
         />
         <UInput
           v-model="password"
@@ -26,6 +50,7 @@ const showPassword = ref(false)
           placeholder="Senha"
           size="lg"
           icon="i-heroicons-lock-closed"
+          :disabled="loading"
         >
           <template #trailing>
             <UButton
@@ -37,12 +62,16 @@ const showPassword = ref(false)
             />
           </template>
         </UInput>
+
+        <p v-if="errorMsg" class="text-sm text-red-500 text-center">{{ errorMsg }}</p>
       </div>
 
       <UButton
         label="Entrar"
         size="lg"
         class="w-full justify-center bg-accent text-white"
+        :loading="loading"
+        @click="handleLogin"
       />
 
       <p class="text-center text-sm text-gray-500">
