@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { vMaska } from 'maska/vue'
 
+const { api } = useApi()
+const router = useRouter()
+
 const currentStep = ref(1)
+const loading = ref(false)
+const apiError = ref('')
 
 // Tutor
 const tutorName = ref('')
@@ -148,9 +153,47 @@ function goToStep2() {
   if (validateStep1()) currentStep.value = 2
 }
 
-function submit() {
-  if (validateStep2()) {
-    // TODO: enviar dados
+async function submit() {
+  if (!validateStep2()) return
+
+  loading.value = true
+  apiError.value = ''
+
+  try {
+    const tutor = await api<{ id: string }>('/tutors', {
+      method: 'POST',
+      body: {
+        name: tutorName.value,
+        cpf: tutorCpf.value,
+        email: tutorEmail.value,
+        address: tutorAddress.value || undefined,
+        password: tutorPassword.value,
+      },
+    })
+
+    await api('/pets', {
+      method: 'POST',
+      body: {
+        tutor_id: tutor.id,
+        name: petName.value,
+        species: petSpecies.value,
+        breed: petBreed.value,
+        size: petSize.value,
+        coat: petCoat.value,
+        birth_date: petBirthDate.value,
+        microchipped: petMicrochipped.value === 'sim',
+        neutered: petNeutered.value === 'sim',
+        behavior: petBehavior.value || undefined,
+        conditions: petConditions.value || undefined,
+      },
+    })
+
+    await router.push('/login')
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } }
+    apiError.value = fetchErr?.data?.error ?? 'Erro ao criar conta. Tente novamente.'
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -391,6 +434,14 @@ function submit() {
           :rows="3"
         />
 
+        <UAlert
+          v-if="apiError"
+          color="error"
+          variant="soft"
+          :description="apiError"
+          icon="i-heroicons-exclamation-circle"
+        />
+
         <div class="flex gap-3 mt-2">
           <UButton
             label="Voltar"
@@ -398,12 +449,14 @@ function submit() {
             variant="outline"
             class="flex-1 justify-center"
             leading-icon="i-heroicons-arrow-left"
+            :disabled="loading"
             @click="currentStep = 1"
           />
           <UButton
             label="Criar conta"
             size="lg"
             class="flex-1 justify-center bg-accent text-white"
+            :loading="loading"
             @click="submit"
           />
         </div>
