@@ -13,7 +13,6 @@ const commonItems = [
     icon: "i-heroicons-shopping-bag",
   },
   { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
-  { label: "Suporte", to: "/suporte", icon: "i-heroicons-lifebuoy" },
 ]
 
 // Itens somente para usuários NÃO logados
@@ -45,7 +44,7 @@ const userInitials = computed(() => {
 
 <template>
   <aside
-    class="relative min-h-screen bg-primary flex flex-col pt-2 pb-8 border-r border-accent transition-all duration-300"
+    class="relative min-h-screen bg-primary flex flex-col pt-2 pb-8 transition-all duration-300"
     :class="collapsed ? 'w-28' : 'w-64 px-4'"
   >
     <!-- Botão colapsar -->

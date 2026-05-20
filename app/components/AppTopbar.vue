@@ -19,7 +19,6 @@ const commonItems: NavItem[] = [
     icon: "i-heroicons-shopping-bag",
   },
   { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
-  { label: "Suporte", to: "/suporte", icon: "i-heroicons-lifebuoy" },
 ]
 
 const guestItems: NavItem[] = [
@@ -107,6 +106,7 @@ function handleLogout() {
         <UIcon name="i-heroicons-arrow-left-on-rectangle" class="size-5 shrink-0" />
         <span>Sair</span>
       </button>
+
     </nav>
   </div>
 </template>
