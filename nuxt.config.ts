@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@nuxt/icons"],
+  modules: ["@nuxt/ui", "@nuxt/icon"],
   ui: {
     colorMode: false,
   },
