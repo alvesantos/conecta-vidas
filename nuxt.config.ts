@@ -11,6 +11,11 @@ export default defineNuxtConfig({
   ui: {
     colorMode: false,
   },
+  icon: {
+    serverBundle: {
+      collections: ["heroicons", "mdi", "ph"],
+    },
+  },
   app: {
     head: {
       title: "ConectaVet - Telemedicina Veterinária",
