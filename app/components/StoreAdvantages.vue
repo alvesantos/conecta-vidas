@@ -71,11 +71,29 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
 
     <!-- WHATSAPP BANNER -->
     <section class="pt-4">
-      <UCard :ui="{ body: 'bg-primary' }">
-        <div class="min-h-42 flex justify-between">
-          <div class="text-foreground">image 100px</div>
-          <div class="text-foreground">text grow</div>
-          <div class="text-foreground">button</div>
+      <UCard :ui="{ body: 'bg-primary relative' }">
+        <img
+          src="/dog_banner.png"
+          alt="Dog Banner Background"
+          class="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.85] lg:object-[center_60%]"
+        />
+
+        <div class="lg:min-h-60 min-h-42 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-4 z-10 relative">
+          <!-- left -->
+          <div class="text-foreground">
+            <img src="/eneli_studio_icons/eneli_studio_paw_inverted.png" />
+          </div>
+
+          <!-- middle -->
+          <div class="text-foreground lg:text-2xl text-start">
+            <h4>Fale agora com um médico veterinário e tire suas dúvidas!</h4>
+            <p class="text-lg text-foreground/60">Orientação profissional na palma da sua mão.</p>
+          </div>
+
+          <!-- right -->
+          <div class="text-foreground text-bottom">
+            button
+          </div>
         </div>
       </UCard>
     </section>
