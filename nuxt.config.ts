@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     colorMode: false,
   },
   icon: {
+    localApiEndpoint: "/_icons",
     serverBundle: {
       collections: ["heroicons", "mdi", "ph"],
     },
