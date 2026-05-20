@@ -29,6 +29,10 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
 
     h('p', {}, props.label)
   ])
+
+  const handleBannerClick = () => {
+    window.open('https://wa.me/5511978786184', '_blank');
+  }
 </script>
 
 <template>
@@ -70,15 +74,15 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
     </section>
 
     <!-- WHATSAPP BANNER -->
-    <section class="pt-4">
+    <section class="pt-4 cursor-pointer" @click="handleBannerClick">
       <UCard :ui="{ body: 'bg-primary relative' }">
         <img
           src="/dog_banner.png"
           alt="Dog Banner Background"
-          class="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.85] lg:object-[center_60%]"
+          class="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.85] lg:object-[center_58%]"
         />
 
-        <div class="lg:min-h-60 min-h-42 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-4 z-10 relative">
+        <div class="lg:min-h-50 min-h-42 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-4 z-10 relative">
           <!-- left -->
           <div class="text-foreground">
             <img src="/eneli_studio_icons/eneli_studio_paw_inverted.png" />
