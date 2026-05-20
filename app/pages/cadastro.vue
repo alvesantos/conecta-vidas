@@ -1,168 +1,172 @@
 <script setup lang="ts">
-definePageMeta({ noPadding: true })
-import { vMaska } from 'maska/vue'
+definePageMeta({ noPadding: true });
+import { vMaska } from "maska/vue";
 
-const { api } = useApi()
-const router = useRouter()
+const { api } = useApi();
+const router = useRouter();
 
-const currentStep = ref(1)
-const loading = ref(false)
-const apiError = ref('')
+const currentStep = ref(1);
+const loading = ref(false);
+const apiError = ref("");
 
 // Tutor
-const tutorName = ref('')
-const tutorCpf = ref('')
-const tutorEmail = ref('')
-const tutorAddress = ref('')
-const tutorPassword = ref('')
-const tutorConfirmPassword = ref('')
-const showPassword = ref(false)
-const showConfirmPassword = ref(false)
+const tutorName = ref("");
+const tutorCpf = ref("");
+const tutorEmail = ref("");
+const tutorAddress = ref("");
+const tutorPassword = ref("");
+const tutorConfirmPassword = ref("");
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 // Pet
-const petName = ref('')
-const petSpecies = ref('')
-const petBreed = ref('')
-const petSize = ref('')
-const petCoat = ref('')
-const petBirthDate = ref('')
-const petMicrochipped = ref('')
-const petNeutered = ref('')
-const petBehavior = ref('')
-const petConditions = ref('')
+const petName = ref("");
+const petSpecies = ref("");
+const petBreed = ref("");
+const petSize = ref("");
+const petCoat = ref("");
+const petBirthDate = ref("");
+const petMicrochipped = ref("");
+const petNeutered = ref("");
+const petBehavior = ref("");
+const petConditions = ref("");
 
 // Errors
-const errors = reactive<Record<string, string>>({})
+const errors = reactive<Record<string, string>>({});
 
-function setError(field: string, msg: string) { errors[field] = msg }
-function clearError(field: string) { delete errors[field] }
+function setError(field: string, msg: string) {
+  errors[field] = msg;
+}
+function clearError(field: string) {
+  delete errors[field];
+}
 
 const speciesOptions = [
-  { label: 'Cão', value: 'cao' },
-  { label: 'Gato', value: 'gato' },
-  { label: 'Pássaro', value: 'passaro' },
-  { label: 'Réptil', value: 'reptil' },
-  { label: 'Roedor', value: 'roedor' },
-  { label: 'Outro', value: 'outro' },
-]
+  { label: "Cão", value: "cao" },
+  { label: "Gato", value: "gato" },
+  { label: "Pássaro", value: "passaro" },
+  { label: "Réptil", value: "reptil" },
+  { label: "Roedor", value: "roedor" },
+  { label: "Outro", value: "outro" },
+];
 
 const sizeOptions = [
-  { label: 'Pequeno', value: 'pequeno' },
-  { label: 'Médio', value: 'medio' },
-  { label: 'Grande', value: 'grande' },
-  { label: 'Gigante', value: 'gigante' },
-]
+  { label: "Pequeno", value: "pequeno" },
+  { label: "Médio", value: "medio" },
+  { label: "Grande", value: "grande" },
+  { label: "Gigante", value: "gigante" },
+];
 
 const booleanOptions = [
-  { label: 'Sim', value: 'sim' },
-  { label: 'Não', value: 'nao' },
-]
+  { label: "Sim", value: "sim" },
+  { label: "Não", value: "nao" },
+];
 
 const petAge = computed(() => {
-  if (!petBirthDate.value) return ''
-  const birth = new Date(petBirthDate.value)
-  const now = new Date()
+  if (!petBirthDate.value) return "";
+  const birth = new Date(petBirthDate.value);
+  const now = new Date();
   const months =
     (now.getFullYear() - birth.getFullYear()) * 12 +
-    (now.getMonth() - birth.getMonth())
-  if (months < 12) return `${months} ${months === 1 ? 'mês' : 'meses'}`
-  const years = Math.floor(months / 12)
-  return `${years} ${years === 1 ? 'ano' : 'anos'}`
-})
+    (now.getMonth() - birth.getMonth());
+  if (months < 12) return `${months} ${months === 1 ? "mês" : "meses"}`;
+  const years = Math.floor(months / 12);
+  return `${years} ${years === 1 ? "ano" : "anos"}`;
+});
 
 function validateStep1() {
-  let valid = true
+  let valid = true;
 
   if (!tutorName.value.trim()) {
-    setError('tutorName', 'Nome obrigatório')
-    valid = false
-  } else clearError('tutorName')
+    setError("tutorName", "Nome obrigatório");
+    valid = false;
+  } else clearError("tutorName");
 
   if (tutorCpf.value.length < 14) {
-    setError('tutorCpf', 'CPF inválido')
-    valid = false
-  } else clearError('tutorCpf')
+    setError("tutorCpf", "CPF inválido");
+    valid = false;
+  } else clearError("tutorCpf");
 
   if (!tutorEmail.value.trim()) {
-    setError('tutorEmail', 'E-mail obrigatório')
-    valid = false
-  } else clearError('tutorEmail')
+    setError("tutorEmail", "E-mail obrigatório");
+    valid = false;
+  } else clearError("tutorEmail");
 
   if (!tutorPassword.value) {
-    setError('tutorPassword', 'Senha obrigatória')
-    valid = false
-  } else clearError('tutorPassword')
+    setError("tutorPassword", "Senha obrigatória");
+    valid = false;
+  } else clearError("tutorPassword");
 
   if (!tutorConfirmPassword.value) {
-    setError('tutorConfirmPassword', 'Confirmação obrigatória')
-    valid = false
+    setError("tutorConfirmPassword", "Confirmação obrigatória");
+    valid = false;
   } else if (tutorPassword.value !== tutorConfirmPassword.value) {
-    setError('tutorConfirmPassword', 'As senhas não coincidem')
-    valid = false
-  } else clearError('tutorConfirmPassword')
+    setError("tutorConfirmPassword", "As senhas não coincidem");
+    valid = false;
+  } else clearError("tutorConfirmPassword");
 
-  return valid
+  return valid;
 }
 
 function validateStep2() {
-  let valid = true
+  let valid = true;
 
   if (!petName.value.trim()) {
-    setError('petName', 'Nome do pet obrigatório')
-    valid = false
-  } else clearError('petName')
+    setError("petName", "Nome do pet obrigatório");
+    valid = false;
+  } else clearError("petName");
 
   if (!petSpecies.value) {
-    setError('petSpecies', 'Espécie obrigatória')
-    valid = false
-  } else clearError('petSpecies')
+    setError("petSpecies", "Espécie obrigatória");
+    valid = false;
+  } else clearError("petSpecies");
 
   if (!petBreed.value.trim()) {
-    setError('petBreed', 'Raça obrigatória')
-    valid = false
-  } else clearError('petBreed')
+    setError("petBreed", "Raça obrigatória");
+    valid = false;
+  } else clearError("petBreed");
 
   if (!petSize.value) {
-    setError('petSize', 'Porte obrigatório')
-    valid = false
-  } else clearError('petSize')
+    setError("petSize", "Porte obrigatório");
+    valid = false;
+  } else clearError("petSize");
 
   if (!petCoat.value.trim()) {
-    setError('petCoat', 'Pelagem obrigatória')
-    valid = false
-  } else clearError('petCoat')
+    setError("petCoat", "Pelagem obrigatória");
+    valid = false;
+  } else clearError("petCoat");
 
   if (!petBirthDate.value) {
-    setError('petBirthDate', 'Data de nascimento obrigatória')
-    valid = false
-  } else clearError('petBirthDate')
+    setError("petBirthDate", "Data de nascimento obrigatória");
+    valid = false;
+  } else clearError("petBirthDate");
 
   if (!petMicrochipped.value) {
-    setError('petMicrochipped', 'Campo obrigatório')
-    valid = false
-  } else clearError('petMicrochipped')
+    setError("petMicrochipped", "Campo obrigatório");
+    valid = false;
+  } else clearError("petMicrochipped");
 
   if (!petNeutered.value) {
-    setError('petNeutered', 'Campo obrigatório')
-    valid = false
-  } else clearError('petNeutered')
+    setError("petNeutered", "Campo obrigatório");
+    valid = false;
+  } else clearError("petNeutered");
 
-  return valid
+  return valid;
 }
 
 function goToStep2() {
-  if (validateStep1()) currentStep.value = 2
+  if (validateStep1()) currentStep.value = 2;
 }
 
 async function submit() {
-  if (!validateStep2()) return
+  if (!validateStep2()) return;
 
-  loading.value = true
-  apiError.value = ''
+  loading.value = true;
+  apiError.value = "";
 
   try {
-    const tutor = await api<{ id: string }>('/tutors', {
-      method: 'POST',
+    const tutor = await api<{ id: string }>("/tutors", {
+      method: "POST",
       body: {
         name: tutorName.value,
         cpf: tutorCpf.value,
@@ -170,10 +174,10 @@ async function submit() {
         address: tutorAddress.value || undefined,
         password: tutorPassword.value,
       },
-    })
+    });
 
-    await api('/pets', {
-      method: 'POST',
+    await api("/pets", {
+      method: "POST",
       body: {
         tutor_id: tutor.id,
         name: petName.value,
@@ -182,27 +186,29 @@ async function submit() {
         size: petSize.value,
         coat: petCoat.value,
         birth_date: petBirthDate.value,
-        microchipped: petMicrochipped.value === 'sim',
-        neutered: petNeutered.value === 'sim',
+        microchipped: petMicrochipped.value === "sim",
+        neutered: petNeutered.value === "sim",
         behavior: petBehavior.value || undefined,
         conditions: petConditions.value || undefined,
       },
-    })
+    });
 
-    await router.push('/login')
+    await router.push("/login");
   } catch (err: unknown) {
-    const fetchErr = err as { data?: { error?: string } }
-    apiError.value = fetchErr?.data?.error ?? 'Erro ao criar conta. Tente novamente.'
+    const fetchErr = err as { data?: { error?: string } };
+    apiError.value =
+      fetchErr?.data?.error ?? "Erro ao criar conta. Tente novamente.";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>
 
 <template>
   <div class="min-h-screen flex items-center justify-center py-10">
-    <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-14 flex flex-col gap-8">
-
+    <div
+      class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-14 flex flex-col gap-8"
+    >
       <!-- Logo -->
       <div class="flex flex-col items-center gap-2">
         <img src="/icon-com-texto.png" alt="Conecta Vet" class="h-40" />
@@ -214,23 +220,42 @@ async function submit() {
         <div class="flex flex-col items-center gap-1 flex-1">
           <div
             class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors"
-            :class="currentStep >= 1 ? 'bg-accent text-white' : 'bg-gray-100 text-gray-400'"
+            :class="
+              currentStep >= 1
+                ? 'bg-accent text-white'
+                : 'bg-gray-100 text-gray-400'
+            "
           >
             1
           </div>
-          <span class="text-xs font-medium" :class="currentStep >= 1 ? 'text-accent' : 'text-gray-400'">Tutor</span>
+          <span
+            class="text-xs font-medium"
+            :class="currentStep >= 1 ? 'text-accent' : 'text-gray-400'"
+            >Tutor</span
+          >
         </div>
 
-        <div class="h-px flex-1 mb-5 transition-colors" :class="currentStep >= 2 ? 'bg-accent' : 'bg-gray-200'" />
+        <div
+          class="h-px flex-1 mb-5 transition-colors"
+          :class="currentStep >= 2 ? 'bg-accent' : 'bg-gray-200'"
+        />
 
         <div class="flex flex-col items-center gap-1 flex-1">
           <div
             class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors"
-            :class="currentStep >= 2 ? 'bg-accent text-white' : 'bg-gray-100 text-gray-400'"
+            :class="
+              currentStep >= 2
+                ? 'bg-accent text-white'
+                : 'bg-gray-100 text-gray-400'
+            "
           >
             2
           </div>
-          <span class="text-xs font-medium" :class="currentStep >= 2 ? 'text-accent' : 'text-gray-400'">Pet</span>
+          <span
+            class="text-xs font-medium"
+            :class="currentStep >= 2 ? 'text-accent' : 'text-gray-400'"
+            >Pet</span
+          >
         </div>
       </div>
 
@@ -254,9 +279,16 @@ async function submit() {
             type="text"
             placeholder="CPF * (000.000.000-00)"
             size="lg"
-            icon="i-heroicons-identification"
             class="w-full"
-          />
+          >
+            <template #leading>
+              <UIcon
+                name="i-heroicons-identification"
+                size="20"
+                class="text-gray-400"
+              />
+            </template>
+          </UInput>
         </UFormField>
 
         <UFormField :error="errors.tutorEmail">
@@ -291,7 +323,9 @@ async function submit() {
               <UButton
                 color="neutral"
                 variant="link"
-                :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                :icon="
+                  showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'
+                "
                 class="cursor-pointer"
                 @click="showPassword = !showPassword"
               />
@@ -312,7 +346,11 @@ async function submit() {
               <UButton
                 color="neutral"
                 variant="link"
-                :icon="showConfirmPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                :icon="
+                  showConfirmPassword
+                    ? 'i-heroicons-eye-slash'
+                    : 'i-heroicons-eye'
+                "
                 class="cursor-pointer"
                 @click="showConfirmPassword = !showConfirmPassword"
               />
@@ -395,7 +433,9 @@ async function submit() {
             class="w-full"
           />
           <template #hint>
-            <span v-if="petAge" class="text-xs text-gray-400">Idade: {{ petAge }}</span>
+            <span v-if="petAge" class="text-xs text-gray-400"
+              >Idade: {{ petAge }}</span
+            >
           </template>
         </UFormField>
 
@@ -469,7 +509,6 @@ async function submit() {
           Entrar
         </NuxtLink>
       </p>
-
     </div>
   </div>
 </template>
