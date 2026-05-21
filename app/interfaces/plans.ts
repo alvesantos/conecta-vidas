@@ -4,6 +4,7 @@ export interface Perk {
 }
 
 export interface Plan {
+  id: number
   title: string
   color: string
   focus: string

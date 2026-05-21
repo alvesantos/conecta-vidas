@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Plan } from '../interfaces/plans';
+import { plans } from '../localData/plans';
 
 defineProps<{
   reduced?: {
@@ -7,80 +7,17 @@ defineProps<{
     default: true
   }
 }>()
-
-const plans: Plan[] = [
-  // =================== ESSENCIAL =================== //
-  {
-    title: "Essencial",
-    color: "#FAF9F6",
-    focus: "Prevenção básica e suporte digital imediato",
-    focus_desc: "Tutores que buscam cuidado eficiente, orientação confiável e praticidade no dia a dia do seu pet.",
-    price: 39.90,
-    perks: [
-      { icon: "i-ph-dog", label: "Cadastro de até 2 pets (cães e gatos)" },
-      { icon: "i-ph-headset", label: "Teletriagem Veterinária ILIMITADA (24h)" },
-      { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada: 1 por mês" },
-      { icon: "i-ph-play-circle", label: "Plataforma de Conteúdo: Acesso completo incluso (Vídeos educativos, culinária e mais!)" },
-      { icon: "i-ph-users-three", label: "Clube ConectaVet (Grupo VIP no WhatsApp)" },
-      { icon: "i-ph-gift", label: "Clube de Benefícios: Descontos Exclusivos na Boutique MAFFY" },
-      { icon: "i-ph-gift", label: "Benefício Aniversário ConectaVet: Surpresa especial para o seu pet, com cupom, parabéns personalizado e mais!" },
-      { icon: "i-ph-gift", label: "Envio de 1 Mini Kit Emergência Pet (Anual)" },
-      { icon: "i-ph-seal-percent", label: "Consultas Virtuais Extras: Coparticipação inteligente (50% de desconto sobre o valor avulso)" }
-    ],
-  },
-
-  // =================== CARE PLUS =================== //
-  {
-    title: "Care Plus",
-    color: "#014496",
-    focus: "Conforto e a tranquilidade de um suporte mais robusto",
-    focus_desc: "Tutores que desejam mais suporte, comodidade e benefícios para cuidar melhor do seu pet.",
-    price: 79.90,
-    perks: [
-      { icon: "i-ph-exclamation-mark", label: "Tudo incluso no Essencial" },
-      { icon: "i-ph-headset", label: "Teletriagem Veterinária ILIMITADA (24h) com Prioridade" },
-      { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada ou Pronto Atendimento: 2 por mês" },
-      { icon: "", label: "Envio de 1 Mini Kit Emergência Pet: Anual" },
-      { icon: "", label: "Atendimento Veterinário Domiciliar: 5% de desconto em todos os atendimentos domiciliares" },
-      { icon: "", label: "Exames Laboratoriais e de Imagem em Casa: Acesso a valores reduzidos de rede" },
-      { icon: "", label: "Encontros Periódicos ConectaVet: Participação em encontros presenciais exclusivos com aulas práticas e socialização pet" },
-      { icon: "", label: "Consultas Virtuais Extras: Coparticipação fixa de apenas R$ 29,00" }
-    ]
-  },
-
-  // =================== SUPER PREMIUM =================== //
-  {
-    title: "Super Premium",
-    color: "#01193A",
-    focus: "A experiência máxima de exclusividade, comodidade e mimos físicos",
-    focus_desc: "Tutores que querem o melhor em exclusividade, benefícios e mimos para seu pet.",
-    price: 149.90,
-    perks: [
-      { icon: "i-ph-exclamation-mark", label: "Tudo incluso no Care Plus e Essencial" },
-      { icon: "i-ph-headset", label: "Teletriagem Veterinária ILIMITADA (24h) com Prioridade máxima" },
-      { icon: "i-ph-stethoscope", label: "Consulta Virtual ou Pronto Atendimento: 4 por mês (inclui pets exóticos/silvestres)" },
-      { icon: "", label: "Benefício Aniversário ConectaVet: Kit premium aniversário com mimos físicos, cupom exclusivo, parabéns personalizado e descontos de elite" },
-      { icon: "", label: "MAFFYBOX: Envio mensal de brinquedos, petiscos e itens de moda pet ergonômica direto para sua casa" },
-      { icon: "", label: "Coleta de Exames Laboratoriais em Domicílio: 100% inclusa (até 2x/ano para Check-up de Rotina)" },
-      { icon: "", label: "Atendimento Veterinário Domiciliar: 10% de desconto em todos os atendimentos domiciliares" },
-      { icon: "", label: "Ultrassonografia em Domicílio: Tarifa VIP com desconto exclusivo (1x/ano)" },
-      { icon: "", label: "Encontros Periódicos ConectaVet com Surpresinhas: Participação em encontros presenciais exclusivos com aulas, ativações e surpresas especiais" },
-      { icon: "", label: "Envio de 1 Mini Kit Emergência Pet Premium: Anual" },
-      { icon: "", label: "Consultas Virtuais Extras: Coparticipação fixa de apenas R$ 19,00" }
-    ]
-  },
-]
 </script>
 
 <template>
   <div>
-    <UCard class="p-4">
+    <UCard>
       <h4 class="lg:block hidden lg:text-2xl font-semibold text-primary text-center mb-4">Assine e tenha acesso a conteúdos exclusivos de primeiros socorros e cuidados com seu pet.</h4>
       <h4 class="block lg:hidden text-2xl font-semibold text-primary text-center mb-4">Assine já!</h4>
 
-      <section class="py-8 lg:py-16">
+      <section>
         <div class="grid lg:grid-cols-3 gap-6">
-          <div v-for="plan in plans" :key="plan.title">
+          <div v-for="plan in plans" :key="plan.id">
             <!-- Card wrapper -->
             <div 
               class="relative border-2 rounded-2xl shadow-lg"
@@ -88,37 +25,46 @@ const plans: Plan[] = [
             >
               <!-- Title -->
               <div 
-                class=" font-bold text-xl mb-4 rounded-t-xl px-2 py-3 flex justify-center gap-2"
-                :class="plan.title !== 'Essencial' ? 'text-foreground' : 'text-primary'"
+                class=" font-bold text-xl mb-4 rounded-t-xl px-2 py-3"
+                :class="plan.id !== 0 ? 'text-foreground' : 'text-primary'"
                 :style="{ backgroundColor: plan.color }"
               >
-                <div>
-                  {{ plan.title }}
+                <div class="flex justify-center gap-2">
+                  <div>
+                    {{ plan.title }}
+                  </div>
+
+                  <span v-if="plan.id === 2" class="">
+                    <UIcon name="i-ph-crown" class="text-yellow-500 size-6" />
+                  </span>
                 </div>
 
-                <span v-if="plan.title === 'Super Premium'" class="">
-                  <UIcon name="i-ph-crown" class="text-yellow-500 size-6" />
-                </span>
+                <p 
+                  class="lg:text-sm text-xs text-center font-normal"
+                  :class="plan.id === 0 ? 'text-primary/70' : 'text-foreground/70'"
+                >{{ plan.focus_desc }}</p>
               </div>
 
               <div class="px-4">
-                <!-- Focus / description -->
-                <h4 class="text-primary font-semibold text-lg mb-2">{{ plan.focus }}</h4>
-                <p class="text-primary/60 mb-4">{{ plan.focus_desc }}</p>
-
-                <!-- Price -->
-                <p class="text-primary text-2xl font-bold mb-4">R$ {{ plan.price.toFixed(2) }}/mês</p>
+                <!-- Price and Focus -->
+                <p class="text-primary lg:text-4xl text-2xl font-bold text-center">
+                  {{ plan.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}/mês
+                </p>
+                <p class="text-primary/60 font-semibold text-center mb-4">{{ plan.focus }}</p>
 
                 <!-- Perks -->
-                <ul class="space-y-2">
+                <ul class="space-y-2 mb-4">
                   <li v-for="perk in plan.perks" :key="perk.label" class="flex items-center gap-2">
                     <div 
-                      class=" rounded-full px-3 py-3 flex items-center"
-                      :style="{ backgroundColor: plan.color }"
+                      class=" rounded-full px-3 py-3 flex items-center border"
+                      :style="{ 
+                        backgroundColor: plan.color,
+                        borderColor: plan.id === 0 ? 'primary' : plan.color,
+                      }"
                     >
                       <UIcon 
                         v-if="perk.icon" :name="perk.icon" class="size-6"
-                        :class="plan.title === 'Essencial' ? 'text-primary' : 'text-foreground'"
+                        :class="plan.id === 0 ? 'text-primary' : 'text-foreground'"
                       />
                     </div>
                     <!-- Text -->
@@ -130,6 +76,11 @@ const plans: Plan[] = [
           </div>
         </div>
       </section>
+
+      <!-- DOTTED BORDER INFO -->
+      <div>
+        test
+      </div>
     </UCard>
   </div>
 </template>
