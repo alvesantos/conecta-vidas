@@ -1,10 +1,13 @@
+export type UserType = 'tutor' | 'admin'
+
 export interface AuthUser {
   id: string
   name: string
   email: string
+  type: UserType
 }
 
-interface LoginResponse {
+interface AuthResponse {
   token: string
   user: AuthUser
 }
@@ -19,21 +22,32 @@ export function useAuth() {
   })
 
   const isLoggedIn = computed(() => !!user.value)
+  const isAdmin = computed(() => user.value?.type === 'admin')
 
-  async function login(email: string, password: string): Promise<void> {
-    const config = useRuntimeConfig()
-
-    const data = await $fetch<LoginResponse>(`${config.public.apiBase}/auth/login`, {
-      method: 'POST',
-      body: { email, password },
-    })
-
+  function persist(data: AuthResponse) {
     user.value = data.user
-
     if (import.meta.client) {
       localStorage.setItem('auth:user', JSON.stringify(data.user))
       localStorage.setItem('auth:token', data.token)
     }
+  }
+
+  async function login(email: string, password: string): Promise<void> {
+    const config = useRuntimeConfig()
+    const data = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/login`, {
+      method: 'POST',
+      body: { email, password },
+    })
+    persist(data)
+  }
+
+  async function register(payload: Record<string, unknown>): Promise<void> {
+    const config = useRuntimeConfig()
+    const data = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/register`, {
+      method: 'POST',
+      body: payload,
+    })
+    persist(data)
   }
 
   function logout() {
@@ -52,5 +66,5 @@ export function useAuth() {
     return null
   }
 
-  return { user, isLoggedIn, login, logout, getToken }
+  return { user, isLoggedIn, isAdmin, login, register, logout, getToken }
 }
