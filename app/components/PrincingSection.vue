@@ -99,7 +99,9 @@ const navigateToRoute = (route: string) => {
               </div>
 
               <div>
+                <!-- MOCK DATA ON CLICK -->
                 <button
+                  @click="navigateToRoute(userCurrentPlan === plan.id ? '/minha-assinatura' : '/checkout')"
                   class="cursor-pointer w-full py-3 rounded-b-xl font-semibold transition-all duration-200 border-2 hover:opacity-90 hover:scale-[1.01]"
                   :class="plan.id === 0
                     ? 'text-primary hover:text-primary'
