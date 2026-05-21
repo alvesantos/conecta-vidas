@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { plans } from '../localData/plans';
 import type { Plan } from '../interfaces/plans';
-import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   reduced: {
@@ -16,6 +18,10 @@ const displayedPerks = (plan: Plan) => {
   limited.push({ icon: 'i-ph-info', label: 'Clique para ver mais benefícios!' })
   return limited
 }
+
+const navigateToRoute = (route: string) => {
+  router.push(route);
+}
 </script>
 
 <template>
@@ -29,7 +35,7 @@ const displayedPerks = (plan: Plan) => {
           <div v-for="plan in plans" :key="plan.id" class="flex">
             <!-- Card wrapper -->
             <div 
-              class="relative border-2 rounded-2xl shadow-lg"
+              class="relative border-2 rounded-2xl shadow-lg flex flex-col flex-1"
               :style="{ borderColor: plan.color }"
             >
               <!-- Title -->
@@ -54,17 +60,18 @@ const displayedPerks = (plan: Plan) => {
                 >{{ plan.focus_desc }}</p>
               </div>
 
-              <div class="px-4">
+              <div class="px-4 flex flex-col flex-1">
                 <!-- Price and Focus -->
                 <p class="text-primary lg:text-4xl text-2xl font-bold text-center">
                   {{ plan.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}/mês
                 </p>
-                <p class="text-primary/60 font-semibold text-center mb-4 text-sm">{{ plan.focus }}</p>
+                <p class="text-primary/60 font-semibold text-center mb-4 text-sm min-h-[3rem] line-clamp-2">{{ plan.focus }}</p>
 
                 <!-- Perks -->
-                <ul class="space-y-2 mb-4">
+                <ul class="space-y-2 mb-4 flex flex-col flex-1 justify-between">
                   <li v-for="perk in displayedPerks(plan)" :key="perk.label" class="flex items-center gap-2">
                     <div 
+                      @click="perk.icon === 'i-ph-info' && navigateToRoute('/assinaturas')"
                       class=" rounded-full px-3 py-3 flex items-center border"
                       :style="{ 
                         backgroundColor: plan.color,
