@@ -4,6 +4,7 @@ import { vMaska } from "maska/vue";
 
 const { api } = useApi();
 const router = useRouter();
+const config = useRuntimeConfig();
 
 const currentStep = ref(1);
 const loading = ref(false);
@@ -31,6 +32,11 @@ const petNeutered = ref("");
 const petBehavior = ref("");
 const petConditions = ref("");
 
+// Avatar
+const petAvatarFile = ref<File | null>(null);
+const petAvatarPreview = ref<string | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
+
 // Errors
 const errors = reactive<Record<string, string>>({});
 
@@ -42,12 +48,8 @@ function clearError(field: string) {
 }
 
 const speciesOptions = [
-  { label: "Cão", value: "cao" },
+  { label: "Cachorro", value: "cachorro" },
   { label: "Gato", value: "gato" },
-  { label: "Pássaro", value: "passaro" },
-  { label: "Réptil", value: "reptil" },
-  { label: "Roedor", value: "roedor" },
-  { label: "Outro", value: "outro" },
 ];
 
 const sizeOptions = [
@@ -73,6 +75,26 @@ const petAge = computed(() => {
   const years = Math.floor(months / 12);
   return `${years} ${years === 1 ? "ano" : "anos"}`;
 });
+
+function onAvatarChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+
+  petAvatarFile.value = file;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    petAvatarPreview.value = e.target?.result as string;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeAvatar() {
+  petAvatarFile.value = null;
+  petAvatarPreview.value = null;
+  if (fileInputRef.value) fileInputRef.value.value = "";
+}
 
 function validateStep1() {
   let valid = true;
@@ -165,6 +187,7 @@ async function submit() {
   apiError.value = "";
 
   try {
+    // 1. Criar tutor
     const tutor = await api<{ id: string }>("/tutors", {
       method: "POST",
       body: {
@@ -176,21 +199,24 @@ async function submit() {
       },
     });
 
-    await api("/pets", {
+    // 2. Criar pet com multipart/form-data (para enviar o avatar junto)
+    const formData = new FormData();
+    formData.append("tutor_id", tutor.id);
+    formData.append("name", petName.value);
+    formData.append("species", petSpecies.value);
+    formData.append("breed", petBreed.value);
+    formData.append("size", petSize.value);
+    formData.append("coat", petCoat.value);
+    formData.append("birth_date", petBirthDate.value);
+    formData.append("microchipped", String(petMicrochipped.value === "sim"));
+    formData.append("neutered", String(petNeutered.value === "sim"));
+    if (petBehavior.value) formData.append("behavior", petBehavior.value);
+    if (petConditions.value) formData.append("conditions", petConditions.value);
+    if (petAvatarFile.value) formData.append("avatar", petAvatarFile.value);
+
+    await $fetch(`${config.public.apiBase}/pets`, {
       method: "POST",
-      body: {
-        tutor_id: tutor.id,
-        name: petName.value,
-        species: petSpecies.value,
-        breed: petBreed.value,
-        size: petSize.value,
-        coat: petCoat.value,
-        birth_date: petBirthDate.value,
-        microchipped: petMicrochipped.value === "sim",
-        neutered: petNeutered.value === "sim",
-        behavior: petBehavior.value || undefined,
-        conditions: petConditions.value || undefined,
-      },
+      body: formData,
     });
 
     await router.push("/login");
@@ -369,6 +395,63 @@ async function submit() {
 
       <!-- Step 2: Pet -->
       <div v-if="currentStep === 2" class="flex flex-col gap-4">
+
+        <!-- Upload de avatar do pet -->
+        <div class="flex flex-col items-center gap-2">
+          <input
+            ref="fileInputRef"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            class="hidden"
+            @change="onAvatarChange"
+          />
+
+          <!-- Preview ou placeholder clicável -->
+          <div
+            class="relative cursor-pointer group"
+            @click="fileInputRef?.click()"
+          >
+            <div
+              v-if="petAvatarPreview"
+              class="w-28 h-28 rounded-full overflow-hidden border-4 border-accent shadow"
+            >
+              <img
+                :src="petAvatarPreview"
+                alt="Foto do pet"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              v-else
+              class="w-28 h-28 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
+            >
+              <UIcon name="i-heroicons-camera" class="text-gray-400 text-2xl group-hover:text-accent" />
+              <span class="text-xs text-gray-400 group-hover:text-accent">Foto do pet</span>
+            </div>
+
+            <!-- Botão de overlay ao passar o mouse (quando já tem preview) -->
+            <div
+              v-if="petAvatarPreview"
+              class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <UIcon name="i-heroicons-camera" class="text-white text-2xl" />
+            </div>
+          </div>
+
+          <!-- Botão remover -->
+          <UButton
+            v-if="petAvatarPreview"
+            label="Remover foto"
+            size="xs"
+            color="neutral"
+            variant="ghost"
+            leading-icon="i-heroicons-trash"
+            class="text-gray-400"
+            @click.stop="removeAvatar"
+          />
+          <p v-else class="text-xs text-gray-400">(opcional) JPG, PNG ou WebP até 5 MB</p>
+        </div>
+
         <UFormField :error="errors.petName">
           <UInput
             v-model="petName"
