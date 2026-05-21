@@ -42,7 +42,12 @@ function handleLogout() {
   <header
     class="bg-[#0d1b4b] border-b border-[#1a2d6b] px-4 py-3 flex items-center justify-between md:hidden"
   >
-    <img src="/conecta-icon.png" alt="ConectaVet" class="h-10 w-auto" />
+    <div class="flex items-center ">
+      <img src="/conecta-icon.png" alt="ConectaVet" class="h-10 w-auto" />
+      <span class="text-white/80 text-xs font-semibold tracking-widest">
+        BACKOFFICE
+      </span>
+    </div>
 
     <button
       class="text-white/70 hover:text-white transition-colors cursor-pointer"
