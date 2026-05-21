@@ -14,7 +14,7 @@ const handleScrollToPricing = () => {
       <!-- CARD -->
       <div class="max-w-[30%] pb-1 cursor-pointer" @click="handleScrollToPricing">
         <UCard 
-          :ui="{body: 'bg-accent'}"
+          :ui="{body: 'bg-primary'}"
           >
           <div class="flex items-center gap-4">
             <!-- ICON -->
@@ -69,11 +69,7 @@ const handleScrollToPricing = () => {
         <!-- CARD -->
         <div class="pt-4 cursor-pointer" @click="handleScrollToPricing">
           <UCard 
-            :ui="{
-              body: {
-                base: 'bg-primary'
-              }
-            }"
+            :ui="{body: 'bg-primary'}"
             >
             <div class="flex items-center gap-4 ">
               <!-- ICON -->

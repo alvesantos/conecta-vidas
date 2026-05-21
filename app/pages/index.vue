@@ -56,7 +56,7 @@ definePageMeta({
 
 
       <section class="w-full lg:absolute lg:bottom-0 static">
-        <subscriptionAd />
+        <SubscriptionAd />
       </section>
     </div>
 
