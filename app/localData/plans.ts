@@ -11,7 +11,6 @@ export const plans: Plan[] = [
     price: 39.90,
     perks: [
       { icon: "i-ph-dog", label: "Cadastro de até 2 pets (cães e gatos)" },
-      { icon: "i-ph-headset", label: "Teletriagem Veterinária ILIMITADA (24h)" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada: 1 por mês" },
       { icon: "i-ph-play-circle", label: "Plataforma de Conteúdo: Acesso completo incluso (Vídeos educativos, culinária e mais!)" },
       { icon: "i-ph-users-three", label: "Clube ConectaVet (Grupo VIP no WhatsApp)" },
@@ -32,7 +31,6 @@ export const plans: Plan[] = [
     price: 79.90,
     perks: [
       { icon: "i-ph-exclamation-mark", label: "Tudo incluso no Essencial" },
-      { icon: "i-ph-headset", label: "Teletriagem Veterinária ILIMITADA (24h) com Prioridade" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada ou Pronto Atendimento: 2 por mês" },
       { icon: "i-ph-first-aid-kit", label: "Envio de 1 Mini Kit Emergência Pet: Anual" },
       { icon: "i-ph-house-line", label: "Atendimento Veterinário Domiciliar: 5% de desconto em todos os atendimentos domiciliares" },
@@ -52,7 +50,6 @@ export const plans: Plan[] = [
     price: 149.90,
     perks: [
       { icon: "i-ph-exclamation-mark", label: "Tudo incluso no Essencial e Care Plus" },
-      { icon: "i-ph-headset", label: "Teletriagem Veterinária ILIMITADA (24h) com Prioridade máxima" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual ou Pronto Atendimento: 4 por mês (inclui pets exóticos/silvestres)" },
       { icon: "i-ph-first-aid-kit", label: "Envio de 1 Mini Kit Emergência Pet Premium: Anual" },
       { icon: "i-ph-house-line", label: "Atendimento Veterinário Domiciliar: 10% de desconto em todos os atendimentos domiciliares" },

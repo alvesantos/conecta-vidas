@@ -69,7 +69,11 @@ const handleScrollToPricing = () => {
         <!-- CARD -->
         <div class="pt-4 cursor-pointer" @click="handleScrollToPricing">
           <UCard 
-            :ui="{body: 'bg-accent'}"
+            :ui="{
+              body: {
+                base: 'bg-primary'
+              }
+            }"
             >
             <div class="flex items-center gap-4 ">
               <!-- ICON -->
