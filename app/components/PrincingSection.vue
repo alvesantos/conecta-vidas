@@ -2,6 +2,7 @@
 import { plans } from '../localData/plans';
 import type { Plan } from '../interfaces/plans';
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const router = useRouter();
 
@@ -11,6 +12,8 @@ const props = defineProps({
     default: true
   }
 });
+
+const userCurrentPlan = ref(1) // MOCK - ID do plano atual do usuário, para fins de demonstração. Substituir pela lógica real de obtenção do plano do usuário.;
 
 const displayedPerks = (plan: Plan) => {
   if (!props.reduced) return plan.perks
@@ -93,6 +96,24 @@ const navigateToRoute = (route: string) => {
                     <span class="text-primary text-xs lg:text-base">{{ perk.label }}</span>
                   </li>
                 </ul>
+              </div>
+
+              <div>
+                <button
+                  class="cursor-pointer w-full py-3 rounded-b-xl font-semibold transition-all duration-200 border-2 hover:opacity-90 hover:scale-[1.01]"
+                  :class="plan.id === 0
+                    ? 'text-primary hover:text-primary'
+                    : 'text-foreground hover:text-foreground'"
+                  :style="{
+                    backgroundColor: plan.color,
+                    borderColor: plan.color
+                  }"
+                >
+                  {{ userCurrentPlan === plan.id
+                    ? 'Gerenciar Assinatura'
+                    : 'Comprar plano'
+                  }}
+                </button>
               </div>
             </div>
           </div>
