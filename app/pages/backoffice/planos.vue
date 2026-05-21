@@ -5,7 +5,7 @@ definePageMeta({ layout: 'backoffice', middleware: 'admin' });
 
 const { listAdmin, createPlan, updatePlan } = usePlans();
 
-const plans = ref<Plan[]>([]);
+const plans = ref<Plan[]>([]); 
 const pending = ref(true);
 
 async function loadPlans() {
@@ -118,7 +118,7 @@ async function save() {
       />
     </div>
 
-    <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="bg-white rounded-xl shadow overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-600 text-left">
           <tr>

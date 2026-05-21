@@ -182,7 +182,7 @@ function typeLabel(type: 'tutor' | 'admin') {
       class="mb-4"
     />
 
-    <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="bg-white rounded-xl shadow overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-600 text-left">
           <tr>
