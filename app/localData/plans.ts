@@ -36,7 +36,7 @@ export const plans: Plan[] = [
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada ou Pronto Atendimento: 2 por mês" },
       { icon: "i-ph-first-aid-kit", label: "Envio de 1 Mini Kit Emergência Pet: Anual" },
       { icon: "i-ph-house-line", label: "Atendimento Veterinário Domiciliar: 5% de desconto em todos os atendimentos domiciliares" },
-      { icon: "i-ph-cat", label: "Encontros Periódicos ConectaVet: Participação em encontros presenciais exclusivos com aulas práticas e socialização pet" },
+      { icon: "i-ph-cat", label: "Encontros ConectaVet: Participação em encontros presenciais exclusivos com aulas práticas e socialização pet" },
       { icon: "i-ph-first-aid", label: "Exames Laboratoriais e de Imagem em Casa: Acesso a valores reduzidos de rede" },
       { icon: "i-ph-seal-percent", label: "Consultas Virtuais Extras: Coparticipação fixa de apenas R$ 29,00" }
     ]
@@ -56,7 +56,6 @@ export const plans: Plan[] = [
       { icon: "i-ph-stethoscope", label: "Consulta Virtual ou Pronto Atendimento: 4 por mês (inclui pets exóticos/silvestres)" },
       { icon: "i-ph-first-aid-kit", label: "Envio de 1 Mini Kit Emergência Pet Premium: Anual" },
       { icon: "i-ph-house-line", label: "Atendimento Veterinário Domiciliar: 10% de desconto em todos os atendimentos domiciliares" },
-      { icon: "i-ph-cat", label: "Encontros Periódicos ConectaVet com Surpresinhas: Participação em encontros presenciais exclusivos com aulas, ativações e surpresas especiais" },
       { icon: "i-ph-first-aid", label: "Coleta de Exames Laboratoriais em Domicílio: 100% inclusa (até 2x/ano para Check-up de Rotina)" },
       { icon: "i-ph-cake", label: "Benefício Aniversário ConectaVet: Kit premium aniversário com mimos físicos, cupom exclusivo, parabéns personalizado e descontos de elite" },
       { icon: "i-ph-lego", label: "MAFFYBOX: Envio mensal de brinquedos, petiscos e itens de moda pet ergonômica direto para sua casa" },

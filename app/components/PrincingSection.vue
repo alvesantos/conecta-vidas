@@ -26,7 +26,7 @@ const displayedPerks = (plan: Plan) => {
 
       <section>
         <div class="grid lg:grid-cols-3 gap-6">
-          <div v-for="plan in plans" :key="plan.id">
+          <div v-for="plan in plans" :key="plan.id" class="flex">
             <!-- Card wrapper -->
             <div 
               class="relative border-2 rounded-2xl shadow-lg"
@@ -77,7 +77,7 @@ const displayedPerks = (plan: Plan) => {
                       />
                     </div>
                     <!-- Text -->
-                    <span class="text-primary">{{ perk.label }}</span>
+                    <span class="text-primary text-xs lg:text-base">{{ perk.label }}</span>
                   </li>
                 </ul>
               </div>
