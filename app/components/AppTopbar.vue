@@ -68,18 +68,6 @@ function handleLogout() {
   >
     <img src="/conecta-icon.png" alt="ConectaVet" class="h-10 w-auto" />
 
-    <!-- Info compacta do usuário logado (no header) -->
-    <div v-if="isLoggedIn" class="flex items-center gap-2">
-      <div
-        class="flex items-center justify-center size-8 rounded-full bg-accent text-white text-sm font-semibold"
-      >
-        {{ userInitials }}
-      </div>
-      <span class="text-white text-sm font-medium hidden xs:block">{{
-        user?.name
-      }}</span>
-    </div>
-
     <button
       class="text-white/70 hover:text-white transition-colors cursor-pointer"
       @click="menuOpen = !menuOpen"
