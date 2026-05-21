@@ -8,7 +8,7 @@ interface NavItem {
 
 const menuOpen = ref(false);
 
-const { user, isLoggedIn, logout } = useAuth();
+const { user, isLoggedIn, isAdmin, logout } = useAuth();
 
 const commonItems: NavItem[] = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
@@ -26,6 +26,10 @@ const loggedInItems: NavItem[] = [
   { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
 ];
 
+const adminItems: NavItem[] = [
+  { label: "Backoffice", to: "/backoffice", icon: "i-heroicons-shield-check" },
+];
+
 const guestItems: NavItem[] = [
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
@@ -35,11 +39,12 @@ const guestItems: NavItem[] = [
   },
 ];
 
-const navItems = computed<NavItem[]>(() =>
-  isLoggedIn.value
-    ? [...commonItems, ...loggedInItems]
-    : [...commonItems, ...guestItems],
-);
+const navItems = computed<NavItem[]>(() => {
+  if (!isLoggedIn.value) return [...commonItems, ...guestItems];
+  const items = [...commonItems, ...loggedInItems];
+  if (isAdmin.value) items.push(...adminItems);
+  return items;
+});
 
 const userInitials = computed(() => {
   if (!user.value?.name) return "?";

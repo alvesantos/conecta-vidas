@@ -86,7 +86,7 @@
 <script setup lang="ts">
 const collapsed = ref(false);
 
-const { user, isLoggedIn, logout } = useAuth();
+const { user, isLoggedIn, isAdmin, logout } = useAuth();
 
 const commonItems = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
@@ -104,6 +104,10 @@ const loggedInItems = [
   { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
 ];
 
+const adminItems = [
+  { label: "Backoffice", to: "/backoffice", icon: "i-heroicons-shield-check" },
+];
+
 const guestItems = [
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
@@ -113,11 +117,12 @@ const guestItems = [
   },
 ];
 
-const navItems = computed(() =>
-  isLoggedIn.value
-    ? [...commonItems, ...loggedInItems]
-    : [...commonItems, ...guestItems],
-);
+const navItems = computed(() => {
+  if (!isLoggedIn.value) return [...commonItems, ...guestItems];
+  const items = [...commonItems, ...loggedInItems];
+  if (isAdmin.value) items.push(...adminItems);
+  return items;
+});
 
 const ui = computed(() => ({
   link: `text-base hover:text-white hover:before:bg-white/10 ${collapsed.value ? "justify-center py-4" : "py-3"}`,
