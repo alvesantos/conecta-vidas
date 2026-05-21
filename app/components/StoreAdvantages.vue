@@ -31,7 +31,8 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
   ])
 
   const handleBannerClick = () => {
-    window.open('https://wa.me/5511978786184', '_blank');
+    const msg = encodeURIComponent('Olá! Vim pelo site da ConectaVet e gostaria de saber mais sobre os planos.');
+    window.open(`https://wa.me/5511978786184?text=${msg}`, '_blank');
   }
 </script>
 
