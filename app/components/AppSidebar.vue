@@ -97,6 +97,7 @@ const commonItems = [
     icon: "i-heroicons-shopping-bag",
   },
   { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
+  { label: "Termos e Políticas", to: "/termos", icon: "i-heroicons-document-text" },
 ];
 
 const loggedInItems = [
