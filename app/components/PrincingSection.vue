@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { plans } from '../localData/plans';
+import type { Plan } from '../interfaces/plans';
+import { computed } from 'vue';
 
-defineProps<{
-  reduced?: {
-    type: boolean,
+const props = defineProps({
+  reduced: {
+    type: Boolean,
     default: true
   }
-}>()
+});
+
+const displayedPerks = (plan: Plan) => {
+  if (!props.reduced) return plan.perks
+  const limited = plan.perks.slice(0, 6)
+  limited.push({ icon: 'i-ph-info', label: 'Clique para ver mais benefícios!' })
+  return limited
+}
 </script>
 
 <template>
@@ -50,11 +59,11 @@ defineProps<{
                 <p class="text-primary lg:text-4xl text-2xl font-bold text-center">
                   {{ plan.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}/mês
                 </p>
-                <p class="text-primary/60 font-semibold text-center mb-4">{{ plan.focus }}</p>
+                <p class="text-primary/60 font-semibold text-center mb-4 text-sm">{{ plan.focus }}</p>
 
                 <!-- Perks -->
                 <ul class="space-y-2 mb-4">
-                  <li v-for="perk in plan.perks" :key="perk.label" class="flex items-center gap-2">
+                  <li v-for="perk in displayedPerks(plan)" :key="perk.label" class="flex items-center gap-2">
                     <div 
                       class=" rounded-full px-3 py-3 flex items-center border"
                       :style="{ 
@@ -78,8 +87,12 @@ defineProps<{
       </section>
 
       <!-- DOTTED BORDER INFO -->
-      <div>
-        test
+      <div class="rounded-2xl border-dotted border-2 mt-4 py-2 flex flex-block">
+        <img src="/maffy_gift.png" class="ml-2 w-[20%] lg:w-[8%] h-auto object-contain lg:mr-20" />
+        <div class="flex flex-col justify-center px-4">
+          <p class="text-primary font-bold text-sm lg:text-3xl">PRESENTINHOS INCLUSOS!</p>
+          <p class="text-xs lg:text-xl">Presente Dia do Pai de Pet e Presente Dia da Mãe de Pet pelo MAFFYBOX!</p>
+        </div>
       </div>
     </UCard>
   </div>
