@@ -1,57 +1,8 @@
-<script setup lang="ts">
-const collapsed = ref(false);
-
-const { user, isLoggedIn, logout } = useAuth();
-
-// Itens visíveis sempre (logado ou não)
-const commonItems = [
-  { label: "Início", to: "/", icon: "i-heroicons-home" },
-  {
-    label: "E-commerce",
-    to: "https://maffy.com.br",
-    target: "_blank",
-    icon: "i-heroicons-shopping-bag",
-  },
-  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
-];
-
-// Itens somente para usuários NÃO logados
-const guestItems = [
-  { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
-  {
-    label: "Login",
-    to: "/login",
-    icon: "i-heroicons-arrow-right-on-rectangle",
-  },
-];
-
-const navItems = computed(() =>
-  isLoggedIn.value ? commonItems : [...commonItems, ...guestItems],
-);
-
-const ui = computed(() => ({
-  link: `py-4 text-base hover:text-white hover:before:bg-white/10 ${collapsed.value ? "justify-center" : "px-2"}`,
-  linkLeadingIcon: `shrink-0 group-hover:text-white ${collapsed.value ? "size-7" : "size-6"}`,
-}));
-
-// Iniciais do nome do usuário para o avatar
-const userInitials = computed(() => {
-  if (!user.value?.name) return "?";
-  return user.value.name
-    .split(" ")
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-});
-</script>
-
 <template>
   <aside
     class="sticky top-0 h-screen bg-primary flex flex-col pt-2 pb-6 transition-all duration-300 overflow-y-auto"
-    :class="collapsed ? 'w-28' : 'w-64 px-4'"
+    :class="collapsed ? 'w-18' : 'w-64 px-4'"
   >
-    <!-- Logo -->
     <div class="flex items-center justify-center mb-6 px-2">
       <img
         src="/conecta-icon.png"
@@ -61,7 +12,6 @@ const userInitials = computed(() => {
       />
     </div>
 
-    <!-- Info do usuário logado -->
     <div
       v-if="isLoggedIn"
       class="flex items-center gap-3 mb-4 px-2 py-3 rounded-xl bg-white/10"
@@ -82,16 +32,15 @@ const userInitials = computed(() => {
       </div>
     </div>
 
-    <!-- Menu de navegação -->
     <UNavigationMenu
       orientation="vertical"
       :items="navItems"
       :ui="ui"
       :collapsed="collapsed"
       class="w-full"
+      :class="collapsed ? 'p-3' : ''"
     />
 
-    <!-- Botão Sair (somente logado) -->
     <div
       v-if="isLoggedIn"
       class="mt-auto pt-4"
@@ -111,7 +60,6 @@ const userInitials = computed(() => {
       </button>
     </div>
 
-    <!-- Botão colapsar (rodapé) -->
     <div
       class="pt-3 border-t border-white/10 mt-3"
       :class="collapsed ? 'flex justify-center' : ''"
@@ -134,3 +82,48 @@ const userInitials = computed(() => {
     </div>
   </aside>
 </template>
+
+<script setup lang="ts">
+const collapsed = ref(false);
+
+const { user, isLoggedIn, logout } = useAuth();
+
+const commonItems = [
+  { label: "Início", to: "/", icon: "i-heroicons-home" },
+  {
+    label: "E-commerce",
+    to: "https://maffy.com.br",
+    target: "_blank",
+    icon: "i-heroicons-shopping-bag",
+  },
+  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
+];
+
+const guestItems = [
+  { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
+  {
+    label: "Login",
+    to: "/login",
+    icon: "i-heroicons-arrow-right-on-rectangle",
+  },
+];
+
+const navItems = computed(() =>
+  isLoggedIn.value ? commonItems : [...commonItems, ...guestItems],
+);
+
+const ui = computed(() => ({
+  link: `text-base hover:text-white hover:before:bg-white/10 ${collapsed.value ? "justify-center py-4" : "py-3"}`,
+  linkLeadingIcon: `shrink-0 group-hover:text-white size-6`,
+}));
+
+const userInitials = computed(() => {
+  if (!user.value?.name) return "?";
+  return user.value.name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+});
+</script>
