@@ -99,6 +99,10 @@ const commonItems = [
   { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
 ];
 
+const loggedInItems = [
+  { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
+];
+
 const guestItems = [
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
@@ -109,7 +113,9 @@ const guestItems = [
 ];
 
 const navItems = computed(() =>
-  isLoggedIn.value ? commonItems : [...commonItems, ...guestItems],
+  isLoggedIn.value
+    ? [...commonItems, ...loggedInItems]
+    : [...commonItems, ...guestItems],
 );
 
 const ui = computed(() => ({

@@ -21,6 +21,10 @@ const commonItems: NavItem[] = [
   { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
 ];
 
+const loggedInItems: NavItem[] = [
+  { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
+];
+
 const guestItems: NavItem[] = [
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
@@ -31,7 +35,9 @@ const guestItems: NavItem[] = [
 ];
 
 const navItems = computed<NavItem[]>(() =>
-  isLoggedIn.value ? commonItems : [...commonItems, ...guestItems],
+  isLoggedIn.value
+    ? [...commonItems, ...loggedInItems]
+    : [...commonItems, ...guestItems],
 );
 
 const userInitials = computed(() => {
