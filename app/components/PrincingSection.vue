@@ -69,9 +69,15 @@ const navigateToRoute = (route: string) => {
 
                 <!-- Perks -->
                 <ul class="space-y-2 mb-4 flex flex-col flex-1 justify-between">
-                  <li v-for="perk in displayedPerks(plan)" :key="perk.label" class="flex items-center gap-2">
+                  <li 
+                    v-for="perk in displayedPerks(plan)"
+                    :key="perk.label" class="flex items-center gap-2"
+                    :class="{
+                      'cursor-pointer': perk.icon === 'i-ph-info',
+                    }"
+                    @click="perk.icon === 'i-ph-info' && navigateToRoute('/assinaturas')"
+                    >
                     <div 
-                      @click="perk.icon === 'i-ph-info' && navigateToRoute('/assinaturas')"
                       class=" rounded-full px-3 py-3 flex items-center border"
                       :style="{ 
                         backgroundColor: plan.color,
