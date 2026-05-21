@@ -2,9 +2,9 @@
 definePageMeta({ noPadding: true });
 import { vMaska } from "maska/vue";
 
-const { api } = useApi();
 const router = useRouter();
 const config = useRuntimeConfig();
+const { register } = useAuth();
 
 const currentStep = ref(1);
 const loading = ref(false);
@@ -187,39 +187,56 @@ async function submit() {
   apiError.value = "";
 
   try {
-    // 1. Criar tutor
-    const tutor = await api<{ id: string }>("/tutors", {
-      method: "POST",
-      body: {
-        name: tutorName.value,
-        cpf: tutorCpf.value,
-        email: tutorEmail.value,
-        address: tutorAddress.value || undefined,
-        password: tutorPassword.value,
+    // 1. Criar usuário (tutor) + pet em uma única chamada (sem avatar)
+    await register({
+      name: tutorName.value,
+      cpf: tutorCpf.value,
+      email: tutorEmail.value,
+      address: tutorAddress.value || undefined,
+      password: tutorPassword.value,
+      pet: {
+        name: petName.value,
+        species: petSpecies.value,
+        breed: petBreed.value,
+        size: petSize.value,
+        coat: petCoat.value,
+        birth_date: petBirthDate.value,
+        microchipped: petMicrochipped.value === "sim",
+        neutered: petNeutered.value === "sim",
+        behavior: petBehavior.value || undefined,
+        conditions: petConditions.value || undefined,
       },
     });
 
-    // 2. Criar pet com multipart/form-data (para enviar o avatar junto)
-    const formData = new FormData();
-    formData.append("tutor_id", tutor.id);
-    formData.append("name", petName.value);
-    formData.append("species", petSpecies.value);
-    formData.append("breed", petBreed.value);
-    formData.append("size", petSize.value);
-    formData.append("coat", petCoat.value);
-    formData.append("birth_date", petBirthDate.value);
-    formData.append("microchipped", String(petMicrochipped.value === "sim"));
-    formData.append("neutered", String(petNeutered.value === "sim"));
-    if (petBehavior.value) formData.append("behavior", petBehavior.value);
-    if (petConditions.value) formData.append("conditions", petConditions.value);
-    if (petAvatarFile.value) formData.append("avatar", petAvatarFile.value);
+    // 2. Se o usuário enviou avatar do pet, fazemos upload separado via multipart
+    if (petAvatarFile.value) {
+      try {
+        const myPets = await $fetch<Array<{ id: string }>>(
+          `${config.public.apiBase}/pets/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("auth:token") ?? ""}`,
+            },
+          },
+        );
+        const created = myPets?.[0];
+        if (created) {
+          const formData = new FormData();
+          formData.append("avatar", petAvatarFile.value);
+          await $fetch(`${config.public.apiBase}/pets/${created.id}`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("auth:token") ?? ""}`,
+            },
+            body: formData,
+          });
+        }
+      } catch {
+        // upload do avatar é opcional — segue o fluxo mesmo se falhar
+      }
+    }
 
-    await $fetch(`${config.public.apiBase}/pets`, {
-      method: "POST",
-      body: formData,
-    });
-
-    await router.push("/login");
+    await router.push("/meu-pet");
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
     apiError.value =
