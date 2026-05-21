@@ -1,61 +1,71 @@
 <script setup lang="ts">
 interface NavItem {
-  label: string
-  to: string
-  icon: string
-  target?: string
+  label: string;
+  to: string;
+  icon: string;
+  target?: string;
 }
 
-const menuOpen = ref(false)
+const menuOpen = ref(false);
 
-const { user, isLoggedIn, logout } = useAuth()
+const { user, isLoggedIn, logout } = useAuth();
 
 const commonItems: NavItem[] = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
   {
     label: "E-commerce",
-    to: "https://loja.conectavet.com.br",
+    to: "https://maffy.com.br",
     target: "_blank",
     icon: "i-heroicons-shopping-bag",
   },
   { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
-]
+];
 
 const guestItems: NavItem[] = [
   { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
-  { label: "Login", to: "/login", icon: "i-heroicons-arrow-right-on-rectangle" },
-]
+  {
+    label: "Login",
+    to: "/login",
+    icon: "i-heroicons-arrow-right-on-rectangle",
+  },
+];
 
 const navItems = computed<NavItem[]>(() =>
-  isLoggedIn.value ? commonItems : [...commonItems, ...guestItems]
-)
+  isLoggedIn.value ? commonItems : [...commonItems, ...guestItems],
+);
 
 const userInitials = computed(() => {
-  if (!user.value?.name) return '?'
+  if (!user.value?.name) return "?";
   return user.value.name
-    .split(' ')
+    .split(" ")
     .slice(0, 2)
     .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-})
+    .join("")
+    .toUpperCase();
+});
 
 function handleLogout() {
-  menuOpen.value = false
-  logout()
+  menuOpen.value = false;
+  logout();
 }
 </script>
 
 <template>
-  <header class="bg-[#0d1b4b] border-b border-[#1a2d6b] px-4 py-3 flex items-center justify-between md:hidden">
+  <header
+    class="bg-[#0d1b4b] border-b border-[#1a2d6b] px-4 py-3 flex items-center justify-between md:hidden"
+  >
     <img src="/conecta-icon.png" alt="ConectaVet" class="h-10 w-auto" />
 
     <!-- Info compacta do usuário logado (no header) -->
     <div v-if="isLoggedIn" class="flex items-center gap-2">
-      <div class="flex items-center justify-center size-8 rounded-full bg-accent text-white text-sm font-semibold">
+      <div
+        class="flex items-center justify-center size-8 rounded-full bg-accent text-white text-sm font-semibold"
+      >
         {{ userInitials }}
       </div>
-      <span class="text-white text-sm font-medium hidden xs:block">{{ user?.name }}</span>
+      <span class="text-white text-sm font-medium hidden xs:block">{{
+        user?.name
+      }}</span>
     </div>
 
     <button
@@ -74,8 +84,13 @@ function handleLogout() {
     class="bg-[#0d1b4b] border-b border-[#1a2d6b] md:hidden"
   >
     <!-- Card do usuário logado no topo do dropdown -->
-    <div v-if="isLoggedIn" class="flex items-center gap-3 px-5 py-4 border-b border-white/10">
-      <div class="flex items-center justify-center size-10 rounded-full bg-accent text-white font-semibold">
+    <div
+      v-if="isLoggedIn"
+      class="flex items-center gap-3 px-5 py-4 border-b border-white/10"
+    >
+      <div
+        class="flex items-center justify-center size-10 rounded-full bg-accent text-white font-semibold"
+      >
         {{ userInitials }}
       </div>
       <div class="flex flex-col min-w-0">
@@ -103,10 +118,12 @@ function handleLogout() {
         class="flex items-center gap-3 px-5 py-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors w-full cursor-pointer mt-1 border-t border-white/10"
         @click="handleLogout"
       >
-        <UIcon name="i-heroicons-arrow-left-on-rectangle" class="size-5 shrink-0" />
+        <UIcon
+          name="i-heroicons-arrow-left-on-rectangle"
+          class="size-5 shrink-0"
+        />
         <span>Sair</span>
       </button>
-
     </nav>
   </div>
 </template>
