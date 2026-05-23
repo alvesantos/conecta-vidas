@@ -32,9 +32,26 @@
       </div>
     </div>
 
+    <!-- Navegação principal -->
     <UNavigationMenu
       orientation="vertical"
       :items="navItems"
+      :ui="ui"
+      :collapsed="collapsed"
+      class="w-full"
+      :class="collapsed ? 'p-3' : ''"
+    />
+
+    <!-- Divisor entre navegação e conta -->
+    <div
+      class="my-3 border-t border-white/15"
+      :class="collapsed ? 'mx-2' : ''"
+    />
+
+    <!-- Itens de conta (Cadastro/Login ou Meu Pet/Backoffice) -->
+    <UNavigationMenu
+      orientation="vertical"
+      :items="accountItems"
       :ui="ui"
       :collapsed="collapsed"
       class="w-full"
@@ -88,39 +105,53 @@ const collapsed = ref(false);
 
 const { user, isLoggedIn, isAdmin, logout } = useAuth();
 
-const commonItems = [
+const navItems = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
   {
-    label: "E-commerce",
+    label: "Solicitar consulta",
+    to: "/solicitar-consulta",
+    icon: "i-mdi-whatsapp",
+  },
+  {
+    label: "Videoaulas",
+    to: "/#videoaulas",
+    icon: "i-heroicons-play-circle",
+  },
+  {
+    label: "Produtos",
     to: "https://maffy.com.br",
     target: "_blank",
     icon: "i-heroicons-shopping-bag",
   },
-  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
-  { label: "Termos e Políticas", to: "/termos", icon: "i-heroicons-document-text" },
-];
-
-const loggedInItems = [
-  { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
-];
-
-const adminItems = [
-  { label: "Backoffice", to: "/backoffice", icon: "i-heroicons-shield-check" },
-];
-
-const guestItems = [
-  { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
-    label: "Login",
-    to: "/login",
-    icon: "i-heroicons-arrow-right-on-rectangle",
+    label: "Nossa história",
+    to: "/nossa-historia",
+    icon: "i-heroicons-book-open",
   },
+  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
 ];
 
-const navItems = computed(() => {
-  if (!isLoggedIn.value) return [...commonItems, ...guestItems];
-  const items = [...commonItems, ...loggedInItems];
-  if (isAdmin.value) items.push(...adminItems);
+const accountItems = computed(() => {
+  if (!isLoggedIn.value) {
+    return [
+      { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
+      {
+        label: "Login",
+        to: "/login",
+        icon: "i-heroicons-arrow-right-on-rectangle",
+      },
+    ];
+  }
+  const items: Array<Record<string, string>> = [
+    { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
+  ];
+  if (isAdmin.value) {
+    items.push({
+      label: "Backoffice",
+      to: "/backoffice",
+      icon: "i-heroicons-shield-check",
+    });
+  }
   return items;
 });
 

@@ -10,39 +10,53 @@ const menuOpen = ref(false);
 
 const { user, isLoggedIn, isAdmin, logout } = useAuth();
 
-const commonItems: NavItem[] = [
+const navItems: NavItem[] = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
   {
-    label: "E-commerce",
+    label: "Solicitar consulta",
+    to: "/solicitar-consulta",
+    icon: "i-mdi-whatsapp",
+  },
+  {
+    label: "Videoaulas",
+    to: "/#videoaulas",
+    icon: "i-heroicons-play-circle",
+  },
+  {
+    label: "Produtos",
     to: "https://maffy.com.br",
     target: "_blank",
     icon: "i-heroicons-shopping-bag",
   },
-  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
-  { label: "Termos e Políticas", to: "/termos", icon: "i-heroicons-document-text" },
-];
-
-const loggedInItems: NavItem[] = [
-  { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
-];
-
-const adminItems: NavItem[] = [
-  { label: "Backoffice", to: "/backoffice", icon: "i-heroicons-shield-check" },
-];
-
-const guestItems: NavItem[] = [
-  { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
   {
-    label: "Login",
-    to: "/login",
-    icon: "i-heroicons-arrow-right-on-rectangle",
+    label: "Nossa história",
+    to: "/nossa-historia",
+    icon: "i-heroicons-book-open",
   },
+  { label: "Assinaturas", to: "/assinaturas", icon: "i-heroicons-credit-card" },
 ];
 
-const navItems = computed<NavItem[]>(() => {
-  if (!isLoggedIn.value) return [...commonItems, ...guestItems];
-  const items = [...commonItems, ...loggedInItems];
-  if (isAdmin.value) items.push(...adminItems);
+const accountItems = computed<NavItem[]>(() => {
+  if (!isLoggedIn.value) {
+    return [
+      { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
+      {
+        label: "Login",
+        to: "/login",
+        icon: "i-heroicons-arrow-right-on-rectangle",
+      },
+    ];
+  }
+  const items: NavItem[] = [
+    { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
+  ];
+  if (isAdmin.value) {
+    items.push({
+      label: "Backoffice",
+      to: "/backoffice",
+      icon: "i-heroicons-shield-check",
+    });
+  }
   return items;
 });
 
@@ -68,7 +82,6 @@ function handleLogout() {
   >
     <img src="/conecta-icon.png" alt="ConectaVet" class="h-10 w-auto" />
 
-    <!-- Info compacta do usuário logado (no header) -->
     <div v-if="isLoggedIn" class="flex items-center gap-2">
       <div
         class="flex items-center justify-center size-8 rounded-full bg-accent text-white text-sm font-semibold"
@@ -95,7 +108,6 @@ function handleLogout() {
     v-show="menuOpen"
     class="bg-[#0d1b4b] border-b border-[#1a2d6b] md:hidden"
   >
-    <!-- Card do usuário logado no topo do dropdown -->
     <div
       v-if="isLoggedIn"
       class="flex items-center gap-3 px-5 py-4 border-b border-white/10"
@@ -124,7 +136,21 @@ function handleLogout() {
         <span>{{ item.label }}</span>
       </NuxtLink>
 
-      <!-- Botão Sair (somente logado) -->
+      <!-- Divisor entre navegação e conta -->
+      <div class="my-2 mx-5 border-t border-white/15" />
+
+      <NuxtLink
+        v-for="item in accountItems"
+        :key="item.to"
+        :to="item.to"
+        :target="item.target"
+        class="flex items-center gap-3 px-5 py-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+        @click="menuOpen = false"
+      >
+        <UIcon :name="item.icon" class="size-5 shrink-0" />
+        <span>{{ item.label }}</span>
+      </NuxtLink>
+
       <button
         v-if="isLoggedIn"
         class="flex items-center gap-3 px-5 py-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors w-full cursor-pointer mt-1 border-t border-white/10"
