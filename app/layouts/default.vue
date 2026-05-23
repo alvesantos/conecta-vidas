@@ -25,7 +25,16 @@ const route = useRoute()
         <!-- Desktop: 3 colunas | Mobile: empilhado centralizado -->
         <div class="flex flex-col md:flex-row md:items-center gap-8 md:gap-4">
 
-          <div class="md:w-1/3 hidden md:block" />
+          <!-- Esquerda: links legais -->
+          <div class="flex flex-col items-center md:items-start gap-2 md:w-1/3">
+            <NuxtLink
+              to="/termos"
+              class="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            >
+              <UIcon name="i-heroicons-document-text" class="size-5 shrink-0" />
+              <span class="text-sm">Termos, Política e LGPD</span>
+            </NuxtLink>
+          </div>
 
           <!-- Centro: slogan + copyright -->
           <div class="flex flex-col items-center gap-2 md:w-1/3 text-center">
@@ -36,12 +45,12 @@ const route = useRoute()
           <!-- Direita: contato -->
           <div class="flex flex-col items-center md:items-end gap-3 md:w-1/3">
             <a
-              href="https://wa.me/5511978786184"
+              href="https://wa.me/5511978654921"
               target="_blank"
               class="flex items-center gap-2 text-white hover:text-green-300 transition-colors"
             >
               <UIcon name="i-mdi-whatsapp" class="size-5 text-green-400 shrink-0" />
-              <span class="text-sm">(11) 97878-6184</span>
+              <span class="text-sm">(11) 97865-4921</span>
             </a>
             <a
               href="mailto:suporteconectavet@gmail.com"
