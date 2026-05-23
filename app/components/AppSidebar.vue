@@ -116,6 +116,7 @@ const navItems = [
     label: "Videoaulas",
     to: "/#videoaulas",
     icon: "i-heroicons-play-circle",
+    active: false,
   },
   {
     label: "Produtos",

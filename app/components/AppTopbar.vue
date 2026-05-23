@@ -4,6 +4,7 @@ interface NavItem {
   to: string;
   icon: string;
   target?: string;
+  active?: boolean;
 }
 
 const menuOpen = ref(false);
@@ -21,6 +22,7 @@ const navItems: NavItem[] = [
     label: "Videoaulas",
     to: "/#videoaulas",
     icon: "i-heroicons-play-circle",
+    active: false,
   },
   {
     label: "Produtos",
@@ -129,6 +131,8 @@ function handleLogout() {
         :key="item.to"
         :to="item.to"
         :target="item.target"
+        :active-class="item.active === false ? '' : undefined"
+        :exact-active-class="item.active === false ? '' : undefined"
         class="flex items-center gap-3 px-5 py-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors"
         @click="menuOpen = false"
       >

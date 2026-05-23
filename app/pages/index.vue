@@ -67,14 +67,14 @@ definePageMeta({
       </section>
     </div>
 
-    <!-- VIDEOAULAS CAROUSEL -->
-    <div class="pt-4 px-4 lg:px-6">
-      <VideoLessonsCarousel />
-    </div>
-
     <!-- PRICES -->
     <div ref="pricingSection" id="pricingSection" class="pt-4 px-4 lg:px-6">
       <PrincingSection />
+    </div>
+
+    <!-- VIDEOAULAS CAROUSEL -->
+    <div class="pt-4 px-4 lg:px-6">
+      <VideoLessonsCarousel />
     </div>
 
     <!-- PAYMENT METHODS -->
