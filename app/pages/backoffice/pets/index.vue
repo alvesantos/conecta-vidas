@@ -45,7 +45,7 @@ onMounted(async () => {
     <h1 class="text-2xl font-bold text-gray-800">Pets</h1>
     <p class="text-gray-500 text-sm mt-1">Todos os pets cadastrados no sistema</p>
 
-    <div class="bg-white rounded-xl shadow overflow-hidden mt-6">
+    <div class="bg-white rounded-xl shadow overflow-x-auto mt-6">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-600 text-left">
           <tr>
