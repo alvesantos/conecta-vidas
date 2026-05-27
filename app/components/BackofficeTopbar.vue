@@ -13,6 +13,7 @@ const { user, isLoggedIn, logout } = useAuth();
 const commonAdminItems: NavItem[] = [
   { label: 'Dashboard', to: '/backoffice', icon: 'i-heroicons-squares-2x2' },
   { label: 'Usuários', to: '/backoffice/usuarios', icon: 'i-heroicons-users' },
+  { label: 'Veterinários', to: '/backoffice/veterinarios', icon: 'i-mdi-stethoscope' },
   { label: 'Pets', to: '/backoffice/pets', icon: 'i-mdi-paw' },
   { label: 'Planos', to: '/backoffice/planos', icon: 'i-heroicons-credit-card' },
   { label: 'Voltar ao site', to: '/', icon: 'i-heroicons-arrow-left-circle' },
