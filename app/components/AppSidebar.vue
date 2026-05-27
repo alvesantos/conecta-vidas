@@ -103,7 +103,7 @@
 <script setup lang="ts">
 const collapsed = ref(false);
 
-const { user, isLoggedIn, isAdmin, logout } = useAuth();
+const { user, isLoggedIn, isAdmin, isVet, logout } = useAuth();
 
 const navItems = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
@@ -151,6 +151,13 @@ const accountItems = computed(() => {
       label: "Backoffice",
       to: "/backoffice",
       icon: "i-heroicons-shield-check",
+    });
+  }
+  if (isVet.value) {
+    items.push({
+      label: "Painel Veterinário",
+      to: "/veterinario/consultas",
+      icon: "i-mdi-stethoscope",
     });
   }
   return items;

@@ -7,7 +7,7 @@ const showPassword = ref(false)
 const loading = ref(false)
 const errorMsg = ref('')
 
-const { login } = useAuth()
+const { login, user } = useAuth()
 
 async function handleLogin() {
   if (!email.value || !password.value) {
@@ -20,7 +20,13 @@ async function handleLogin() {
 
   try {
     await login(email.value, password.value)
-    await navigateTo('/')
+    if (user.value?.type === 'veterinario') {
+      await navigateTo('/veterinario/consultas')
+    } else if (user.value?.type === 'admin') {
+      await navigateTo('/backoffice')
+    } else {
+      await navigateTo('/')
+    }
   } catch (err) {
     errorMsg.value = err instanceof Error ? err.message : 'Erro ao fazer login.'
   } finally {

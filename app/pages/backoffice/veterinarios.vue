@@ -34,6 +34,8 @@ onMounted(loadVets);
 const modalOpen = ref(false);
 const saving = ref(false);
 const formError = ref('');
+const showPassword = ref(false);
+const showPasswordConfirm = ref(false);
 
 const form = reactive({
   name: '',
@@ -241,111 +243,135 @@ function statusLabel(recipientId: string | null) {
     </div>
 
     <!-- Modal Criar Veterinário -->
-    <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-4xl' }">
+    <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-5xl' }">
       <template #content>
         <div class="p-6 flex flex-col gap-5 max-h-[85vh] overflow-y-auto">
           <h3 class="text-lg font-semibold text-gray-800">Adicionar Veterinário</h3>
 
           <!-- Dados Básicos -->
-          <div>
-            <h4 class="text-sm font-semibold text-gray-600 mb-3">Dados Básicos</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <UFormField label="Nome / Razão Social *">
-                <UInput v-model="form.name" placeholder="Nome completo ou razão social" />
-              </UFormField>
+          <div class="flex flex-col gap-3">
+            <h4 class="text-sm font-semibold text-gray-600">Dados Básicos</h4>
+            <UFormField label="Nome / Razão Social *">
+              <UInput v-model="form.name" placeholder="Nome completo ou razão social" class="w-full" />
+            </UFormField>
+            <div class="grid grid-cols-2 gap-3">
               <UFormField label="CNPJ *">
-                <UInput v-model="form.cnpj" v-maska="'##.###.###/####-##'" placeholder="00.000.000/0000-00" />
+                <UInput v-model="form.cnpj" v-maska="'##.###.###/####-##'" placeholder="00.000.000/0000-00" class="w-full" />
               </UFormField>
               <UFormField label="E-mail *">
-                <UInput v-model="form.email" type="email" placeholder="email@exemplo.com" />
+                <UInput v-model="form.email" type="email" placeholder="email@exemplo.com" class="w-full" />
+              </UFormField>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <UFormField label="Senha *">
+                <UInput v-model="form.password" :type="showPassword ? 'text' : 'password'" placeholder="******" class="w-full">
+                  <template #trailing>
+                    <UButton
+                      color="neutral"
+                      variant="link"
+                      :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                      class="cursor-pointer"
+                      @click="showPassword = !showPassword"
+                    />
+                  </template>
+                </UInput>
+              </UFormField>
+              <UFormField label="Confirmar Senha *">
+                <UInput v-model="form.password_confirm" :type="showPasswordConfirm ? 'text' : 'password'" placeholder="******" class="w-full">
+                  <template #trailing>
+                    <UButton
+                      color="neutral"
+                      variant="link"
+                      :icon="showPasswordConfirm ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                      class="cursor-pointer"
+                      @click="showPasswordConfirm = !showPasswordConfirm"
+                    />
+                  </template>
+                </UInput>
               </UFormField>
             </div>
           </div>
 
           <!-- Chave Pix -->
-          <div>
-            <h4 class="text-sm font-semibold text-gray-600 mb-3">Chave Pix</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-3">
+            <h4 class="text-sm font-semibold text-gray-600">Chave Pix</h4>
+            <div class="grid grid-cols-2 gap-3">
               <UFormField label="Tipo de chave">
-                <USelect v-model="form.pix_type" :items="pixTypeOptions" />
+                <USelect v-model="form.pix_type" :items="pixTypeOptions" class="w-full" />
               </UFormField>
               <UFormField label="Valor da chave">
-                <UInput v-model="form.pix_key" placeholder="Informe a chave Pix" />
+                <UInput v-model="form.pix_key" placeholder="Informe a chave Pix" class="w-full" />
               </UFormField>
             </div>
           </div>
 
           <!-- Dados Bancários -->
-          <div>
-            <h4 class="text-sm font-semibold text-gray-600 mb-3">Dados Bancários</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="flex flex-col gap-3">
+            <h4 class="text-sm font-semibold text-gray-600">Dados Bancários</h4>
+            <div class="grid grid-cols-2 gap-3">
               <UFormField label="Código do banco">
-                <UInput v-model="form.bank_code" placeholder="001" />
+                <UInput v-model="form.bank_code" placeholder="001" class="w-full" />
               </UFormField>
-              <UFormField label="Nome do banco" class="md:col-span-2">
-                <UInput v-model="form.bank_name" placeholder="Banco do Brasil" />
+              <UFormField label="Nome do banco">
+                <UInput v-model="form.bank_name" placeholder="Banco do Brasil" class="w-full" />
               </UFormField>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
               <UFormField label="Agência">
-                <UInput v-model="form.bank_agency" placeholder="0001" />
+                <UInput v-model="form.bank_agency" placeholder="0001" class="w-full" />
               </UFormField>
               <UFormField label="Número da conta">
-                <UInput v-model="form.bank_account_number" placeholder="12345" />
+                <UInput v-model="form.bank_account_number" placeholder="12345" class="w-full" />
               </UFormField>
               <UFormField label="Dígito">
-                <UInput v-model="form.bank_account_digit" placeholder="0" />
+                <UInput v-model="form.bank_account_digit" placeholder="0" class="w-full" />
               </UFormField>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
               <UFormField label="Tipo de conta">
-                <USelect v-model="form.bank_account_type" :items="accountTypeOptions" />
+                <USelect v-model="form.bank_account_type" :items="accountTypeOptions" class="w-full" />
               </UFormField>
               <UFormField label="Tipo de titular">
-                <USelect v-model="form.bank_holder_type" :items="holderTypeOptions" />
+                <USelect v-model="form.bank_holder_type" :items="holderTypeOptions" class="w-full" />
               </UFormField>
             </div>
           </div>
 
           <!-- Endereço de Faturamento -->
-          <div>
-            <h4 class="text-sm font-semibold text-gray-600 mb-3">Endereço de Faturamento</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="flex flex-col gap-3">
+            <h4 class="text-sm font-semibold text-gray-600">Endereço de Faturamento</h4>
+            <div class="grid grid-cols-2 gap-3">
               <UFormField label="CEP">
                 <UInput
                   v-model="form.billing_cep"
                   v-maska="'#####-###'"
                   placeholder="00000-000"
                   :loading="loadingCep"
+                  class="w-full"
                   @blur="fetchCep"
                 />
               </UFormField>
-              <UFormField label="Logradouro" class="md:col-span-2">
-                <UInput v-model="form.billing_street" placeholder="Rua, Avenida..." />
-              </UFormField>
-              <UFormField label="Número">
-                <UInput v-model="form.billing_number" placeholder="123" />
-              </UFormField>
-              <UFormField label="Complemento">
-                <UInput v-model="form.billing_complement" placeholder="Sala, Andar..." />
-              </UFormField>
               <UFormField label="Bairro">
-                <UInput v-model="form.billing_neighborhood" placeholder="Centro" />
-              </UFormField>
-              <UFormField label="Cidade">
-                <UInput v-model="form.billing_city" placeholder="São Paulo" />
-              </UFormField>
-              <UFormField label="Estado">
-                <USelect v-model="form.billing_state" :items="stateOptions" placeholder="UF" />
+                <UInput v-model="form.billing_neighborhood" placeholder="Centro" class="w-full" />
               </UFormField>
             </div>
-          </div>
-
-          <!-- Senha -->
-          <div>
-            <h4 class="text-sm font-semibold text-gray-600 mb-3">Senha de Acesso</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <UFormField label="Senha *">
-                <UInput v-model="form.password" type="password" placeholder="Mínimo 6 caracteres" />
+            <UFormField label="Logradouro">
+              <UInput v-model="form.billing_street" placeholder="Rua, Avenida..." class="w-full" />
+            </UFormField>
+            <div class="grid grid-cols-2 gap-3">
+              <UFormField label="Número">
+                <UInput v-model="form.billing_number" placeholder="123" class="w-full" />
               </UFormField>
-              <UFormField label="Confirmar Senha *">
-                <UInput v-model="form.password_confirm" type="password" placeholder="Repita a senha" />
+              <UFormField label="Complemento">
+                <UInput v-model="form.billing_complement" placeholder="Sala, Andar..." class="w-full" />
+              </UFormField>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <UFormField label="Cidade">
+                <UInput v-model="form.billing_city" placeholder="São Paulo" class="w-full" />
+              </UFormField>
+              <UFormField label="Estado">
+                <USelect v-model="form.billing_state" :items="stateOptions" placeholder="UF" class="w-full" />
               </UFormField>
             </div>
           </div>

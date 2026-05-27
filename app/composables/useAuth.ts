@@ -1,4 +1,4 @@
-export type UserType = 'tutor' | 'admin'
+export type UserType = 'tutor' | 'admin' | 'veterinario'
 
 export interface AuthUser {
   id: string
@@ -23,6 +23,7 @@ export function useAuth() {
 
   const isLoggedIn = computed(() => !!user.value)
   const isAdmin = computed(() => user.value?.type === 'admin')
+  const isVet = computed(() => user.value?.type === 'veterinario')
 
   function persist(data: AuthResponse) {
     user.value = data.user
@@ -66,5 +67,5 @@ export function useAuth() {
     return null
   }
 
-  return { user, isLoggedIn, isAdmin, login, register, logout, getToken }
+  return { user, isLoggedIn, isAdmin, isVet, login, register, logout, getToken }
 }
