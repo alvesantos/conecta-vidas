@@ -11,7 +11,7 @@ export const plans: Plan[] = [
     price: 39.90,
     free_consultations: 1,
     perks: [
-      { icon: "i-ph-dog", label: "Cadastro de até 2 pets (cães e gatos)" },
+      { icon: "i-ph-dog", label: "Cadastro de até 5 pets (cães e gatos)" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada: 1 por mês" },
       { icon: "i-ph-play-circle", label: "Plataforma de Conteúdo: Acesso completo incluso (Vídeos educativos, culinária e mais!)" },
       { icon: "i-ph-users-three", label: "Clube ConectaVet (Grupo VIP no WhatsApp)" },
