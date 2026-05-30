@@ -188,55 +188,37 @@ async function submit() {
   apiError.value = "";
 
   try {
-    // 1. Criar usuário (tutor) + pet em uma única chamada (sem avatar)
+    // 1. Criar apenas o usuário (tutor)
     await register({
       name: tutorName.value,
       cpf: tutorCpf.value,
       email: tutorEmail.value,
       address: tutorAddress.value || undefined,
       password: tutorPassword.value,
-      pet: {
-        name: petName.value,
-        species: petSpecies.value,
-        breed: petBreed.value,
-        size: petSize.value,
-        coat: petCoat.value,
-        coat_color: petCoatColor.value || undefined,
-        birth_date: petBirthDate.value,
-        microchipped: petMicrochipped.value === "sim",
-        neutered: petNeutered.value === "sim",
-        behavior: petBehavior.value || undefined,
-        conditions: petConditions.value || undefined,
-      },
     });
 
-    // 2. Se o usuário enviou avatar do pet, fazemos upload separado via multipart
-    if (petAvatarFile.value) {
-      try {
-        const myPets = await $fetch<Array<{ id: string }>>(
-          `${config.public.apiBase}/pets/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("auth:token") ?? ""}`,
-            },
-          },
-        );
-        const created = myPets?.[0];
-        if (created) {
-          const formData = new FormData();
-          formData.append("avatar", petAvatarFile.value);
-          await $fetch(`${config.public.apiBase}/pets/${created.id}`, {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("auth:token") ?? ""}`,
-            },
-            body: formData,
-          });
-        }
-      } catch {
-        // upload do avatar é opcional — segue o fluxo mesmo se falhar
-      }
-    }
+    // 2. Criar o pet (com a foto, se houver) em uma única requisição multipart
+    const formData = new FormData();
+    formData.append("name", petName.value);
+    formData.append("species", petSpecies.value);
+    formData.append("breed", petBreed.value);
+    formData.append("size", petSize.value);
+    formData.append("coat", petCoat.value);
+    if (petCoatColor.value) formData.append("coat_color", petCoatColor.value);
+    formData.append("birth_date", petBirthDate.value);
+    formData.append("microchipped", String(petMicrochipped.value === "sim"));
+    formData.append("neutered", String(petNeutered.value === "sim"));
+    if (petBehavior.value) formData.append("behavior", petBehavior.value);
+    if (petConditions.value) formData.append("conditions", petConditions.value);
+    if (petAvatarFile.value) formData.append("avatar", petAvatarFile.value);
+
+    await $fetch(`${config.public.apiBase}/pets`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("auth:token") ?? ""}`,
+      },
+      body: formData,
+    });
 
     await router.push("/meu-pet");
   } catch (err: unknown) {
