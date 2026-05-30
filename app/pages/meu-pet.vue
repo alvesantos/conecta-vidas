@@ -20,9 +20,13 @@ interface Pet {
 const { api } = useApi();
 const config = useRuntimeConfig();
 
+const PET_LIMIT = 5;
+
 const pets = ref<Pet[]>([]);
 const pending = ref(true);
 const fetchError = ref('');
+
+const canAddPet = computed(() => pets.value.length < PET_LIMIT);
 
 const uploadsBase = computed(() => config.public.apiBase.replace(/\/api\/?$/, ''));
 
@@ -61,15 +65,28 @@ async function loadPets() {
   }
 }
 
-// --- Modal de edição ---
-const editOpen = ref(false);
+// --- Modal de criação / edição ---
+const modalOpen = ref(false);
+const modalMode = ref<'create' | 'edit'>('edit');
 const editTarget = ref<Pet | null>(null);
-const editSaving = ref(false);
-const editError = ref('');
-const editAvatarFile = ref<File | null>(null);
-const editAvatarPreview = ref<string | null>(null);
-const editFileInput = ref<HTMLInputElement | null>(null);
-const editForm = reactive({
+const saving = ref(false);
+const formError = ref('');
+const avatarFile = ref<File | null>(null);
+const avatarPreview = ref<string | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const speciesOptions = [
+  { label: 'Cachorro', value: 'cachorro' },
+  { label: 'Gato', value: 'gato' },
+];
+const sizeOptions = [
+  { label: 'Pequeno', value: 'pequeno' },
+  { label: 'Médio', value: 'medio' },
+  { label: 'Grande', value: 'grande' },
+  { label: 'Gigante', value: 'gigante' },
+];
+
+const form = reactive({
   name: '',
   species: '',
   breed: '',
@@ -83,65 +100,112 @@ const editForm = reactive({
   conditions: '',
 });
 
-function openEdit(pet: Pet) {
-  editTarget.value = pet;
-  editForm.name = pet.name;
-  editForm.species = pet.species;
-  editForm.breed = pet.breed;
-  editForm.size = pet.size;
-  editForm.coat = pet.coat;
-  editForm.coat_color = pet.coat_color ?? '';
-  editForm.birth_date = pet.birth_date?.slice(0, 10) ?? '';
-  editForm.microchipped = pet.microchipped;
-  editForm.neutered = pet.neutered;
-  editForm.behavior = pet.behavior ?? '';
-  editForm.conditions = pet.conditions ?? '';
-  editAvatarFile.value = null;
-  editAvatarPreview.value = avatarSrc(pet.avatar_url);
-  if (editFileInput.value) editFileInput.value.value = '';
-  editError.value = '';
-  editOpen.value = true;
+function resetForm() {
+  form.name = '';
+  form.species = '';
+  form.breed = '';
+  form.size = '';
+  form.coat = '';
+  form.coat_color = '';
+  form.birth_date = '';
+  form.microchipped = false;
+  form.neutered = false;
+  form.behavior = '';
+  form.conditions = '';
 }
 
-function onEditAvatarChange(event: Event) {
+function openCreate() {
+  modalMode.value = 'create';
+  editTarget.value = null;
+  resetForm();
+  avatarFile.value = null;
+  avatarPreview.value = null;
+  if (fileInput.value) fileInput.value.value = '';
+  formError.value = '';
+  modalOpen.value = true;
+}
+
+function openEdit(pet: Pet) {
+  modalMode.value = 'edit';
+  editTarget.value = pet;
+  form.name = pet.name;
+  form.species = pet.species;
+  form.breed = pet.breed;
+  form.size = pet.size;
+  form.coat = pet.coat;
+  form.coat_color = pet.coat_color ?? '';
+  form.birth_date = pet.birth_date?.slice(0, 10) ?? '';
+  form.microchipped = pet.microchipped;
+  form.neutered = pet.neutered;
+  form.behavior = pet.behavior ?? '';
+  form.conditions = pet.conditions ?? '';
+  avatarFile.value = null;
+  avatarPreview.value = avatarSrc(pet.avatar_url);
+  if (fileInput.value) fileInput.value.value = '';
+  formError.value = '';
+  modalOpen.value = true;
+}
+
+function onAvatarChange(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
   if (!file) return;
-  editAvatarFile.value = file;
+  avatarFile.value = file;
   const reader = new FileReader();
   reader.onload = (e) => {
-    editAvatarPreview.value = e.target?.result as string;
+    avatarPreview.value = e.target?.result as string;
   };
   reader.readAsDataURL(file);
 }
 
-async function saveEdit() {
-  if (!editTarget.value) return;
-  editSaving.value = true;
-  editError.value = '';
+function validate() {
+  const required: Array<[keyof typeof form, string]> = [
+    ['name', 'Nome'],
+    ['species', 'Espécie'],
+    ['breed', 'Raça'],
+    ['size', 'Porte'],
+    ['coat', 'Pelagem'],
+    ['birth_date', 'Data de nascimento'],
+  ];
+  for (const [key, label] of required) {
+    if (!String(form[key]).trim()) {
+      formError.value = `${label} é obrigatório.`;
+      return false;
+    }
+  }
+  return true;
+}
+
+async function savePet() {
+  if (!validate()) return;
+  saving.value = true;
+  formError.value = '';
   try {
-    let body: FormData | typeof editForm;
-    if (editAvatarFile.value) {
+    let body: FormData | typeof form;
+    if (avatarFile.value) {
       const formData = new FormData();
-      for (const [key, value] of Object.entries(editForm)) {
+      for (const [key, value] of Object.entries(form)) {
         formData.append(key, String(value));
       }
-      formData.append('avatar', editAvatarFile.value);
+      formData.append('avatar', avatarFile.value);
       body = formData;
     } else {
-      body = { ...editForm };
+      body = { ...form };
     }
-    await api(`/pets/${editTarget.value.id}`, {
-      method: 'PUT',
-      body,
-    });
-    editOpen.value = false;
+
+    if (modalMode.value === 'create') {
+      await api('/pets', { method: 'POST', body });
+    } else if (editTarget.value) {
+      await api(`/pets/${editTarget.value.id}`, { method: 'PUT', body });
+    }
+
+    modalOpen.value = false;
     await loadPets();
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
-    editError.value = fetchErr?.data?.error ?? 'Erro ao salvar pet.';
+    formError.value = fetchErr?.data?.error ?? 'Erro ao salvar pet.';
   } finally {
-    editSaving.value = false;
+    saving.value = false;
   }
 }
 
@@ -150,9 +214,23 @@ onMounted(loadPets);
 
 <template>
   <div class="max-w-4xl mx-auto">
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-800">Meus Pets</h1>
-      <p class="text-gray-500 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
+    <div class="mb-8 flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Meus Pets</h1>
+        <p class="text-gray-500 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
+      </div>
+      <div v-if="!pending && !fetchError && pets.length > 0" class="flex flex-col items-end gap-1">
+        <UButton
+          label="Adicionar pet"
+          icon="i-heroicons-plus"
+          class="bg-accent text-white"
+          :disabled="!canAddPet"
+          @click="openCreate"
+        />
+        <span v-if="!canAddPet" class="text-xs text-gray-400">
+          Limite de {{ PET_LIMIT }} pets atingido
+        </span>
+      </div>
     </div>
 
     <div v-if="pending" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -187,11 +265,11 @@ onMounted(loadPets);
         <p class="text-gray-400 text-sm mt-1">Cadastre seu pet para acessar o perfil aqui.</p>
       </div>
       <UButton
-        to="/cadastro"
         label="Cadastrar pet"
         size="lg"
         class="bg-accent text-white mt-2"
         leading-icon="i-heroicons-plus"
+        @click="openCreate"
       />
     </div>
 
@@ -244,27 +322,29 @@ onMounted(loadPets);
       </div>
     </div>
 
-    <!-- Modal Editar -->
-    <UModal v-model:open="editOpen" :ui="{ content: 'max-w-2xl' }">
+    <!-- Modal Criar / Editar -->
+    <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-2xl' }">
       <template #content>
         <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
-          <h3 class="text-lg font-semibold text-gray-800">Editar {{ editTarget?.name }}</h3>
+          <h3 class="text-lg font-semibold text-gray-800">
+            {{ modalMode === 'create' ? 'Adicionar pet' : `Editar ${editTarget?.name}` }}
+          </h3>
 
           <!-- Foto do pet -->
           <div class="flex flex-col items-center gap-2">
             <input
-              ref="editFileInput"
+              ref="fileInput"
               type="file"
               accept="image/jpeg,image/png,image/webp,image/gif"
               class="hidden"
-              @change="onEditAvatarChange"
+              @change="onAvatarChange"
             />
-            <div class="relative cursor-pointer group" @click="editFileInput?.click()">
+            <div class="relative cursor-pointer group" @click="fileInput?.click()">
               <div
-                v-if="editAvatarPreview"
+                v-if="avatarPreview"
                 class="w-24 h-24 rounded-full overflow-hidden border-4 border-accent/30 shadow"
               >
-                <img :src="editAvatarPreview" alt="Foto do pet" class="w-full h-full object-cover" />
+                <img :src="avatarPreview" alt="Foto do pet" class="w-full h-full object-cover" />
               </div>
               <div
                 v-else
@@ -278,70 +358,61 @@ onMounted(loadPets);
                 <UIcon name="i-heroicons-camera" class="text-white text-2xl" />
               </div>
             </div>
-            <span class="text-xs text-gray-400">Clique para alterar a foto</span>
+            <span class="text-xs text-gray-400">Clique para {{ modalMode === 'create' ? 'adicionar' : 'alterar' }} a foto</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <UFormField label="Nome">
-              <UInput v-model="editForm.name" />
+              <UInput v-model="form.name" class="w-full" />
             </UFormField>
             <UFormField label="Espécie">
-              <USelect
-                v-model="editForm.species"
-                :items="[
-                  { label: 'Cachorro', value: 'cachorro' },
-                  { label: 'Gato', value: 'gato' },
-                ]"
-              />
+              <USelect v-model="form.species" :items="speciesOptions" class="w-full" />
             </UFormField>
             <UFormField label="Raça">
-              <UInput v-model="editForm.breed" />
+              <UInput v-model="form.breed" class="w-full" />
             </UFormField>
             <UFormField label="Porte">
-              <USelect
-                v-model="editForm.size"
-                :items="[
-                  { label: 'Pequeno', value: 'pequeno' },
-                  { label: 'Médio', value: 'medio' },
-                  { label: 'Grande', value: 'grande' },
-                  { label: 'Gigante', value: 'gigante' },
-                ]"
-              />
+              <USelect v-model="form.size" :items="sizeOptions" class="w-full" />
             </UFormField>
             <UFormField label="Pelagem">
-              <UInput v-model="editForm.coat" />
+              <UInput v-model="form.coat" class="w-full" />
             </UFormField>
             <UFormField label="Cor da pelagem">
-              <UInput v-model="editForm.coat_color" placeholder="ex: preto, caramelo, tricolor" />
+              <UInput v-model="form.coat_color" placeholder="ex: preto, caramelo, tricolor" class="w-full" />
             </UFormField>
             <UFormField label="Nascimento">
-              <UInput v-model="editForm.birth_date" type="date" />
+              <UInput v-model="form.birth_date" type="date" class="w-full" />
             </UFormField>
           </div>
 
           <div class="flex items-center gap-6">
             <label class="flex items-center gap-2 cursor-pointer">
-              <UCheckbox v-model="editForm.microchipped" />
+              <UCheckbox v-model="form.microchipped" />
               <span class="text-sm">Microchipado</span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer">
-              <UCheckbox v-model="editForm.neutered" />
+              <UCheckbox v-model="form.neutered" />
               <span class="text-sm">Castrado</span>
             </label>
           </div>
 
           <UFormField label="Comportamento">
-            <UTextarea v-model="editForm.behavior" :rows="2" />
+            <UTextarea v-model="form.behavior" :rows="2" class="w-full" />
           </UFormField>
           <UFormField label="Condições / Doenças">
-            <UTextarea v-model="editForm.conditions" :rows="2" />
+            <UTextarea v-model="form.conditions" :rows="2" class="w-full" />
           </UFormField>
 
-          <UAlert v-if="editError" color="error" variant="soft" :description="editError" />
+          <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="editOpen = false" />
-            <UButton color="primary" label="Salvar" :loading="editSaving" @click="saveEdit" />
+            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
+            <UButton
+              color="primary"
+              :label="modalMode === 'create' ? 'Adicionar' : 'Salvar'"
+              :loading="saving"
+              @click="savePet"
+            />
           </div>
         </div>
       </template>
