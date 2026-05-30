@@ -8,6 +8,7 @@ interface AdminPetDetail {
   breed: string;
   size: string;
   coat: string;
+  coat_color?: string | null;
   birth_date: string;
   microchipped: boolean;
   neutered: boolean;
@@ -95,6 +96,10 @@ onMounted(async () => {
         <div>
           <p class="text-gray-500">Pelagem</p>
           <p class="font-medium">{{ pet.coat }}</p>
+        </div>
+        <div>
+          <p class="text-gray-500">Cor da pelagem</p>
+          <p class="font-medium">{{ pet.coat_color || '—' }}</p>
         </div>
         <div>
           <p class="text-gray-500">Microchipado</p>

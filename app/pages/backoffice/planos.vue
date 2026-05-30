@@ -30,6 +30,7 @@ const form = reactive({
   focus: '',
   focus_desc: '',
   price: 0,
+  free_consultations: 0,
   is_active: true,
   perks: [] as Perk[],
 });
@@ -40,6 +41,7 @@ function resetForm() {
   form.focus = '';
   form.focus_desc = '';
   form.price = 0;
+  form.free_consultations = 0;
   form.is_active = true;
   form.perks = [{ icon: 'i-ph-check', label: '' }];
   formError.value = '';
@@ -58,6 +60,7 @@ function openEdit(plan: Plan) {
   form.focus = plan.focus;
   form.focus_desc = plan.focus_desc;
   form.price = Number(plan.price);
+  form.free_consultations = Number(plan.free_consultations ?? 0);
   form.is_active = plan.is_active ?? true;
   form.perks = Array.isArray(plan.perks)
     ? plan.perks.map((p) => ({ ...p }))
@@ -84,6 +87,7 @@ async function save() {
       focus: form.focus,
       focus_desc: form.focus_desc,
       price: Number(form.price),
+      free_consultations: Number(form.free_consultations),
       is_active: form.is_active,
       perks: form.perks.filter((p) => p.label.trim()),
     };
@@ -125,6 +129,7 @@ async function save() {
             <th class="px-4 py-3 font-medium">Cor</th>
             <th class="px-4 py-3 font-medium">Título</th>
             <th class="px-4 py-3 font-medium">Preço</th>
+            <th class="px-4 py-3 font-medium">Consultas grátis</th>
             <th class="px-4 py-3 font-medium">Benefícios</th>
             <th class="px-4 py-3 font-medium">Status</th>
             <th class="px-4 py-3 font-medium text-right">Ações</th>
@@ -132,10 +137,10 @@ async function save() {
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr v-if="pending">
-            <td colspan="6" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
+            <td colspan="7" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
           </tr>
           <tr v-else-if="plans.length === 0">
-            <td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhum plano cadastrado.</td>
+            <td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhum plano cadastrado.</td>
           </tr>
           <tr v-for="plan in plans" :key="plan.id" class="hover:bg-gray-50">
             <td class="px-4 py-3">
@@ -145,6 +150,7 @@ async function save() {
             <td class="px-4 py-3 text-gray-600">
               {{ Number(plan.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
             </td>
+            <td class="px-4 py-3 text-gray-500">{{ plan.free_consultations ?? 0 }} / mês</td>
             <td class="px-4 py-3 text-gray-500">{{ plan.perks?.length ?? 0 }} item(s)</td>
             <td class="px-4 py-3">
               <span
@@ -181,6 +187,9 @@ async function save() {
             </UFormField>
             <UFormField label="Preço (R$)">
               <UInput v-model="form.price" type="number" step="0.01" />
+            </UFormField>
+            <UFormField label="Consultas grátis / mês">
+              <UInput v-model="form.free_consultations" type="number" min="0" step="1" />
             </UFormField>
             <UFormField label="Cor (hex)">
               <UInput v-model="form.color" />

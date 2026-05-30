@@ -10,6 +10,7 @@ export interface Plan {
   focus: string
   focus_desc: string
   price: number | string
+  free_consultations?: number
   perks: Perk[]
   is_active?: boolean
 }

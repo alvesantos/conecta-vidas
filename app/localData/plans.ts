@@ -9,8 +9,9 @@ export const plans: Plan[] = [
     focus: "Prevenção básica e suporte digital imediato",
     focus_desc: "Tutores que buscam cuidado eficiente, orientação confiável e praticidade no dia a dia do seu pet.",
     price: 39.90,
+    free_consultations: 1,
     perks: [
-      { icon: "i-ph-dog", label: "Cadastro de até 2 pets (cães e gatos)" },
+      { icon: "i-ph-dog", label: "Cadastro de até 5 pets (cães e gatos)" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada: 1 por mês" },
       { icon: "i-ph-play-circle", label: "Plataforma de Conteúdo: Acesso completo incluso (Vídeos educativos, culinária e mais!)" },
       { icon: "i-ph-users-three", label: "Clube ConectaVet (Grupo VIP no WhatsApp)" },
@@ -29,6 +30,7 @@ export const plans: Plan[] = [
     focus: "Conforto e a tranquilidade de um suporte mais robusto",
     focus_desc: "Tutores que desejam mais suporte, comodidade e benefícios para cuidar melhor do seu pet.",
     price: 79.90,
+    free_consultations: 2,
     perks: [
       { icon: "i-ph-exclamation-mark", label: "Tudo incluso no Essencial" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada ou Pronto Atendimento: 2 por mês" },
@@ -48,6 +50,7 @@ export const plans: Plan[] = [
     focus: "A experiência máxima de exclusividade, comodidade e mimos físicos",
     focus_desc: "Tutores que querem o melhor em exclusividade, benefícios e mimos para seu pet.",
     price: 149.90,
+    free_consultations: 4,
     perks: [
       { icon: "i-ph-exclamation-mark", label: "Tudo incluso no Essencial e Care Plus" },
       { icon: "i-ph-stethoscope", label: "Consulta Virtual ou Pronto Atendimento: 4 por mês (inclui pets exóticos/silvestres)" },
