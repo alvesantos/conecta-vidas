@@ -66,6 +66,9 @@ const editOpen = ref(false);
 const editTarget = ref<Pet | null>(null);
 const editSaving = ref(false);
 const editError = ref('');
+const editAvatarFile = ref<File | null>(null);
+const editAvatarPreview = ref<string | null>(null);
+const editFileInput = ref<HTMLInputElement | null>(null);
 const editForm = reactive({
   name: '',
   species: '',
@@ -93,8 +96,23 @@ function openEdit(pet: Pet) {
   editForm.neutered = pet.neutered;
   editForm.behavior = pet.behavior ?? '';
   editForm.conditions = pet.conditions ?? '';
+  editAvatarFile.value = null;
+  editAvatarPreview.value = avatarSrc(pet.avatar_url);
+  if (editFileInput.value) editFileInput.value.value = '';
   editError.value = '';
   editOpen.value = true;
+}
+
+function onEditAvatarChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+  editAvatarFile.value = file;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    editAvatarPreview.value = e.target?.result as string;
+  };
+  reader.readAsDataURL(file);
 }
 
 async function saveEdit() {
@@ -102,9 +120,20 @@ async function saveEdit() {
   editSaving.value = true;
   editError.value = '';
   try {
+    let body: FormData | typeof editForm;
+    if (editAvatarFile.value) {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(editForm)) {
+        formData.append(key, String(value));
+      }
+      formData.append('avatar', editAvatarFile.value);
+      body = formData;
+    } else {
+      body = { ...editForm };
+    }
     await api(`/pets/${editTarget.value.id}`, {
       method: 'PUT',
-      body: { ...editForm },
+      body,
     });
     editOpen.value = false;
     await loadPets();
@@ -220,6 +249,37 @@ onMounted(loadPets);
       <template #content>
         <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
           <h3 class="text-lg font-semibold text-gray-800">Editar {{ editTarget?.name }}</h3>
+
+          <!-- Foto do pet -->
+          <div class="flex flex-col items-center gap-2">
+            <input
+              ref="editFileInput"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              class="hidden"
+              @change="onEditAvatarChange"
+            />
+            <div class="relative cursor-pointer group" @click="editFileInput?.click()">
+              <div
+                v-if="editAvatarPreview"
+                class="w-24 h-24 rounded-full overflow-hidden border-4 border-accent/30 shadow"
+              >
+                <img :src="editAvatarPreview" alt="Foto do pet" class="w-full h-full object-cover" />
+              </div>
+              <div
+                v-else
+                class="w-24 h-24 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
+              >
+                <UIcon name="i-heroicons-camera" class="text-gray-400 text-2xl group-hover:text-accent" />
+              </div>
+              <div
+                class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <UIcon name="i-heroicons-camera" class="text-white text-2xl" />
+              </div>
+            </div>
+            <span class="text-xs text-gray-400">Clique para alterar a foto</span>
+          </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <UFormField label="Nome">
