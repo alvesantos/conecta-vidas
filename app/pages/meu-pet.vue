@@ -8,6 +8,7 @@ interface Pet {
   breed: string;
   size: string;
   coat: string;
+  coat_color?: string;
   birth_date: string;
   microchipped: boolean;
   neutered: boolean;
@@ -71,6 +72,7 @@ const editForm = reactive({
   breed: '',
   size: '',
   coat: '',
+  coat_color: '',
   birth_date: '',
   microchipped: false,
   neutered: false,
@@ -85,6 +87,7 @@ function openEdit(pet: Pet) {
   editForm.breed = pet.breed;
   editForm.size = pet.size;
   editForm.coat = pet.coat;
+  editForm.coat_color = pet.coat_color ?? '';
   editForm.birth_date = pet.birth_date?.slice(0, 10) ?? '';
   editForm.microchipped = pet.microchipped;
   editForm.neutered = pet.neutered;
@@ -247,6 +250,9 @@ onMounted(loadPets);
             </UFormField>
             <UFormField label="Pelagem">
               <UInput v-model="editForm.coat" />
+            </UFormField>
+            <UFormField label="Cor da pelagem">
+              <UInput v-model="editForm.coat_color" placeholder="ex: preto, caramelo, tricolor" />
             </UFormField>
             <UFormField label="Nascimento">
               <UInput v-model="editForm.birth_date" type="date" />

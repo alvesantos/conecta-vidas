@@ -26,6 +26,7 @@ const petSpecies = ref("");
 const petBreed = ref("");
 const petSize = ref("");
 const petCoat = ref("");
+const petCoatColor = ref("");
 const petBirthDate = ref("");
 const petMicrochipped = ref("");
 const petNeutered = ref("");
@@ -200,6 +201,7 @@ async function submit() {
         breed: petBreed.value,
         size: petSize.value,
         coat: petCoat.value,
+        coat_color: petCoatColor.value || undefined,
         birth_date: petBirthDate.value,
         microchipped: petMicrochipped.value === "sim",
         neutered: petNeutered.value === "sim",
@@ -520,6 +522,17 @@ async function submit() {
             placeholder="Pelagem * (ex: curta, longa, dupla)"
             size="lg"
             icon="i-heroicons-swatch"
+            class="w-full"
+          />
+        </UFormField>
+
+        <UFormField>
+          <UInput
+            v-model="petCoatColor"
+            type="text"
+            placeholder="Cor da pelagem (ex: preto, caramelo, tricolor)"
+            size="lg"
+            icon="i-heroicons-paint-brush"
             class="w-full"
           />
         </UFormField>
