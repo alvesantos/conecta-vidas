@@ -9,18 +9,18 @@ const handleScrollToPricing = () => {
 
 <template>
   <div class="px-4 lg:px-6">
-    <!-- DESKTOP -->
+    <!-- DESKTOP (≥1024px) -->
     <div class="justify-between items-center hidden lg:flex">
       <!-- CARD -->
-      <div class="max-w-[30%] pb-1 cursor-pointer" @click="handleScrollToPricing">
-        <UCard 
+      <div class="max-w-[30%] min-[900px]:max-w-[48%] pb-1 cursor-pointer" @click="handleScrollToPricing">
+        <UCard
           :ui="{body: 'bg-primary'}"
           >
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-4 min-[900px]:gap-3">
             <!-- ICON -->
             <div class="shrink-0">
               <img
-                class="w-20 h-20 object-contain"
+                class="w-20 h-20 min-[900px]:w-14 min-[900px]:h-14 object-contain"
                 src="/eneli_studio_icons/eneli_studio_pet_shield.png"
                 alt="dog-shield"
               />
@@ -28,11 +28,11 @@ const handleScrollToPricing = () => {
 
             <!-- CONTENT -->
             <div class="min-w-0">
-              <h3 class="text-2xl font-semibold leading-tight text-foreground">
+              <h3 class="text-2xl min-[900px]:text-lg font-semibold leading-tight text-foreground">
                 Assine agora e tenha segurança!
               </h3>
 
-              <p class="pt-3 text-white/80 leading-snug">
+              <p class="pt-3 min-[900px]:pt-2 text-white/80 leading-snug min-[900px]:text-sm">
                 Saber agir quando seu filho de quatro patas
                 mais precisar pode custar menos de dois reais por dia!
               </p>
@@ -42,7 +42,7 @@ const handleScrollToPricing = () => {
       </div>
 
       <!-- CHIP -->
-      <div class="text-white max-w-75">
+      <div class="text-white max-w-75 min-[900px]:max-w-[48%]">
         <UCard class="p-0"
           :ui="{body: 'bg-foreground'}"
           >
@@ -54,7 +54,7 @@ const handleScrollToPricing = () => {
 
             <!-- CONTENT -->
             <div class="min-w-0">
-              <p class=" font-semibold leading-tight text-primary text-center">
+              <p class="font-semibold leading-tight text-primary text-center min-[900px]:text-sm">
                 Atendimento com médicos veterinários <span class="text-accent">qualificados</span>
               </p>
             </div>
@@ -63,12 +63,12 @@ const handleScrollToPricing = () => {
       </div>
     </div>
 
-    <!-- MOBILE =================================== -->
-     <div class="lg:hidden ">
+    <!-- MOBILE / TABLET (< 1024px) -->
+     <div class="lg:hidden">
       <div>
         <!-- CARD -->
         <div class="pt-4 cursor-pointer" @click="handleScrollToPricing">
-          <UCard 
+          <UCard
             :ui="{body: 'bg-primary'}"
             >
             <div class="flex items-center gap-4 ">
@@ -96,9 +96,9 @@ const handleScrollToPricing = () => {
           </UCard>
         </div>
       </div>
-      
+
       <div class="pt-4">
-        <UCard 
+        <UCard
           :ui="{body: 'bg-foreground'}"
           >
           <div class="flex items-center gap-x-2">

@@ -10,8 +10,8 @@ definePageMeta({
   <div>
     <div class="relative">
       <header>
-        <img 
-          class="max-w-[50%] md:max-w-[20%] pt-6 px-6 md:pt-10 hidden md:block absolute"
+        <img
+          class="max-w-[50%] min-[900px]:max-w-[20%] pt-6 px-6 min-[900px]:pt-10 hidden min-[900px]:block absolute"
           src="/conectavet-extended-icon.png"
           alt="conectavet" />
       </header>
@@ -19,26 +19,26 @@ definePageMeta({
       <div>
         <section class="flex w-full justify-between">
         <!-- SIDE CONTENT -->
-          <div class="lg:max-w-[30%] max-w-[50%] max-h-full lg:pt-[150px] lg:px-4 flex flex-col justify-between">
+          <div class="lg:max-w-[30%] min-[900px]:max-w-[44%] max-w-[50%] max-h-full lg:pt-[150px] min-[900px]:pt-20 lg:px-4 min-[900px]:px-3 flex flex-col justify-between">
             <div class="side-content pl-4">
-              <div class="lg:hidden">
+              <div class="min-[900px]:hidden">
                 <img src="/icon-com-texto.png" />
               </div>
 
               <!-- TITLE -->
-              <p class="text-lg lg:text-5xl">
+              <p class="text-lg min-[900px]:text-2xl lg:text-5xl">
                 Seu pet merece o melhor cuidado,
                 <span class="text-accent underline">onde você estiver</span>
               </p>
 
-              <!-- DESCRIPTION DESKTOP -->
-              <p class="lg:text-lg text-[.6rem] px-4 pt-8 hidden lg:block">
+              <!-- DESCRIPTION DESKTOP/MEDIUM -->
+              <p class="lg:text-lg min-[900px]:text-sm text-[.6rem] px-4 pt-8 hidden min-[900px]:block">
                 Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
               </p>
             </div>
           </div>
           <!-- DOG BACKGROUND -->
-          <div class="lg:max-w-[70%] max-w-[50%] shrink-0 overflow-hidden">
+          <div class="lg:max-w-[70%] min-[900px]:max-w-[56%] max-w-[50%] shrink-0 overflow-hidden">
             <img
               class="conectavet-dog w-full h-full object-cover object-[65%_center] scale-130 lg:scale-100"
               src="/cute_dog.png"
@@ -48,14 +48,14 @@ definePageMeta({
 
         <div>
         <!-- DESCRIPTION MOBILE -->
-        <p class="lg:hidden lg:text-lg text-[.6rem] px-4 pt-4">
+        <p class="min-[900px]:hidden text-[.6rem] px-4 pt-4">
           Telemedicina veterinária com <span class="text-accent font-semibold">orientação, acolhimento e segurança</span> quando você mais precisar.
         </p>
       </div>
       </div>
 
 
-      <section class="w-full lg:absolute lg:bottom-0 static">
+      <section class="w-full static lg:absolute lg:bottom-0">
         <SubscriptionAd />
       </section>
     </div>
@@ -118,48 +118,27 @@ definePageMeta({
   }
 }
 
-/* Desktop */
-@media (min-width: 1024px) {
+/* Mobile */
+.conectavet-dog {
+  mask-image: linear-gradient(to left, white 0%, white 60%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to left, white 0%, white 60%, transparent 85%);
+}
+
+/* Medium screens (notebooks) */
+@media (min-width: 900px) {
   .conectavet-dog {
-    mask-image:
-      linear-gradient(
-        to left,
-        white 0%,
-        white 76%,
-        transparent 96%
-      );
-
-    -webkit-mask-image:
-      linear-gradient(
-        to left,
-        white 0%,
-        white 76%,
-        transparent 96%
-      );
-
-    mask-composite: intersect;
-    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to left, white 0%, white 68%, transparent 92%);
+    -webkit-mask-image: linear-gradient(to left, white 0%, white 68%, transparent 92%);
   }
 }
 
-/* Mobile */
-@media (max-width: 1023px) {
+/* Desktop */
+@media (min-width: 1024px) {
   .conectavet-dog {
-    mask-image:
-      linear-gradient(
-        to left,
-        white 0%,
-        white 60%,
-        transparent 85%
-      );
-
-    -webkit-mask-image:
-      linear-gradient(
-        to left,
-        white 0%,
-        white 60%,
-        transparent 85%
-      );
+    mask-image: linear-gradient(to left, white 0%, white 76%, transparent 96%);
+    -webkit-mask-image: linear-gradient(to left, white 0%, white 76%, transparent 96%);
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
   }
 }
 </style>
