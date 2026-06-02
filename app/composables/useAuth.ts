@@ -5,6 +5,7 @@ export interface AuthUser {
   name: string
   email: string
   type: UserType
+  crmv?: string | null
 }
 
 interface AuthResponse {

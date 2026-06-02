@@ -154,6 +154,7 @@ async function downloadPdf() {
   try {
     await downloadPrescriptionPdf({
       vetName: user.value?.name,
+      vetCrmv: user.value?.crmv,
       date: date.value,
       content: content.value,
       responsibleName: selectedResponsible.value?.name,
@@ -335,11 +336,10 @@ async function downloadPdf() {
 
           <!-- Assinatura -->
           <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: flex-end;">
-            <div style="text-align: center; width: 280px;">
-              <div style="border-top: 1px solid #111827; padding-top: 6px; font-size: 13px; color: #374151;">
-                {{ user?.name }}<br />
-                <span style="font-size: 11px; color: #6b7280;">Médico(a) Veterinário(a)</span>
-              </div>
+            <div style="font-size: 13px; color: #374151; line-height: 1.5;">
+              <strong>{{ user?.name }}</strong><br />
+              <template v-if="user?.crmv">CRMV: {{ user.crmv }}<br /></template>
+              <span style="font-size: 11px; color: #6b7280;">Médico(a) Veterinário(a)</span>
             </div>
             <div style="font-size: 13px; color: #374151;">
               {{ todayFormatted }}
