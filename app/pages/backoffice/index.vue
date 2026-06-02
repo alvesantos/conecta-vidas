@@ -74,7 +74,7 @@ const birthdayColumns = [
 <template>
   <div>
     <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Backoffice</h1>
-    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Visão geral do sistema</p>
+    <p class="text-gray-500 dark:text-gray-200 text-sm mt-1">Visão geral do sistema</p>
 
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
       <NuxtLink
@@ -84,7 +84,7 @@ const birthdayColumns = [
         <UIcon name="i-heroicons-users" class="size-8 text-accent" />
         <div>
           <p class="font-semibold text-gray-800 dark:text-gray-100">Gerenciar usuários</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Lista, edição, planos e exclusão</p>
+          <p class="text-sm text-gray-500 dark:text-gray-200">Lista, edição, planos e exclusão</p>
         </div>
       </NuxtLink>
       <NuxtLink
@@ -94,7 +94,7 @@ const birthdayColumns = [
         <UIcon name="i-mdi-paw" class="size-8 text-accent" />
         <div>
           <p class="font-semibold text-gray-800 dark:text-gray-100">Gerenciar animais</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Visualizar animais cadastrados e responsáveis</p>
+          <p class="text-sm text-gray-500 dark:text-gray-200">Visualizar animais cadastrados e responsáveis</p>
         </div>
       </NuxtLink>
       <NuxtLink
@@ -104,7 +104,7 @@ const birthdayColumns = [
         <UIcon name="i-heroicons-credit-card" class="size-8 text-accent" />
         <div>
           <p class="font-semibold text-gray-800 dark:text-gray-100">Gerenciar planos</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Criar e editar planos disponíveis</p>
+          <p class="text-sm text-gray-500 dark:text-gray-200">Criar e editar planos disponíveis</p>
         </div>
       </NuxtLink>
     </div>
@@ -115,28 +115,28 @@ const birthdayColumns = [
 
     <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Usuários</p>
-        <p class="text-3xl font-bold text-primary mt-2">{{ totalUsers }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-200">Usuários</p>
+        <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ totalUsers }}</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Responsáveis</p>
-        <p class="text-3xl font-bold text-primary mt-2">{{ totalTutors }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-200">Responsáveis</p>
+        <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ totalTutors }}</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Administradores</p>
-        <p class="text-3xl font-bold text-primary mt-2">{{ totalAdmins }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-200">Administradores</p>
+        <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ totalAdmins }}</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Com plano</p>
-        <p class="text-3xl font-bold text-accent mt-2">{{ totalSubscribed }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-200">Com plano</p>
+        <p class="text-3xl font-bold text-accent dark:text-white mt-2">{{ totalSubscribed }}</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Animais cadastrados</p>
-        <p class="text-3xl font-bold text-primary mt-2">{{ pets.length }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-200">Animais cadastrados</p>
+        <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ pets.length }}</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Planos</p>
-        <p class="text-3xl font-bold text-primary mt-2">{{ plans.length }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-200">Planos</p>
+        <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ plans.length }}</p>
       </div>
     </div>
 

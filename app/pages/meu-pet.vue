@@ -259,8 +259,8 @@ onMounted(loadPets);
         <UIcon name="i-mdi-paw" class="text-accent text-4xl" />
       </div>
       <div>
-        <p class="text-gray-700 font-medium text-lg">Nenhum animal cadastrado ainda</p>
-        <p class="text-gray-400 text-sm mt-1">Cadastre seu animal para acessar o perfil aqui.</p>
+        <p class="text-gray-700 dark:text-gray-200 font-medium text-lg">Nenhum animal cadastrado ainda</p>
+        <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Cadastre seu animal para acessar o perfil aqui.</p>
       </div>
       <UButton
         label="Cadastrar animal"
@@ -275,7 +275,7 @@ onMounted(loadPets);
       <div
         v-for="pet in pets"
         :key="pet.id"
-        class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow p-8 flex flex-col items-center gap-4"
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-shadow p-8 flex flex-col items-center gap-4"
       >
         <div class="relative">
           <div
@@ -292,14 +292,14 @@ onMounted(loadPets);
           </div>
         </div>
 
-        <h2 class="text-xl font-bold text-gray-800 text-center leading-tight">{{ pet.name }}</h2>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 text-center leading-tight">{{ pet.name }}</h2>
 
         <div class="flex flex-col items-center gap-1">
-          <div class="flex items-center gap-1.5 text-gray-500 text-sm">
+          <div class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm">
             <UIcon :name="speciesIcon(pet.species)" class="text-accent text-base shrink-0" />
             <span>{{ speciesLabel(pet.species) }}</span>
           </div>
-          <div class="flex items-center gap-1.5 text-gray-500 text-sm">
+          <div class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm">
             <UIcon name="i-heroicons-cake" class="text-accent text-base shrink-0" />
             <span>{{ petAge(pet.birth_date) }}</span>
           </div>
@@ -359,9 +359,9 @@ onMounted(loadPets);
               </div>
               <div
                 v-else
-                class="w-24 h-24 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
+                class="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
               >
-                <UIcon name="i-heroicons-camera" class="text-gray-400 text-2xl group-hover:text-accent" />
+                <UIcon name="i-heroicons-camera" class="text-gray-400 dark:text-gray-500 text-2xl group-hover:text-accent" />
               </div>
               <div
                 class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
@@ -369,7 +369,7 @@ onMounted(loadPets);
                 <UIcon name="i-heroicons-camera" class="text-white text-2xl" />
               </div>
             </div>
-            <span class="text-xs text-gray-400">Clique para {{ modalMode === 'create' ? 'adicionar' : 'alterar' }} a foto</span>
+            <span class="text-xs text-gray-400 dark:text-gray-500">Clique para {{ modalMode === 'create' ? 'adicionar' : 'alterar' }} a foto</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
