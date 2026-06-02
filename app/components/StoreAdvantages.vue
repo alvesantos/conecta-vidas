@@ -20,11 +20,11 @@ const advantageIcons = [
 
 const AdvantageItem = (props: { icon: string, label: string }) =>
   h('div', {
-    class: 'bg-foreground p-4 text-center text-accent'
+    class: 'bg-foreground dark:bg-transparent p-4 text-center text-accent dark:text-white'
   }, [
     h('img', {
       src: props.icon,
-      class: 'mx-auto mb-4 w-16 h-16 object-contain'
+      class: 'mx-auto mb-4 w-16 h-16 object-contain dark:brightness-0 dark:invert'
     }),
 
     h('p', {}, props.label)
@@ -39,7 +39,7 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
 <template>
   <div>
     <section>
-      <UCard :ui="{ body: 'bg-foreground' }">
+      <UCard :ui="{ body: 'bg-foreground dark:bg-primary' }">
 
         <!-- MOBILE -->
         <UCarousel
@@ -49,9 +49,9 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
           dots
           :autoplay="{ delay: 2000 }"
           :items="advantageIcons"
-          :ui="{ 
+          :ui="{
             item: 'basis-full',
-            dot: 'data-[state=active]:bg-accent size-3'
+            dot: 'data-[state=active]:bg-accent size-3',
           }"
         >
           <AdvantageItem
@@ -63,7 +63,7 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
         <div class="text-transparent lg:hidden">a</div>
 
         <!-- DESKTOP ==================== -->
-        <div class="hidden lg:grid grid-cols-4 gap-px bg-gray-300">
+        <div class="hidden lg:grid grid-cols-4 gap-px bg-gray-300 dark:bg-primary">
           <AdvantageItem
             v-for="item in advantageIcons"
             :key="item.label"

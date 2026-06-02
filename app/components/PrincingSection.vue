@@ -96,20 +96,20 @@ onMounted(async () => {
 <template>
   <div>
     <UCard>
-      <h4 class="lg:block hidden lg:text-2xl font-semibold text-primary text-center mb-4">
+      <h4 class="lg:block hidden lg:text-2xl font-semibold text-primary dark:text-gray-100 text-center mb-4">
         Assine e tenha acesso a conteúdos exclusivos de primeiros socorros e cuidados com seu pet.
       </h4>
-      <h4 class="block lg:hidden text-2xl font-semibold text-primary text-center mb-4">Assine já!</h4>
+      <h4 class="block lg:hidden text-2xl font-semibold text-primary dark:text-gray-100 text-center mb-4">Assine já!</h4>
 
       <p
         v-if="isSubscriptionView && isLoggedIn && subscription"
-        class="text-center text-sm text-primary mb-4"
+        class="text-center text-sm text-primary dark:text-gray-100 mb-4"
       >
         Você está no plano <strong>{{ subscription.plan_title }}</strong>.
       </p>
       <p
         v-else-if="isSubscriptionView && isLoggedIn && !subscription"
-        class="text-center text-sm text-primary/70 mb-4"
+        class="text-center text-sm text-primary/70 dark:text-gray-400 mb-4"
       >
         Você ainda não possui um plano (plano <strong>Free</strong>).
       </p>
@@ -155,10 +155,10 @@ onMounted(async () => {
               </div>
 
               <div class="px-4 flex flex-col flex-1">
-                <p class="text-primary lg:text-4xl text-2xl font-bold text-center">
+                <p class="text-primary dark:text-gray-100 lg:text-4xl text-2xl font-bold text-center">
                   {{ priceOf(plan).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}/mês
                 </p>
-                <p class="text-primary/60 font-semibold text-center mb-4 text-sm min-h-[3rem] line-clamp-2">
+                <p class="text-primary/60 dark:text-gray-400 font-semibold text-center mb-4 text-sm min-h-[3rem] line-clamp-2">
                   {{ plan.focus }}
                 </p>
 
@@ -181,7 +181,7 @@ onMounted(async () => {
                         :class="plan.color === '#FAF9F6' ? 'text-primary' : 'text-foreground'"
                       />
                     </div>
-                    <span class="text-primary text-xs lg:text-base">{{ perk.label }}</span>
+                    <span class="text-primary dark:text-gray-200 text-xs lg:text-base">{{ perk.label }}</span>
                   </li>
                 </ul>
               </div>
@@ -205,8 +205,8 @@ onMounted(async () => {
       <div class="rounded-2xl border-dotted border-2 mt-4 py-2 flex flex-block">
         <img src="/maffy_gift.png" class="ml-2 w-[20%] lg:w-[8%] h-auto object-contain lg:mr-20" />
         <div class="flex flex-col justify-center px-4">
-          <p class="text-primary font-bold text-sm lg:text-3xl">PRESENTINHOS INCLUSOS!</p>
-          <p class="text-xs lg:text-xl">Presente Dia do Pai de Pet e Presente Dia da Mãe de Pet pelo MAFFYBOX!</p>
+          <p class="text-primary dark:text-gray-100 font-bold text-sm lg:text-3xl">PRESENTINHOS INCLUSOS!</p>
+          <p class="text-xs lg:text-xl dark:text-gray-300">Presente Dia do Pai de Pet e Presente Dia da Mãe de Pet pelo MAFFYBOX!</p>
         </div>
       </div>
     </UCard>
