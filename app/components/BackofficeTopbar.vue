@@ -10,6 +10,12 @@ const menuOpen = ref(false);
 
 const { user, isLoggedIn, logout } = useAuth();
 
+const colorMode = useColorMode();
+const isDark = computed(() => colorMode.value === 'dark');
+function toggleColorMode() {
+  colorMode.preference = isDark.value ? 'light' : 'dark';
+}
+
 const commonAdminItems: NavItem[] = [
   { label: 'Dashboard', to: '/backoffice', icon: 'i-heroicons-squares-2x2' },
   { label: 'Usuários', to: '/backoffice/usuarios', icon: 'i-heroicons-users' },
@@ -51,15 +57,23 @@ function handleLogout() {
       </span>
     </div>
 
-    <button
-      class="text-white/70 hover:text-white transition-colors cursor-pointer"
-      @click="menuOpen = !menuOpen"
-    >
-      <UIcon
-        :name="menuOpen ? 'i-heroicons-x-mark' : 'i-heroicons-bars-3'"
-        class="size-7"
-      />
-    </button>
+    <div class="flex items-center gap-2">
+      <button
+        class="text-white/70 hover:text-white transition-colors cursor-pointer p-1"
+        @click="toggleColorMode"
+      >
+        <UIcon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'" class="size-6" />
+      </button>
+      <button
+        class="text-white/70 hover:text-white transition-colors cursor-pointer"
+        @click="menuOpen = !menuOpen"
+      >
+        <UIcon
+          :name="menuOpen ? 'i-heroicons-x-mark' : 'i-heroicons-bars-3'"
+          class="size-7"
+        />
+      </button>
+    </div>
   </header>
 
   <div

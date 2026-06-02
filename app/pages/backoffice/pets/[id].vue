@@ -73,83 +73,83 @@ onMounted(async () => {
 
     <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mt-6" />
 
-    <div v-else-if="pending" class="mt-6 bg-white rounded-xl shadow p-8 animate-pulse h-64" />
+    <div v-else-if="pending" class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow p-8 animate-pulse h-64" />
 
-    <div v-else-if="pet" class="mt-6 bg-white rounded-xl shadow p-8 flex flex-col gap-6">
+    <div v-else-if="pet" class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow p-8 flex flex-col gap-6">
       <div class="flex items-center gap-6">
         <div class="size-24 rounded-full overflow-hidden bg-accent/10 flex items-center justify-center border-4 border-accent/20">
           <img v-if="avatarSrc(pet.avatar_url)" :src="avatarSrc(pet.avatar_url)!" class="w-full h-full object-cover" />
           <UIcon v-else :name="speciesIcon(pet.species)" class="text-accent size-12" />
         </div>
         <div>
-          <h1 class="text-2xl font-bold text-gray-800">{{ pet.name }}</h1>
-          <p class="text-sm text-gray-500">{{ speciesLabel(pet.species) }} · {{ pet.breed }}</p>
-          <p class="text-sm text-gray-500">{{ petAge(pet.birth_date) }}</p>
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ pet.name }}</h1>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ speciesLabel(pet.species) }} · {{ pet.breed }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ petAge(pet.birth_date) }}</p>
         </div>
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
         <div>
-          <p class="text-gray-500">Porte</p>
-          <p class="font-medium capitalize">{{ pet.size }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Porte</p>
+          <p class="font-medium capitalize dark:text-gray-100">{{ pet.size }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Pelagem</p>
-          <p class="font-medium">{{ pet.coat }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Pelagem</p>
+          <p class="font-medium dark:text-gray-100">{{ pet.coat }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Cor da pelagem</p>
-          <p class="font-medium">{{ pet.coat_color || '—' }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Cor da pelagem</p>
+          <p class="font-medium dark:text-gray-100">{{ pet.coat_color || '—' }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Sexo</p>
-          <p class="font-medium">{{ sexLabel(pet.sex) }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Sexo</p>
+          <p class="font-medium dark:text-gray-100">{{ sexLabel(pet.sex) }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Peso</p>
-          <p class="font-medium">{{ pet.weight ? `${pet.weight} kg` : '—' }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Peso</p>
+          <p class="font-medium dark:text-gray-100">{{ pet.weight ? `${pet.weight} kg` : '—' }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Microchipado</p>
-          <p class="font-medium">{{ pet.microchipped ? 'Sim' : 'Não' }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Microchipado</p>
+          <p class="font-medium dark:text-gray-100">{{ pet.microchipped ? 'Sim' : 'Não' }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Castrado</p>
-          <p class="font-medium">{{ pet.neutered ? 'Sim' : 'Não' }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Castrado</p>
+          <p class="font-medium dark:text-gray-100">{{ pet.neutered ? 'Sim' : 'Não' }}</p>
         </div>
         <div>
-          <p class="text-gray-500">Nascimento</p>
-          <p class="font-medium">{{ pet.birth_date?.slice(0, 10) }}</p>
+          <p class="text-gray-500 dark:text-gray-400">Nascimento</p>
+          <p class="font-medium dark:text-gray-100">{{ pet.birth_date?.slice(0, 10) }}</p>
         </div>
       </div>
 
       <div v-if="pet.behavior">
-        <p class="text-gray-500 text-sm">Comportamento</p>
-        <p class="text-gray-800 mt-1">{{ pet.behavior }}</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Comportamento</p>
+        <p class="text-gray-800 dark:text-gray-100 mt-1">{{ pet.behavior }}</p>
       </div>
       <div v-if="pet.conditions">
-        <p class="text-gray-500 text-sm">Condições</p>
-        <p class="text-gray-800 mt-1">{{ pet.conditions }}</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Condições</p>
+        <p class="text-gray-800 dark:text-gray-100 mt-1">{{ pet.conditions }}</p>
       </div>
 
-      <div class="border-t border-gray-100 pt-6">
-        <h2 class="text-lg font-semibold text-gray-800 mb-3">Responsável</h2>
+      <div class="border-t border-gray-100 dark:border-gray-700 pt-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">Responsável</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <div>
-            <p class="text-gray-500">Nome</p>
-            <p class="font-medium">{{ pet.owner_name || '—' }}</p>
+            <p class="text-gray-500 dark:text-gray-400">Nome</p>
+            <p class="font-medium dark:text-gray-100">{{ pet.owner_name || '—' }}</p>
           </div>
           <div>
-            <p class="text-gray-500">E-mail</p>
-            <p class="font-medium">{{ pet.owner_email || '—' }}</p>
+            <p class="text-gray-500 dark:text-gray-400">E-mail</p>
+            <p class="font-medium dark:text-gray-100">{{ pet.owner_email || '—' }}</p>
           </div>
           <div>
-            <p class="text-gray-500">CPF</p>
-            <p class="font-medium">{{ pet.owner_cpf || '—' }}</p>
+            <p class="text-gray-500 dark:text-gray-400">CPF</p>
+            <p class="font-medium dark:text-gray-100">{{ pet.owner_cpf || '—' }}</p>
           </div>
           <div>
-            <p class="text-gray-500">Endereço</p>
-            <p class="font-medium">{{ pet.owner_address || '—' }}</p>
+            <p class="text-gray-500 dark:text-gray-400">Endereço</p>
+            <p class="font-medium dark:text-gray-100">{{ pet.owner_address || '—' }}</p>
           </div>
         </div>
       </div>

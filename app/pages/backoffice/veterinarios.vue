@@ -190,13 +190,14 @@ function statusLabel(recipientId: string | null) {
   <div class="max-w-7xl">
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Veterinários</h1>
-        <p class="text-gray-500 text-sm mt-1">Gerencie os veterinários cadastrados no sistema</p>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Veterinários</h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Gerencie os veterinários cadastrados no sistema</p>
       </div>
       <UButton
         label="Adicionar Veterinário"
         icon="i-heroicons-plus"
         color="primary"
+        class="dark:text-white"
         @click="openCreate"
       />
     </div>
@@ -209,9 +210,9 @@ function statusLabel(recipientId: string | null) {
       class="mb-4"
     />
 
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
       <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-600 text-left">
+        <thead class="bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-left">
           <tr>
             <th class="px-4 py-3 font-medium">Nome</th>
             <th class="px-4 py-3 font-medium">CNPJ</th>
@@ -220,26 +221,26 @@ function statusLabel(recipientId: string | null) {
             <th class="px-4 py-3 font-medium">Data de cadastro</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100">
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
           <tr v-if="pending">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
+            <td colspan="5" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Carregando...</td>
           </tr>
           <tr v-else-if="vets.length === 0">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400">Nenhum veterinário cadastrado.</td>
+            <td colspan="5" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Nenhum veterinário cadastrado.</td>
           </tr>
-          <tr v-for="vet in vets" :key="vet.id" class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium text-gray-800">{{ vet.name }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ formatCnpj(vet.cnpj) }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ vet.email }}</td>
+          <tr v-for="vet in vets" :key="vet.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{{ vet.name }}</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ formatCnpj(vet.cnpj) }}</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ vet.email }}</td>
             <td class="px-4 py-3">
               <span
                 class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="vet.recipient_id ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
+                :class="vet.recipient_id ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'"
               >
                 {{ statusLabel(vet.recipient_id) }}
               </span>
             </td>
-            <td class="px-4 py-3 text-gray-600">{{ formatDate(vet.created_at) }}</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ formatDate(vet.created_at) }}</td>
           </tr>
         </tbody>
       </table>
@@ -248,12 +249,12 @@ function statusLabel(recipientId: string | null) {
     <!-- Modal Criar Veterinário -->
     <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-5xl' }">
       <template #content>
-        <div class="p-6 flex flex-col gap-5 max-h-[85vh] overflow-y-auto">
-          <h3 class="text-lg font-semibold text-gray-800">Adicionar Veterinário</h3>
+        <div class="p-6 flex flex-col gap-5 max-h-[85vh] overflow-y-auto dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Adicionar Veterinário</h3>
 
           <!-- Dados Básicos -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Dados Básicos</h4>
+            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Dados Básicos</h4>
             <UFormField label="Nome / Razão Social *">
               <UInput v-model="form.name" placeholder="Nome completo ou razão social" class="w-full" />
             </UFormField>
@@ -300,7 +301,7 @@ function statusLabel(recipientId: string | null) {
 
           <!-- Chave Pix -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Chave Pix</h4>
+            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Chave Pix</h4>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="Tipo de chave">
                 <USelect v-model="form.pix_type" :items="pixTypeOptions" class="w-full" />
@@ -313,7 +314,7 @@ function statusLabel(recipientId: string | null) {
 
           <!-- Dados Bancários -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Dados Bancários</h4>
+            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Dados Bancários</h4>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="Código do banco">
                 <UInput v-model="form.bank_code" placeholder="001" class="w-full" />
@@ -345,7 +346,7 @@ function statusLabel(recipientId: string | null) {
 
           <!-- Endereço de Faturamento -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Endereço de Faturamento</h4>
+            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Endereço de Faturamento</h4>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="CEP">
                 <UInput
@@ -386,7 +387,7 @@ function statusLabel(recipientId: string | null) {
 
           <div class="flex justify-end gap-2 mt-2">
             <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
-            <UButton color="primary" label="Criar Veterinário" :loading="saving" @click="save" />
+            <UButton color="primary" label="Criar Veterinário" :loading="saving" class="dark:text-white" @click="save" />
           </div>
         </div>
       </template>

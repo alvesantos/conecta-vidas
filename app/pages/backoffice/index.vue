@@ -73,78 +73,78 @@ const birthdayColumns = [
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-800">Backoffice</h1>
-    <p class="text-gray-500 text-sm mt-1">Visão geral do sistema</p>
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Backoffice</h1>
+    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Visão geral do sistema</p>
 
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
       <NuxtLink
         to="/backoffice/usuarios"
-        class="bg-white rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
+        class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
       >
         <UIcon name="i-heroicons-users" class="size-8 text-accent" />
         <div>
-          <p class="font-semibold text-gray-800">Gerenciar usuários</p>
-          <p class="text-sm text-gray-500">Lista, edição, planos e exclusão</p>
+          <p class="font-semibold text-gray-800 dark:text-gray-100">Gerenciar usuários</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Lista, edição, planos e exclusão</p>
         </div>
       </NuxtLink>
       <NuxtLink
         to="/backoffice/pets"
-        class="bg-white rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
+        class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
       >
         <UIcon name="i-mdi-paw" class="size-8 text-accent" />
         <div>
-          <p class="font-semibold text-gray-800">Gerenciar animais</p>
-          <p class="text-sm text-gray-500">Visualizar animais cadastrados e responsáveis</p>
+          <p class="font-semibold text-gray-800 dark:text-gray-100">Gerenciar animais</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Visualizar animais cadastrados e responsáveis</p>
         </div>
       </NuxtLink>
       <NuxtLink
         to="/backoffice/planos"
-        class="bg-white rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
+        class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
       >
         <UIcon name="i-heroicons-credit-card" class="size-8 text-accent" />
         <div>
-          <p class="font-semibold text-gray-800">Gerenciar planos</p>
-          <p class="text-sm text-gray-500">Criar e editar planos disponíveis</p>
+          <p class="font-semibold text-gray-800 dark:text-gray-100">Gerenciar planos</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Criar e editar planos disponíveis</p>
         </div>
       </NuxtLink>
     </div>
 
     <div v-if="pending" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-      <div v-for="i in 6" :key="i" class="bg-white rounded-xl shadow p-6 animate-pulse h-28" />
+      <div v-for="i in 6" :key="i" class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 animate-pulse h-28" />
     </div>
 
     <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Usuários</p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Usuários</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ totalUsers }}</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Responsáveis</p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Responsáveis</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ totalTutors }}</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Administradores</p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Administradores</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ totalAdmins }}</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Com plano</p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Com plano</p>
         <p class="text-3xl font-bold text-accent mt-2">{{ totalSubscribed }}</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Animais cadastrados</p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Animais cadastrados</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ pets.length }}</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Planos</p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Planos</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ plans.length }}</p>
       </div>
     </div>
 
     <div v-if="!pending" class="mt-8 grid grid-cols-12 gap-4">
-      <div class="col-span-12 md:col-span-6 bg-white rounded-xl shadow">
-        <div class="flex items-center gap-2 p-6 pb-4 border-b border-gray-100">
+      <div class="col-span-12 md:col-span-6 bg-white dark:bg-gray-800 rounded-xl shadow">
+        <div class="flex items-center gap-2 p-6 pb-4 border-b border-gray-100 dark:border-gray-700">
           <UIcon name="i-heroicons-cake" class="size-5 text-amber-500" />
-          <h2 class="font-semibold text-gray-800 capitalize">Aniversariantes de {{ currentMonthName }}</h2>
+          <h2 class="font-semibold text-gray-800 dark:text-gray-100 capitalize">Aniversariantes de {{ currentMonthName }}</h2>
           <UBadge :label="String(birthdayPets.length)" color="amber" variant="subtle" class="ml-auto" />
         </div>
 
@@ -161,15 +161,15 @@ const birthdayColumns = [
                 :alt="row.original.name"
                 class="size-8 rounded-full object-cover shrink-0"
               />
-              <div v-else class="size-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+              <div v-else class="size-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center shrink-0">
                 <UIcon name="i-mdi-paw" class="size-4 text-amber-500" />
               </div>
-              <span class="font-medium text-gray-800">{{ row.original.name }}</span>
+              <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.name }}</span>
             </div>
           </template>
 
           <template #empty>
-            <div class="flex flex-col items-center justify-center py-12 text-gray-400">
+            <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
               <UIcon name="i-heroicons-cake" class="size-10 mb-2" />
               <p class="text-sm">Nenhum aniversariante em {{ currentMonthName }}</p>
             </div>

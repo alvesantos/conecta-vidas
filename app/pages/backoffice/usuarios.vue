@@ -179,8 +179,8 @@ const columns = [
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Usuários</h1>
-        <p class="text-gray-500 text-sm mt-1">Lista completa de responsáveis, veterinários e administradores</p>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Usuários</h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Lista completa de responsáveis, veterinários e administradores</p>
       </div>
     </div>
 
@@ -192,7 +192,7 @@ const columns = [
       class="mb-4"
     />
 
-    <div class="bg-white rounded-xl shadow">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
       <UTable
         :data="users"
         :columns="columns"
@@ -200,7 +200,7 @@ const columns = [
         class="w-full"
       >
         <template #name-cell="{ row }">
-          <span class="font-medium text-gray-800">
+          <span class="font-medium text-gray-800 dark:text-gray-100">
             {{ row.original.name }}
             <span v-if="me?.id === row.original.id" class="text-xs text-accent ml-1">(você)</span>
           </span>
@@ -240,7 +240,7 @@ const columns = [
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
             <UIcon name="i-heroicons-users" class="size-10 mb-2" />
             <p class="text-sm">Nenhum usuário encontrado.</p>
           </div>
@@ -251,8 +251,8 @@ const columns = [
     <!-- Modal Editar -->
     <UModal v-model:open="editOpen">
       <template #content>
-        <div class="p-6 flex flex-col gap-4">
-          <h3 class="text-lg font-semibold text-gray-800">Editar usuário</h3>
+        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Editar usuário</h3>
 
           <UFormField label="Nome">
             <UInput v-model="editForm.name" />
@@ -278,7 +278,7 @@ const columns = [
 
           <div class="flex justify-end gap-2 mt-2">
             <UButton variant="outline" label="Cancelar" @click="editOpen = false" />
-            <UButton color="primary" label="Salvar" :loading="editSaving" @click="saveEdit" />
+            <UButton color="primary" label="Salvar" :loading="editSaving" class="dark:text-white" @click="saveEdit" />
           </div>
         </div>
       </template>
@@ -287,9 +287,9 @@ const columns = [
     <!-- Modal Excluir -->
     <UModal v-model:open="deleteOpen">
       <template #content>
-        <div class="p-6 flex flex-col gap-4">
-          <h3 class="text-lg font-semibold text-gray-800">Excluir usuário</h3>
-          <p class="text-sm text-gray-600">
+        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Excluir usuário</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
             Esta ação é <strong>permanente</strong> e excluirá também todos os animais e assinaturas
             de <strong>{{ deleteTarget?.name }}</strong>. Deseja continuar?
           </p>
@@ -304,14 +304,14 @@ const columns = [
     <!-- Modal Plano -->
     <UModal v-model:open="planOpen">
       <template #content>
-        <div class="p-6 flex flex-col gap-4">
-          <h3 class="text-lg font-semibold text-gray-800">
+        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
             Plano de {{ planTarget?.name }}
           </h3>
-          <p v-if="planTarget?.plan_title" class="text-sm text-gray-600">
+          <p v-if="planTarget?.plan_title" class="text-sm text-gray-600 dark:text-gray-300">
             Plano atual: <strong>{{ planTarget.plan_title }}</strong>
           </p>
-          <p v-else class="text-sm text-gray-600">
+          <p v-else class="text-sm text-gray-600 dark:text-gray-300">
             Este usuário está no plano <strong>Free</strong>.
           </p>
 
@@ -321,14 +321,14 @@ const columns = [
             <button
               v-for="plan in plans"
               :key="plan.id"
-              class="flex items-center justify-between border rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors text-left"
-              :class="planTarget?.plan_id === plan.id ? 'border-accent bg-accent/5' : 'border-gray-200'"
+              class="flex items-center justify-between border rounded-lg px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left"
+              :class="planTarget?.plan_id === plan.id ? 'border-accent bg-accent/5' : 'border-gray-200 dark:border-gray-600'"
               :disabled="planSaving"
               @click="assignPlan(plan)"
             >
               <div>
-                <p class="font-medium text-gray-800">{{ plan.title }}</p>
-                <p class="text-xs text-gray-500">
+                <p class="font-medium text-gray-800 dark:text-gray-100">{{ plan.title }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
                   {{ Number(plan.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }} / mês
                 </p>
               </div>

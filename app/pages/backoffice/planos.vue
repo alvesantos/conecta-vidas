@@ -111,20 +111,21 @@ async function save() {
   <div class="max-w-6xl">
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Planos</h1>
-        <p class="text-gray-500 text-sm mt-1">Crie e edite os planos disponíveis no sistema</p>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Planos</h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Crie e edite os planos disponíveis no sistema</p>
       </div>
       <UButton
         label="Novo plano"
         icon="i-heroicons-plus"
         color="primary"
+        class="dark:text-white"
         @click="openCreate"
       />
     </div>
 
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
       <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-600 text-left">
+        <thead class="bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-left">
           <tr>
             <th class="px-4 py-3 font-medium">Cor</th>
             <th class="px-4 py-3 font-medium">Título</th>
@@ -135,27 +136,27 @@ async function save() {
             <th class="px-4 py-3 font-medium text-right">Ações</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100">
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
           <tr v-if="pending">
-            <td colspan="7" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
+            <td colspan="7" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Carregando...</td>
           </tr>
           <tr v-else-if="plans.length === 0">
-            <td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhum plano cadastrado.</td>
+            <td colspan="7" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Nenhum plano cadastrado.</td>
           </tr>
-          <tr v-for="plan in plans" :key="plan.id" class="hover:bg-gray-50">
+          <tr v-for="plan in plans" :key="plan.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
             <td class="px-4 py-3">
               <span class="inline-block size-6 rounded-full border" :style="{ backgroundColor: plan.color }" />
             </td>
-            <td class="px-4 py-3 font-medium text-gray-800">{{ plan.title }}</td>
-            <td class="px-4 py-3 text-gray-600">
+            <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{{ plan.title }}</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">
               {{ Number(plan.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
             </td>
-            <td class="px-4 py-3 text-gray-500">{{ plan.free_consultations ?? 0 }} / mês</td>
-            <td class="px-4 py-3 text-gray-500">{{ plan.perks?.length ?? 0 }} item(s)</td>
+            <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ plan.free_consultations ?? 0 }} / mês</td>
+            <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ plan.perks?.length ?? 0 }} item(s)</td>
             <td class="px-4 py-3">
               <span
                 class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="plan.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'"
+                :class="plan.is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'"
               >
                 {{ plan.is_active ? 'Ativo' : 'Inativo' }}
               </span>
@@ -166,6 +167,7 @@ async function save() {
                 variant="ghost"
                 icon="i-heroicons-pencil-square"
                 color="primary"
+                class="dark:text-white"
                 @click="openEdit(plan)"
               />
             </td>
@@ -176,8 +178,8 @@ async function save() {
 
     <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-3xl' }">
       <template #content>
-        <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
-          <h3 class="text-lg font-semibold text-gray-800">
+        <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
             {{ editingId ? 'Editar plano' : 'Novo plano' }}
           </h3>
 
@@ -210,7 +212,7 @@ async function save() {
 
           <div>
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-700">Benefícios</span>
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Benefícios</span>
               <UButton size="xs" variant="ghost" icon="i-heroicons-plus" label="Adicionar" @click="addPerk" />
             </div>
             <div class="flex flex-col gap-2">
@@ -236,7 +238,7 @@ async function save() {
 
           <div class="flex justify-end gap-2 mt-2">
             <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
-            <UButton color="primary" :label="editingId ? 'Salvar' : 'Criar'" :loading="saving" @click="save" />
+            <UButton color="primary" :label="editingId ? 'Salvar' : 'Criar'" :loading="saving" class="dark:text-white" @click="save" />
           </div>
         </div>
       </template>
