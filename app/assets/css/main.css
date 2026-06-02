@@ -15,4 +15,9 @@
     background-color: var(--color-foreground);
     color: var(--color-primary);
   }
+
+  .dark body {
+    background-color: #011428;
+    color: #e2e8f0;
+  }
 }
