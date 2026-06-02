@@ -29,6 +29,61 @@ async function loadPrescriptions() {
 
 onMounted(loadPrescriptions);
 
+interface PrescriptionDetail {
+  content: string;
+  date: string;
+  responsible_name: string | null;
+  responsible_cpf: string | null;
+  responsible_email: string | null;
+  responsible_address: string | null;
+  vet_name: string | null;
+  pet_name: string | null;
+  pet_species: string | null;
+  pet_breed: string | null;
+  pet_sex: string | null;
+  pet_size: string | null;
+  pet_weight: number | string | null;
+  pet_coat: string | null;
+  pet_coat_color: string | null;
+  pet_birth_date: string | null;
+}
+
+const downloadingId = ref<string | null>(null);
+
+async function downloadPdf(id: string) {
+  downloadingId.value = id;
+  errorMsg.value = '';
+  try {
+    const d = await api<PrescriptionDetail>(`/vet/prescriptions/${id}`);
+    await downloadPrescriptionPdf({
+      vetName: d.vet_name,
+      date: d.date,
+      content: d.content,
+      responsibleName: d.responsible_name,
+      responsibleCpf: d.responsible_cpf,
+      responsibleEmail: d.responsible_email,
+      responsibleAddress: d.responsible_address,
+      animal: d.pet_name
+        ? {
+            name: d.pet_name,
+            species: d.pet_species,
+            breed: d.pet_breed,
+            sex: d.pet_sex,
+            size: d.pet_size,
+            weight: d.pet_weight,
+            coat: d.pet_coat,
+            coatColor: d.pet_coat_color,
+            birthDate: d.pet_birth_date,
+          }
+        : null,
+    });
+  } catch {
+    errorMsg.value = 'Erro ao gerar o PDF.';
+  } finally {
+    downloadingId.value = null;
+  }
+}
+
 function formatDate(dateStr: string) {
   if (!dateStr) return '';
   const [year, month, day] = dateStr.slice(0, 10).split('-');
@@ -65,14 +120,15 @@ function excerpt(text: string) {
             <th class="px-4 py-3 font-medium">Responsável</th>
             <th class="px-4 py-3 font-medium">Animal</th>
             <th class="px-4 py-3 font-medium">Prescrição</th>
+            <th class="px-4 py-3 font-medium text-right">Ações</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr v-if="pending">
-            <td colspan="4" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
+            <td colspan="5" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
           </tr>
           <tr v-else-if="prescriptions.length === 0">
-            <td colspan="4" class="px-4 py-8 text-center text-gray-400">
+            <td colspan="5" class="px-4 py-8 text-center text-gray-400">
               Nenhuma prescrição emitida ainda.
             </td>
           </tr>
@@ -81,6 +137,17 @@ function excerpt(text: string) {
             <td class="px-4 py-3 text-gray-800">{{ p.responsible_name }}</td>
             <td class="px-4 py-3 text-gray-600">{{ p.pet_name || '—' }}</td>
             <td class="px-4 py-3 text-gray-600">{{ excerpt(p.content) }}</td>
+            <td class="px-4 py-3 text-right">
+              <UButton
+                size="xs"
+                variant="soft"
+                color="primary"
+                icon="i-heroicons-arrow-down-tray"
+                label="Baixar PDF"
+                :loading="downloadingId === p.id"
+                @click="downloadPdf(p.id)"
+              />
+            </td>
           </tr>
         </tbody>
       </table>

@@ -147,30 +147,38 @@ async function savePrescription() {
   }
 }
 
-function downloadPdf() {
-  const node = document.getElementById('prescription-document');
-  if (!node) return;
-  const win = window.open('', '_blank', 'width=900,height=1000');
-  if (!win) return;
-  win.document.write(`
-    <html>
-      <head>
-        <title>Prescrição - ${selectedAnimal.value?.name ?? selectedResponsible.value?.name ?? 'ConectaVet'}</title>
-        <meta charset="utf-8" />
-        <style>
-          * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-          body { margin: 0; padding: 32px; color: #1f2937; }
-          @page { size: A4; margin: 16mm; }
-        </style>
-      </head>
-      <body>${node.innerHTML}</body>
-    </html>
-  `);
-  win.document.close();
-  win.focus();
-  setTimeout(() => {
-    win.print();
-  }, 400);
+const downloading = ref(false);
+
+async function downloadPdf() {
+  downloading.value = true;
+  try {
+    await downloadPrescriptionPdf({
+      vetName: user.value?.name,
+      date: date.value,
+      content: content.value,
+      responsibleName: selectedResponsible.value?.name,
+      responsibleCpf: selectedResponsible.value?.cpf,
+      responsibleEmail: selectedResponsible.value?.email,
+      responsibleAddress: selectedResponsible.value?.address,
+      animal: selectedAnimal.value
+        ? {
+            name: selectedAnimal.value.name,
+            species: selectedAnimal.value.species,
+            breed: selectedAnimal.value.breed,
+            sex: selectedAnimal.value.sex,
+            size: selectedAnimal.value.size,
+            weight: selectedAnimal.value.weight,
+            coat: selectedAnimal.value.coat,
+            coatColor: selectedAnimal.value.coat_color,
+            birthDate: selectedAnimal.value.birth_date,
+          }
+        : null,
+    });
+  } catch {
+    errorMsg.value = 'Erro ao gerar o PDF.';
+  } finally {
+    downloading.value = false;
+  }
 }
 </script>
 
@@ -260,6 +268,7 @@ function downloadPdf() {
             icon="i-heroicons-arrow-down-tray"
             variant="outline"
             color="primary"
+            :loading="downloading"
             @click="downloadPdf"
           />
           <UButton
