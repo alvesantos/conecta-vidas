@@ -153,18 +153,18 @@ const birthdayColumns = [
           :columns="birthdayColumns"
           class="w-full"
         >
-          <template #name-data="{ row }">
+          <template #name-cell="{ row }">
             <div class="flex items-center gap-3">
               <img
-                v-if="row.avatar_url"
-                :src="row.avatar_url"
-                :alt="row.name"
+                v-if="row.original.avatar_url"
+                :src="row.original.avatar_url"
+                :alt="row.original.name"
                 class="size-8 rounded-full object-cover shrink-0"
               />
               <div v-else class="size-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                 <UIcon name="i-mdi-paw" class="size-4 text-amber-500" />
               </div>
-              <span class="font-medium text-gray-800">{{ row.name }}</span>
+              <span class="font-medium text-gray-800">{{ row.original.name }}</span>
             </div>
           </template>
 

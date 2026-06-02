@@ -165,10 +165,18 @@ function typeLabel(type: 'tutor' | 'admin' | 'veterinario') {
   if (type === 'veterinario') return 'Veterinário';
   return 'Responsável';
 }
+
+const columns = [
+  { accessorKey: 'name', header: 'Nome' },
+  { accessorKey: 'email', header: 'E-mail' },
+  { accessorKey: 'type', header: 'Tipo' },
+  { accessorKey: 'plan_title', header: 'Plano' },
+  { id: 'actions', header: '' },
+];
 </script>
 
 <template>
-  <div class="max-w-7xl">
+  <div>
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Usuários</h1>
@@ -184,69 +192,60 @@ function typeLabel(type: 'tutor' | 'admin' | 'veterinario') {
       class="mb-4"
     />
 
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-600 text-left">
-          <tr>
-            <th class="px-4 py-3 font-medium">Nome</th>
-            <th class="px-4 py-3 font-medium">E-mail</th>
-            <th class="px-4 py-3 font-medium">Tipo</th>
-            <th class="px-4 py-3 font-medium">Plano</th>
-            <th class="px-4 py-3 font-medium text-right">Ações</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr v-if="pending">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
-          </tr>
-          <tr v-else-if="users.length === 0">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400">Nenhum usuário encontrado.</td>
-          </tr>
-          <tr v-for="row in users" :key="row.id" class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium text-gray-800">
-              {{ row.name }}
-              <span v-if="me?.id === row.id" class="text-xs text-accent ml-1">(você)</span>
-            </td>
-            <td class="px-4 py-3 text-gray-600">{{ row.email }}</td>
-            <td class="px-4 py-3">
-              <span
-                class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="row.type === 'admin' ? 'bg-purple-100 text-purple-700' : row.type === 'veterinario' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'"
-              >
-                {{ typeLabel(row.type) }}
-              </span>
-            </td>
-            <td class="px-4 py-3">
-              <button
-                class="text-xs font-medium px-3 py-1 rounded-full cursor-pointer transition-colors"
-                :class="row.plan_title ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
-                @click="openPlanModal(row)"
-              >
-                {{ row.plan_title || 'Free' }}
-              </button>
-            </td>
-            <td class="px-4 py-3">
-              <div class="flex items-center justify-end gap-2">
-                <UButton
-                  size="xs"
-                  variant="ghost"
-                  icon="i-heroicons-pencil-square"
-                  color="primary"
-                  @click="openEdit(row)"
-                />
-                <UButton
-                  size="xs"
-                  variant="ghost"
-                  icon="i-heroicons-trash"
-                  color="error"
-                  :disabled="me?.id === row.id"
-                  @click="openDelete(row)"
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="bg-white rounded-xl shadow">
+      <UTable
+        :data="users"
+        :columns="columns"
+        :loading="pending"
+        class="w-full"
+      >
+        <template #name-cell="{ row }">
+          <span class="font-medium text-gray-800">
+            {{ row.original.name }}
+            <span v-if="me?.id === row.original.id" class="text-xs text-accent ml-1">(você)</span>
+          </span>
+        </template>
+
+        <template #type-cell="{ row }">
+          <UBadge
+            :label="typeLabel(row.original.type)"
+            :color="row.original.type === 'admin' ? 'purple' : row.original.type === 'veterinario' ? 'success' : 'info'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #plan_title-cell="{ row }">
+          <UBadge
+            :label="row.original.plan_title || 'Free'"
+            :color="row.original.plan_title ? 'success' : 'neutral'"
+            variant="subtle"
+            class="cursor-pointer"
+            @click="openPlanModal(row.original)"
+          />
+        </template>
+
+        <template #actions-cell="{ row }">
+          <div class="flex justify-end">
+            <UDropdownMenu
+              :items="[
+                [
+                  { label: 'Editar', icon: 'i-heroicons-pencil-square', onSelect: () => openEdit(row.original) },
+                  { label: 'Excluir', icon: 'i-heroicons-trash', color: 'error', disabled: me?.id === row.original.id, onSelect: () => openDelete(row.original) },
+                ],
+              ]"
+            >
+              <UButton size="md" variant="ghost" icon="i-heroicons-ellipsis-vertical" color="neutral" />
+            </UDropdownMenu>
+          </div>
+        </template>
+
+        <template #empty>
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
+            <UIcon name="i-heroicons-users" class="size-10 mb-2" />
+            <p class="text-sm">Nenhum usuário encontrado.</p>
+          </div>
+        </template>
+      </UTable>
     </div>
 
     <!-- Modal Editar -->
