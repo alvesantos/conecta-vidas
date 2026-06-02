@@ -184,10 +184,18 @@ function formatDate(dateStr: string) {
 function statusLabel(recipientId: string | null) {
   return recipientId ? 'Ativo' : 'Pendente';
 }
+
+const columns = [
+  { accessorKey: 'name', header: 'Nome' },
+  { accessorKey: 'cnpj', header: 'CNPJ' },
+  { accessorKey: 'email', header: 'E-mail' },
+  { accessorKey: 'recipient_id', header: 'Status' },
+  { accessorKey: 'created_at', header: 'Data de cadastro' },
+];
 </script>
 
 <template>
-  <div class="max-w-7xl">
+  <div>
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Veterinários</h1>
@@ -210,47 +218,51 @@ function statusLabel(recipientId: string | null) {
       class="mb-4"
     />
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-left">
-          <tr>
-            <th class="px-4 py-3 font-medium">Nome</th>
-            <th class="px-4 py-3 font-medium">CNPJ</th>
-            <th class="px-4 py-3 font-medium">E-mail</th>
-            <th class="px-4 py-3 font-medium">Status</th>
-            <th class="px-4 py-3 font-medium">Data de cadastro</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-          <tr v-if="pending">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Carregando...</td>
-          </tr>
-          <tr v-else-if="vets.length === 0">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Nenhum veterinário cadastrado.</td>
-          </tr>
-          <tr v-for="vet in vets" :key="vet.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-            <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{{ vet.name }}</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ formatCnpj(vet.cnpj) }}</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ vet.email }}</td>
-            <td class="px-4 py-3">
-              <span
-                class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="vet.recipient_id ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'"
-              >
-                {{ statusLabel(vet.recipient_id) }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ formatDate(vet.created_at) }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+      <UTable
+        :data="vets"
+        :columns="columns"
+        :loading="pending"
+        class="w-full"
+      >
+        <template #name-cell="{ row }">
+          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.name }}</span>
+        </template>
+
+        <template #cnpj-cell="{ row }">
+          {{ formatCnpj(row.original.cnpj) }}
+        </template>
+
+        <template #recipient_id-cell="{ row }">
+          <UBadge
+            :label="statusLabel(row.original.recipient_id)"
+            :color="row.original.recipient_id ? 'success' : 'warning'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #created_at-cell="{ row }">
+          {{ formatDate(row.original.created_at) }}
+        </template>
+
+        <template #empty>
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <UIcon name="i-mdi-stethoscope" class="size-10 mb-2" />
+            <p class="text-sm">Nenhum veterinário cadastrado.</p>
+          </div>
+        </template>
+      </UTable>
     </div>
 
     <!-- Modal Criar Veterinário -->
-    <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-5xl' }">
+    <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">
       <template #content>
-        <div class="p-6 flex flex-col gap-5 max-h-[85vh] overflow-y-auto dark:bg-gray-800">
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Adicionar Veterinário</h3>
+        <div class="flex flex-col max-h-[90vh] dark:bg-gray-800">
+          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Adicionar Veterinário</h3>
+            <UButton icon="i-heroicons-x-mark" variant="ghost" color="neutral" size="md" @click="modalOpen = false" />
+          </div>
+          <div class="px-8 py-6 flex flex-col gap-5 overflow-y-auto flex-1">
 
           <!-- Dados Básicos -->
           <div class="flex flex-col gap-3">
@@ -386,8 +398,9 @@ function statusLabel(recipientId: string | null) {
           <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
+            <UButton variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
             <UButton color="primary" label="Criar Veterinário" :loading="saving" class="dark:text-white" @click="save" />
+          </div>
           </div>
         </div>
       </template>
