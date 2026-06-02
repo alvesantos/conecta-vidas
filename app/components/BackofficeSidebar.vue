@@ -3,19 +3,23 @@ const { user, logout } = useAuth();
 
 const collapsed = ref(false);
 
+const colorMode = useColorMode();
+const isDark = computed(() => colorMode.value === 'dark');
+function toggleColorMode() {
+  colorMode.preference = isDark.value ? 'light' : 'dark';
+}
+
 const items = [
   { label: 'Dashboard', to: '/backoffice', icon: 'i-heroicons-squares-2x2' },
   { label: 'Usuários', to: '/backoffice/usuarios', icon: 'i-heroicons-users' },
   { label: 'Veterinários', to: '/backoffice/veterinarios', icon: 'i-mdi-stethoscope' },
   { label: 'Animais', to: '/backoffice/pets', icon: 'i-mdi-paw' },
   { label: 'Planos', to: '/backoffice/planos', icon: 'i-heroicons-credit-card' },
-  { label: 'Área do Veterinário', to: '/veterinario/prescricoes', icon: 'i-mdi-stethoscope' },
-  { label: 'Voltar ao site', to: '/', icon: 'i-heroicons-arrow-left-circle' },
 ];
 
 const ui = computed(() => ({
-  link: `text-base hover:text-white hover:before:bg-white/10 ${collapsed.value ? 'justify-center py-4' : 'py-3'}`,
-  linkLeadingIcon: `shrink-0 group-hover:text-white size-6`,
+  link: `text-base hover:text-white hover:before:bg-white/10 aria-[current=page]:text-white aria-[current=page]:before:bg-white/20 ${collapsed.value ? 'justify-center py-4' : 'py-3'}`,
+  linkLeadingIcon: `shrink-0 group-hover:text-white group-aria-[current=page]:text-white size-6`,
 }));
 
 const userInitials = computed(() => {
@@ -71,9 +75,40 @@ const userInitials = computed(() => {
       :class="collapsed ? 'p-3' : ''"
     />
 
-    <div class="mt-auto pt-4" :class="collapsed ? 'flex flex-col items-center gap-2' : ''">
+    <div class="mt-auto pt-4 flex flex-col gap-1" :class="collapsed ? 'items-center' : ''">
+      <NuxtLink
+        to="/veterinario/prescricoes"
+        class="flex items-center gap-3 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
+        :class="collapsed ? 'justify-center px-2' : 'px-2'"
+      >
+        <UIcon name="i-mdi-stethoscope" :class="collapsed ? 'size-7' : 'size-6'" class="shrink-0" />
+        <span v-if="!collapsed" class="text-base font-medium">Área do Veterinário</span>
+      </NuxtLink>
+
+      <NuxtLink
+        to="/"
+        class="flex items-center gap-3 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
+        :class="collapsed ? 'justify-center px-2' : 'px-2'"
+      >
+        <UIcon name="i-heroicons-arrow-left-circle" :class="collapsed ? 'size-7' : 'size-6'" class="shrink-0" />
+        <span v-if="!collapsed" class="text-base font-medium">Voltar ao site</span>
+      </NuxtLink>
+
       <button
-        class="flex items-center gap-3 py-4 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
+        class="flex items-center gap-3 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
+        :class="collapsed ? 'justify-center px-2' : 'px-2'"
+        @click="toggleColorMode"
+      >
+        <UIcon
+          :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"
+          :class="collapsed ? 'size-7' : 'size-6'"
+          class="shrink-0"
+        />
+        <span v-if="!collapsed" class="text-base font-medium">{{ isDark ? 'Modo claro' : 'Modo escuro' }}</span>
+      </button>
+
+      <button
+        class="flex items-center gap-3 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
         :class="collapsed ? 'justify-center px-2' : 'px-2'"
         @click="logout"
       >

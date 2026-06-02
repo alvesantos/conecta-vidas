@@ -77,10 +77,20 @@
       </button>
     </div>
 
-    <div
-      class="pt-3 border-t border-white/10 mt-3"
-      :class="collapsed ? 'flex justify-center' : ''"
-    >
+    <div class="pt-3 border-t border-white/10 mt-3" :class="collapsed ? 'flex flex-col items-center gap-1' : ''">
+      <button
+        class="flex items-center gap-3 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
+        :class="collapsed ? 'justify-center px-2' : 'px-2'"
+        @click="toggleColorMode"
+      >
+        <UIcon
+          :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"
+          :class="collapsed ? 'size-7' : 'size-6'"
+          class="shrink-0"
+        />
+        <span v-if="!collapsed" class="text-base font-medium">{{ isDark ? 'Modo claro' : 'Modo escuro' }}</span>
+      </button>
+
       <button
         class="flex items-center gap-3 py-3 text-white/40 hover:text-white/80 hover:bg-white/10 rounded-lg transition-colors w-full cursor-pointer"
         :class="collapsed ? 'justify-center px-2' : 'px-2'"
@@ -104,6 +114,12 @@
 const collapsed = ref(false);
 
 const { user, isLoggedIn, isAdmin, isVet, logout } = useAuth();
+
+const colorMode = useColorMode();
+const isDark = computed(() => colorMode.value === 'dark');
+function toggleColorMode() {
+  colorMode.preference = isDark.value ? 'light' : 'dark';
+}
 
 const navItems = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
@@ -164,8 +180,8 @@ const accountItems = computed(() => {
 });
 
 const ui = computed(() => ({
-  link: `text-base hover:text-white hover:before:bg-white/10 ${collapsed.value ? "justify-center py-4" : "py-3"}`,
-  linkLeadingIcon: `shrink-0 group-hover:text-white size-6`,
+  link: `text-base hover:text-white hover:before:bg-white/10 aria-[current=page]:text-white aria-[current=page]:before:bg-white/20 ${collapsed.value ? "justify-center py-4" : "py-3"}`,
+  linkLeadingIcon: `shrink-0 group-hover:text-white group-aria-[current=page]:text-white size-6`,
 }));
 
 const userInitials = computed(() => {
