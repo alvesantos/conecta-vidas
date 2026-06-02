@@ -10,6 +10,8 @@ interface AdminPetDetail {
   coat: string;
   coat_color?: string | null;
   birth_date: string;
+  weight?: number | string | null;
+  sex?: string | null;
   microchipped: boolean;
   neutered: boolean;
   behavior?: string | null;
@@ -38,9 +40,7 @@ function avatarSrc(avatarUrl?: string | null) {
   return `${uploadsBase.value}${avatarUrl}`;
 }
 
-function speciesIcon(species?: string) {
-  return species === 'gato' ? 'i-mdi-cat' : 'i-mdi-dog';
-}
+// speciesIcon e speciesLabel vêm do composable useSpecies (auto-import)
 
 function petAge(birthDate?: string) {
   if (!birthDate) return '';
@@ -83,7 +83,7 @@ onMounted(async () => {
         </div>
         <div>
           <h1 class="text-2xl font-bold text-gray-800">{{ pet.name }}</h1>
-          <p class="text-sm text-gray-500 capitalize">{{ pet.species }} · {{ pet.breed }}</p>
+          <p class="text-sm text-gray-500">{{ speciesLabel(pet.species) }} · {{ pet.breed }}</p>
           <p class="text-sm text-gray-500">{{ petAge(pet.birth_date) }}</p>
         </div>
       </div>
@@ -100,6 +100,14 @@ onMounted(async () => {
         <div>
           <p class="text-gray-500">Cor da pelagem</p>
           <p class="font-medium">{{ pet.coat_color || '—' }}</p>
+        </div>
+        <div>
+          <p class="text-gray-500">Sexo</p>
+          <p class="font-medium">{{ sexLabel(pet.sex) }}</p>
+        </div>
+        <div>
+          <p class="text-gray-500">Peso</p>
+          <p class="font-medium">{{ pet.weight ? `${pet.weight} kg` : '—' }}</p>
         </div>
         <div>
           <p class="text-gray-500">Microchipado</p>
@@ -125,7 +133,7 @@ onMounted(async () => {
       </div>
 
       <div class="border-t border-gray-100 pt-6">
-        <h2 class="text-lg font-semibold text-gray-800 mb-3">Tutor</h2>
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">Responsável</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <div>
             <p class="text-gray-500">Nome</p>

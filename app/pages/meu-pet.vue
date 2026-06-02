@@ -10,6 +10,8 @@ interface Pet {
   coat: string;
   coat_color?: string;
   birth_date: string;
+  weight?: number | string | null;
+  sex?: string | null;
   microchipped: boolean;
   neutered: boolean;
   behavior?: string;
@@ -46,20 +48,14 @@ function petAge(birthDate: string) {
   return `${years} ${years === 1 ? 'ano' : 'anos'}`;
 }
 
-function speciesIcon(species: string) {
-  return species === 'gato' ? 'i-mdi-cat' : 'i-mdi-dog';
-}
-
-function speciesLabel(species: string) {
-  return species === 'gato' ? 'Gato' : 'Cachorro';
-}
+// speciesIcon, speciesLabel, speciesOptions, sexOptions e sexLabel vêm do composable useSpecies (auto-import)
 
 async function loadPets() {
   pending.value = true;
   try {
     pets.value = await api<Pet[]>('/pets/me');
   } catch {
-    fetchError.value = 'Não foi possível carregar seus pets. Tente novamente.';
+    fetchError.value = 'Não foi possível carregar seus animais. Tente novamente.';
   } finally {
     pending.value = false;
   }
@@ -75,10 +71,6 @@ const avatarFile = ref<File | null>(null);
 const avatarPreview = ref<string | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
 
-const speciesOptions = [
-  { label: 'Cachorro', value: 'cachorro' },
-  { label: 'Gato', value: 'gato' },
-];
 const sizeOptions = [
   { label: 'Pequeno', value: 'pequeno' },
   { label: 'Médio', value: 'medio' },
@@ -94,6 +86,8 @@ const form = reactive({
   coat: '',
   coat_color: '',
   birth_date: '',
+  weight: '',
+  sex: '',
   microchipped: false,
   neutered: false,
   behavior: '',
@@ -108,6 +102,8 @@ function resetForm() {
   form.coat = '';
   form.coat_color = '';
   form.birth_date = '';
+  form.weight = '';
+  form.sex = '';
   form.microchipped = false;
   form.neutered = false;
   form.behavior = '';
@@ -135,6 +131,8 @@ function openEdit(pet: Pet) {
   form.coat = pet.coat;
   form.coat_color = pet.coat_color ?? '';
   form.birth_date = pet.birth_date?.slice(0, 10) ?? '';
+  form.weight = pet.weight != null ? String(pet.weight) : '';
+  form.sex = pet.sex ?? '';
   form.microchipped = pet.microchipped;
   form.neutered = pet.neutered;
   form.behavior = pet.behavior ?? '';
@@ -203,7 +201,7 @@ async function savePet() {
     await loadPets();
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
-    formError.value = fetchErr?.data?.error ?? 'Erro ao salvar pet.';
+    formError.value = fetchErr?.data?.error ?? 'Erro ao salvar animal.';
   } finally {
     saving.value = false;
   }
@@ -216,19 +214,19 @@ onMounted(loadPets);
   <div class="max-w-4xl mx-auto">
     <div class="mb-8 flex items-start justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Meus Pets</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Meus Animais</h1>
         <p class="text-gray-500 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
       </div>
       <div v-if="!pending && !fetchError && pets.length > 0" class="flex flex-col items-end gap-1">
         <UButton
-          label="Adicionar pet"
+          label="Adicionar animal"
           icon="i-heroicons-plus"
           class="bg-accent text-white"
           :disabled="!canAddPet"
           @click="openCreate"
         />
         <span v-if="!canAddPet" class="text-xs text-gray-400">
-          Limite de {{ PET_LIMIT }} pets atingido
+          Limite de {{ PET_LIMIT }} animais atingido
         </span>
       </div>
     </div>
@@ -261,11 +259,11 @@ onMounted(loadPets);
         <UIcon name="i-mdi-paw" class="text-accent text-4xl" />
       </div>
       <div>
-        <p class="text-gray-700 font-medium text-lg">Nenhum pet cadastrado ainda</p>
-        <p class="text-gray-400 text-sm mt-1">Cadastre seu pet para acessar o perfil aqui.</p>
+        <p class="text-gray-700 font-medium text-lg">Nenhum animal cadastrado ainda</p>
+        <p class="text-gray-400 text-sm mt-1">Cadastre seu animal para acessar o perfil aqui.</p>
       </div>
       <UButton
-        label="Cadastrar pet"
+        label="Cadastrar animal"
         size="lg"
         class="bg-accent text-white mt-2"
         leading-icon="i-heroicons-plus"
@@ -327,7 +325,7 @@ onMounted(loadPets);
       <template #content>
         <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
           <h3 class="text-lg font-semibold text-gray-800">
-            {{ modalMode === 'create' ? 'Adicionar pet' : `Editar ${editTarget?.name}` }}
+            {{ modalMode === 'create' ? 'Adicionar animal' : `Editar ${editTarget?.name}` }}
           </h3>
 
           <!-- Foto do pet -->
@@ -344,7 +342,7 @@ onMounted(loadPets);
                 v-if="avatarPreview"
                 class="w-24 h-24 rounded-full overflow-hidden border-4 border-accent/30 shadow"
               >
-                <img :src="avatarPreview" alt="Foto do pet" class="w-full h-full object-cover" />
+                <img :src="avatarPreview" alt="Foto do animal" class="w-full h-full object-cover" />
               </div>
               <div
                 v-else
@@ -379,6 +377,12 @@ onMounted(loadPets);
             </UFormField>
             <UFormField label="Cor da pelagem">
               <UInput v-model="form.coat_color" placeholder="ex: preto, caramelo, tricolor" class="w-full" />
+            </UFormField>
+            <UFormField label="Sexo">
+              <USelect v-model="form.sex" :items="sexOptions" placeholder="Selecione" class="w-full" />
+            </UFormField>
+            <UFormField label="Peso (kg)">
+              <UInput v-model="form.weight" type="number" step="0.1" min="0" placeholder="ex: 12.5" class="w-full" />
             </UFormField>
             <UFormField label="Nascimento">
               <UInput v-model="form.birth_date" type="date" class="w-full" />

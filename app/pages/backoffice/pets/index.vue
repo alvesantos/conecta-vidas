@@ -27,9 +27,7 @@ function avatarSrc(avatarUrl?: string | null) {
   return `${uploadsBase.value}${avatarUrl}`;
 }
 
-function speciesIcon(species: string) {
-  return species === 'gato' ? 'i-mdi-cat' : 'i-mdi-dog';
-}
+// speciesIcon e speciesLabel vêm do composable useSpecies (auto-import)
 
 onMounted(async () => {
   try {
@@ -42,18 +40,18 @@ onMounted(async () => {
 
 <template>
   <div class="max-w-7xl">
-    <h1 class="text-2xl font-bold text-gray-800">Pets</h1>
-    <p class="text-gray-500 text-sm mt-1">Todos os pets cadastrados no sistema</p>
+    <h1 class="text-2xl font-bold text-gray-800">Animais</h1>
+    <p class="text-gray-500 text-sm mt-1">Todos os animais cadastrados no sistema</p>
 
     <div class="bg-white rounded-xl shadow overflow-x-auto mt-6">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-600 text-left">
           <tr>
-            <th class="px-4 py-3 font-medium">Pet</th>
+            <th class="px-4 py-3 font-medium">Animal</th>
             <th class="px-4 py-3 font-medium">Espécie</th>
             <th class="px-4 py-3 font-medium">Raça</th>
             <th class="px-4 py-3 font-medium">Porte</th>
-            <th class="px-4 py-3 font-medium">Tutor</th>
+            <th class="px-4 py-3 font-medium">Responsável</th>
             <th class="px-4 py-3 font-medium"></th>
           </tr>
         </thead>
@@ -62,7 +60,7 @@ onMounted(async () => {
             <td colspan="6" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
           </tr>
           <tr v-else-if="pets.length === 0">
-            <td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhum pet encontrado.</td>
+            <td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhum animal encontrado.</td>
           </tr>
           <tr
             v-for="pet in pets"
@@ -77,7 +75,7 @@ onMounted(async () => {
               </div>
               <span class="font-medium text-gray-800">{{ pet.name }}</span>
             </td>
-            <td class="px-4 py-3 capitalize text-gray-600">{{ pet.species }}</td>
+            <td class="px-4 py-3 text-gray-600">{{ speciesLabel(pet.species) }}</td>
             <td class="px-4 py-3 text-gray-600">{{ pet.breed }}</td>
             <td class="px-4 py-3 capitalize text-gray-600">{{ pet.size }}</td>
             <td class="px-4 py-3 text-gray-600">

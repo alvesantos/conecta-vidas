@@ -28,6 +28,8 @@ const petSize = ref("");
 const petCoat = ref("");
 const petCoatColor = ref("");
 const petBirthDate = ref("");
+const petWeight = ref("");
+const petSex = ref("");
 const petMicrochipped = ref("");
 const petNeutered = ref("");
 const petBehavior = ref("");
@@ -48,10 +50,7 @@ function clearError(field: string) {
   delete errors[field];
 }
 
-const speciesOptions = [
-  { label: "Cachorro", value: "cachorro" },
-  { label: "Gato", value: "gato" },
-];
+// speciesOptions e sexOptions vêm do composable useSpecies (auto-import)
 
 const sizeOptions = [
   { label: "Pequeno", value: "pequeno" },
@@ -135,7 +134,7 @@ function validateStep2() {
   let valid = true;
 
   if (!petName.value.trim()) {
-    setError("petName", "Nome do pet obrigatório");
+    setError("petName", "Nome do animal obrigatório");
     valid = false;
   } else clearError("petName");
 
@@ -205,6 +204,8 @@ async function submit() {
     formData.append("size", petSize.value);
     formData.append("coat", petCoat.value);
     if (petCoatColor.value) formData.append("coat_color", petCoatColor.value);
+    if (petWeight.value) formData.append("weight", petWeight.value);
+    if (petSex.value) formData.append("sex", petSex.value);
     formData.append("birth_date", petBirthDate.value);
     formData.append("microchipped", String(petMicrochipped.value === "sim"));
     formData.append("neutered", String(petNeutered.value === "sim"));
@@ -239,7 +240,7 @@ async function submit() {
       <!-- Logo -->
       <div class="flex flex-col items-center gap-2">
         <img src="/icon-com-texto.png" alt="Conecta Vet" class="h-40" />
-        <p class="text-sm text-gray-500">Crie sua conta de tutor</p>
+        <p class="text-sm text-gray-500">Crie sua conta de responsável</p>
       </div>
 
       <!-- Steps indicator -->
@@ -258,7 +259,7 @@ async function submit() {
           <span
             class="text-xs font-medium"
             :class="currentStep >= 1 ? 'text-accent' : 'text-gray-400'"
-            >Tutor</span
+            >Responsável</span
           >
         </div>
 
@@ -281,7 +282,7 @@ async function submit() {
           <span
             class="text-xs font-medium"
             :class="currentStep >= 2 ? 'text-accent' : 'text-gray-400'"
-            >Pet</span
+            >Animal</span
           >
         </div>
       </div>
@@ -418,7 +419,7 @@ async function submit() {
             >
               <img
                 :src="petAvatarPreview"
-                alt="Foto do pet"
+                alt="Foto do animal"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -427,7 +428,7 @@ async function submit() {
               class="w-28 h-28 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
             >
               <UIcon name="i-heroicons-camera" class="text-gray-400 text-2xl group-hover:text-accent" />
-              <span class="text-xs text-gray-400 group-hover:text-accent">Foto do pet</span>
+              <span class="text-xs text-gray-400 group-hover:text-accent">Foto do animal</span>
             </div>
 
             <!-- Botão de overlay ao passar o mouse (quando já tem preview) -->
@@ -457,7 +458,7 @@ async function submit() {
           <UInput
             v-model="petName"
             type="text"
-            placeholder="Nome do pet *"
+            placeholder="Nome do animal *"
             size="lg"
             icon="i-heroicons-heart"
             class="w-full"
@@ -518,6 +519,31 @@ async function submit() {
             class="w-full"
           />
         </UFormField>
+
+        <div class="grid grid-cols-2 gap-4">
+          <UFormField>
+            <USelect
+              v-model="petSex"
+              :items="sexOptions"
+              placeholder="Sexo"
+              size="lg"
+              icon="i-heroicons-identification"
+              class="w-full"
+            />
+          </UFormField>
+          <UFormField>
+            <UInput
+              v-model="petWeight"
+              type="number"
+              step="0.1"
+              min="0"
+              placeholder="Peso (kg)"
+              size="lg"
+              icon="i-heroicons-scale"
+              class="w-full"
+            />
+          </UFormField>
+        </div>
 
         <UFormField :error="errors.petBirthDate" label="Data de nascimento *">
           <UInput
