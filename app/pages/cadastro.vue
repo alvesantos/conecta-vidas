@@ -235,12 +235,12 @@ async function submit() {
 <template>
   <div class="min-h-screen flex items-center justify-center py-10">
     <div
-      class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-14 flex flex-col gap-8"
+      class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-14 flex flex-col gap-8"
     >
       <!-- Logo -->
       <div class="flex flex-col items-center gap-2">
         <img src="/icon-com-texto.png" alt="Conecta Vet" class="h-40" />
-        <p class="text-sm text-gray-500">Crie sua conta de responsável</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Crie sua conta de responsável</p>
       </div>
 
       <!-- Steps indicator -->
@@ -609,7 +609,7 @@ async function submit() {
             label="Voltar"
             size="lg"
             variant="outline"
-            class="flex-1 justify-center"
+            class="flex-1 justify-center dark:text-white dark:border-white dark:hover:bg-white/10"
             leading-icon="i-heroicons-arrow-left"
             :disabled="loading"
             @click="currentStep = 1"
@@ -624,7 +624,7 @@ async function submit() {
         </div>
       </div>
 
-      <p class="text-center text-sm text-gray-500 -mt-2">
+      <p class="text-center text-sm text-gray-500 dark:text-gray-400 -mt-2">
         Já tem uma conta?
         <NuxtLink to="/login" class="text-accent font-medium hover:underline">
           Entrar

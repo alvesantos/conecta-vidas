@@ -37,10 +37,10 @@ async function handleLogin() {
 
 <template>
   <div class="min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-14 flex flex-col gap-8">
+    <div class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-14 flex flex-col gap-8">
       <div class="flex flex-col items-center gap-3">
         <img src="/icon-com-texto.png" alt="Conecta Vet" class="h-48" />
-        <p class="text-sm text-gray-500">Acesse sua conta</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Acesse sua conta</p>
       </div>
 
       <div class="flex flex-col gap-4">
@@ -82,7 +82,7 @@ async function handleLogin() {
         @click="handleLogin"
       />
 
-      <p class="text-center text-sm text-gray-500">
+      <p class="text-center text-sm text-gray-500 dark:text-gray-400">
         Não tem uma conta?
         <NuxtLink to="/cadastro" class="text-accent font-medium hover:underline">
           Cadastre-se

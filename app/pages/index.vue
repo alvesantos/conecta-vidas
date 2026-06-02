@@ -2,7 +2,7 @@
 import subscriptionAd from '~/components/SubscriptionAd.vue';
 
 definePageMeta({
-  noPadding: true
+  noPadding: true,
 })
 </script>
 
