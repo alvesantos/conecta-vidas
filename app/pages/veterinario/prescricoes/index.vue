@@ -37,6 +37,7 @@ interface PrescriptionDetail {
   responsible_email: string | null;
   responsible_address: string | null;
   vet_name: string | null;
+  vet_crmv: string | null;
   pet_name: string | null;
   pet_species: string | null;
   pet_breed: string | null;
@@ -57,6 +58,7 @@ async function downloadPdf(id: string) {
     const d = await api<PrescriptionDetail>(`/vet/prescriptions/${id}`);
     await downloadPrescriptionPdf({
       vetName: d.vet_name,
+      vetCrmv: d.vet_crmv,
       date: d.date,
       content: d.content,
       responsibleName: d.responsible_name,

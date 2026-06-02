@@ -8,6 +8,7 @@ interface VetRow {
   name: string;
   cnpj: string;
   email: string;
+  crmv: string | null;
   recipient_id: string | null;
   created_at: string;
 }
@@ -41,6 +42,7 @@ const form = reactive({
   name: '',
   cnpj: '',
   email: '',
+  crmv: '',
   password: '',
   password_confirm: '',
   pix_type: 'cpf',
@@ -65,6 +67,7 @@ function resetForm() {
   form.name = '';
   form.cnpj = '';
   form.email = '';
+  form.crmv = '';
   form.password = '';
   form.password_confirm = '';
   form.pix_type = 'cpf';
@@ -262,6 +265,9 @@ function statusLabel(recipientId: string | null) {
                 <UInput v-model="form.email" type="email" placeholder="email@exemplo.com" class="w-full" />
               </UFormField>
             </div>
+            <UFormField label="CRMV">
+              <UInput v-model="form.crmv" placeholder="Ex: 78210-SP" class="w-full" />
+            </UFormField>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="Senha *">
                 <UInput v-model="form.password" :type="showPassword ? 'text' : 'password'" placeholder="******" class="w-full">

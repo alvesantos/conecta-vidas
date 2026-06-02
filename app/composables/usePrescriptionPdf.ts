@@ -12,6 +12,7 @@ export interface PrescriptionAnimal {
 
 export interface PrescriptionDocData {
   vetName?: string | null
+  vetCrmv?: string | null
   /** Data da prescrição (yyyy-mm-dd ou ISO). */
   date: string
   content: string
@@ -97,11 +98,10 @@ export function buildPrescriptionHtml(data: PrescriptionDocData): string {
     <div style="font-size: 14px; color: #1f2937; white-space: pre-wrap; line-height: 1.6; min-height: 200px;">${escapeHtml(data.content)}</div>
 
     <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: flex-end;">
-      <div style="text-align: center; width: 280px;">
-        <div style="border-top: 1px solid #111827; padding-top: 6px; font-size: 13px; color: #374151;">
-          ${escapeHtml(data.vetName)}<br />
-          <span style="font-size: 11px; color: #6b7280;">Médico(a) Veterinário(a)</span>
-        </div>
+      <div style="font-size: 13px; color: #374151; line-height: 1.5;">
+        <strong>${escapeHtml(data.vetName)}</strong><br />
+        ${data.vetCrmv ? `CRMV: ${escapeHtml(data.vetCrmv)}<br />` : ''}
+        <span style="font-size: 11px; color: #6b7280;">Médico(a) Veterinário(a)</span>
       </div>
       <div style="font-size: 13px; color: #374151;">
         ${formatDate(data.date)}
