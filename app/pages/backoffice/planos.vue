@@ -77,6 +77,16 @@ function removePerk(index: number) {
   form.perks.splice(index, 1);
 }
 
+const columns = [
+  { id: 'color', header: 'Cor' },
+  { accessorKey: 'title', header: 'Título' },
+  { accessorKey: 'price', header: 'Preço' },
+  { accessorKey: 'free_consultations', header: 'Consultas grátis' },
+  { id: 'perks_count', header: 'Benefícios' },
+  { accessorKey: 'is_active', header: 'Status' },
+  { id: 'actions', header: '' },
+];
+
 async function save() {
   saving.value = true;
   formError.value = '';
@@ -108,7 +118,7 @@ async function save() {
 </script>
 
 <template>
-  <div class="max-w-6xl">
+  <div>
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Planos</h1>
@@ -123,65 +133,73 @@ async function save() {
       />
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-left">
-          <tr>
-            <th class="px-4 py-3 font-medium">Cor</th>
-            <th class="px-4 py-3 font-medium">Título</th>
-            <th class="px-4 py-3 font-medium">Preço</th>
-            <th class="px-4 py-3 font-medium">Consultas grátis</th>
-            <th class="px-4 py-3 font-medium">Benefícios</th>
-            <th class="px-4 py-3 font-medium">Status</th>
-            <th class="px-4 py-3 font-medium text-right">Ações</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-          <tr v-if="pending">
-            <td colspan="7" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Carregando...</td>
-          </tr>
-          <tr v-else-if="plans.length === 0">
-            <td colspan="7" class="px-4 py-8 text-center text-gray-400 dark:text-gray-500">Nenhum plano cadastrado.</td>
-          </tr>
-          <tr v-for="plan in plans" :key="plan.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-            <td class="px-4 py-3">
-              <span class="inline-block size-6 rounded-full border" :style="{ backgroundColor: plan.color }" />
-            </td>
-            <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{{ plan.title }}</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">
-              {{ Number(plan.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
-            </td>
-            <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ plan.free_consultations ?? 0 }} / mês</td>
-            <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ plan.perks?.length ?? 0 }} item(s)</td>
-            <td class="px-4 py-3">
-              <span
-                class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="plan.is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'"
-              >
-                {{ plan.is_active ? 'Ativo' : 'Inativo' }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-right">
-              <UButton
-                size="xs"
-                variant="ghost"
-                icon="i-heroicons-pencil-square"
-                color="primary"
-                class="dark:text-white"
-                @click="openEdit(plan)"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+      <UTable
+        :data="plans"
+        :columns="columns"
+        :loading="pending"
+        class="w-full"
+      >
+        <template #color-cell="{ row }">
+          <span class="inline-block size-6 rounded-full border" :style="{ backgroundColor: row.original.color }" />
+        </template>
+
+        <template #title-cell="{ row }">
+          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.title }}</span>
+        </template>
+
+        <template #price-cell="{ row }">
+          {{ Number(row.original.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+        </template>
+
+        <template #free_consultations-cell="{ row }">
+          {{ row.original.free_consultations ?? 0 }} / mês
+        </template>
+
+        <template #perks_count-cell="{ row }">
+          {{ row.original.perks?.length ?? 0 }} item(s)
+        </template>
+
+        <template #is_active-cell="{ row }">
+          <UBadge
+            :label="row.original.is_active ? 'Ativo' : 'Inativo'"
+            :color="row.original.is_active ? 'success' : 'neutral'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #actions-cell="{ row }">
+          <div class="flex justify-end">
+            <UButton
+              size="xs"
+              variant="ghost"
+              icon="i-heroicons-pencil-square"
+              color="primary"
+              class="dark:text-white"
+              @click="openEdit(row.original)"
+            />
+          </div>
+        </template>
+
+        <template #empty>
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <UIcon name="i-heroicons-credit-card" class="size-10 mb-2" />
+            <p class="text-sm">Nenhum plano cadastrado.</p>
+          </div>
+        </template>
+      </UTable>
     </div>
 
-    <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-3xl' }">
+    <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">
       <template #content>
-        <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto dark:bg-gray-800">
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-            {{ editingId ? 'Editar plano' : 'Novo plano' }}
-          </h3>
+        <div class="flex flex-col max-h-[90vh] dark:bg-gray-800">
+          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+              {{ editingId ? 'Editar plano' : 'Novo plano' }}
+            </h3>
+            <UButton icon="i-heroicons-x-mark" variant="ghost" color="neutral" size="md" @click="modalOpen = false" />
+          </div>
+          <div class="px-8 py-6 flex flex-col gap-4 overflow-y-auto flex-1">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <UFormField label="Título">
@@ -237,8 +255,9 @@ async function save() {
           <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
+            <UButton variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
             <UButton color="primary" :label="editingId ? 'Salvar' : 'Criar'" :loading="saving" class="dark:text-white" @click="save" />
+          </div>
           </div>
         </div>
       </template>
