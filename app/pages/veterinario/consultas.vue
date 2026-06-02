@@ -31,7 +31,6 @@ async function loadConsultations() {
 }
 
 onMounted(loadConsultations);
-
 watch(dateFilter, () => loadConsultations());
 
 const updatingId = ref<string | null>(null);
@@ -52,11 +51,11 @@ async function markAsRealizada(consultation: Consultation) {
   }
 }
 
-const statusColors: Record<string, string> = {
-  agendada: 'bg-blue-100 text-blue-700',
-  confirmada: 'bg-yellow-100 text-yellow-700',
-  realizada: 'bg-green-100 text-green-700',
-  cancelada: 'bg-red-100 text-red-700',
+const statusBadgeColor: Record<string, string> = {
+  agendada: 'info',
+  confirmada: 'warning',
+  realizada: 'success',
+  cancelada: 'error',
 };
 
 const statusLabels: Record<string, string> = {
@@ -78,14 +77,23 @@ function formatTime(timeStr: string) {
 function clearFilter() {
   dateFilter.value = '';
 }
+
+const columns = [
+  { accessorKey: 'date', header: 'Data' },
+  { accessorKey: 'time', header: 'Horário' },
+  { accessorKey: 'tutor_name', header: 'Responsável' },
+  { accessorKey: 'pet_name', header: 'Animal' },
+  { id: 'status', header: 'Status' },
+  { id: 'actions', header: '' },
+];
 </script>
 
 <template>
-  <div class="max-w-7xl">
+  <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Consultas</h1>
-        <p class="text-gray-500 text-sm mt-1">Acompanhe suas consultas agendadas</p>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Consultas</h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Acompanhe suas consultas agendadas</p>
       </div>
     </div>
 
@@ -103,60 +111,56 @@ function clearFilter() {
       />
     </div>
 
-    <UAlert
-      v-if="errorMsg"
-      color="error"
-      variant="soft"
-      :description="errorMsg"
-      class="mb-4"
-    />
+    <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
 
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-600 text-left">
-          <tr>
-            <th class="px-4 py-3 font-medium">Data</th>
-            <th class="px-4 py-3 font-medium">Horário</th>
-            <th class="px-4 py-3 font-medium">Responsável</th>
-            <th class="px-4 py-3 font-medium">Animal</th>
-            <th class="px-4 py-3 font-medium">Status</th>
-            <th class="px-4 py-3 font-medium text-right">Ações</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr v-if="pending">
-            <td colspan="6" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
-          </tr>
-          <tr v-else-if="consultations.length === 0">
-            <td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma consulta encontrada.</td>
-          </tr>
-          <tr v-for="c in consultations" :key="c.id" class="hover:bg-gray-50">
-            <td class="px-4 py-3 text-gray-800">{{ formatDate(c.date) }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ formatTime(c.time) }}</td>
-            <td class="px-4 py-3 text-gray-800">{{ c.tutor_name }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ c.pet_name || '-' }}</td>
-            <td class="px-4 py-3">
-              <span
-                class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="statusColors[c.status] ?? 'bg-gray-100 text-gray-600'"
-              >
-                {{ statusLabels[c.status] ?? c.status }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-right">
-              <UButton
-                v-if="c.status === 'agendada' || c.status === 'confirmada'"
-                size="xs"
-                variant="soft"
-                color="primary"
-                label="Marcar como realizada"
-                :loading="updatingId === c.id"
-                @click="markAsRealizada(c)"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+      <UTable :data="consultations" :columns="columns" :loading="pending" class="w-full">
+        <template #date-cell="{ row }">
+          <span class="text-gray-800 dark:text-gray-100">{{ formatDate(row.original.date) }}</span>
+        </template>
+
+        <template #time-cell="{ row }">
+          <span class="text-gray-600 dark:text-gray-300">{{ formatTime(row.original.time) }}</span>
+        </template>
+
+        <template #tutor_name-cell="{ row }">
+          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.tutor_name }}</span>
+        </template>
+
+        <template #pet_name-cell="{ row }">
+          <span class="text-gray-600 dark:text-gray-300">{{ row.original.pet_name || '—' }}</span>
+        </template>
+
+        <template #status-cell="{ row }">
+          <UBadge
+            :label="statusLabels[row.original.status] ?? row.original.status"
+            :color="statusBadgeColor[row.original.status] ?? 'neutral'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #actions-cell="{ row }">
+          <div class="flex justify-end">
+            <UButton
+              v-if="row.original.status === 'agendada' || row.original.status === 'confirmada'"
+              size="xs"
+              variant="soft"
+              color="primary"
+              label="Marcar como realizada"
+              class="dark:text-white"
+              :loading="updatingId === row.original.id"
+              @click="markAsRealizada(row.original)"
+            />
+          </div>
+        </template>
+
+        <template #empty>
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <UIcon name="i-heroicons-calendar-days" class="size-10 mb-2" />
+            <p class="text-sm">Nenhuma consulta encontrada.</p>
+          </div>
+        </template>
+      </UTable>
     </div>
   </div>
 </template>

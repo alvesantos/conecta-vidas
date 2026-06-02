@@ -184,7 +184,7 @@ async function downloadPdf() {
 </script>
 
 <template>
-  <div class="max-w-4xl">
+  <div>
     <NuxtLink
       to="/veterinario/prescricoes"
       class="text-sm text-accent hover:underline flex items-center gap-1 mb-4"
@@ -193,13 +193,13 @@ async function downloadPdf() {
     </NuxtLink>
 
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">Nova Prescrição</h1>
-      <p class="text-gray-500 text-sm mt-1">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Nova Prescrição</h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
         Selecione o responsável, o animal e escreva a prescrição.
       </p>
     </div>
 
-    <div class="bg-white rounded-xl shadow p-6 flex flex-col gap-5">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col gap-5">
       <!-- Responsável -->
       <UFormField label="Responsável">
         <USelect
@@ -214,7 +214,7 @@ async function downloadPdf() {
 
       <!-- Animal -->
       <div v-if="selectedResponsibleId">
-        <div v-if="loadingAnimals" class="text-sm text-gray-400">Carregando animais...</div>
+        <div v-if="loadingAnimals" class="text-sm text-gray-400 dark:text-gray-500">Carregando animais...</div>
         <UFormField v-else-if="animals.length > 0" label="Animal">
           <USelect
             v-model="selectedAnimalId"
@@ -254,6 +254,7 @@ async function downloadPdf() {
           label="Pré-visualizar"
           icon="i-heroicons-eye"
           color="primary"
+          class="dark:text-white"
           @click="openPreview"
         />
       </div>
@@ -262,13 +263,14 @@ async function downloadPdf() {
     <!-- Pré-visualização (PDF Viewer) -->
     <div v-if="showPreview" class="mt-8">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="text-lg font-semibold text-gray-800">Pré-visualização</h2>
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Pré-visualização</h2>
         <div class="flex gap-2">
           <UButton
             label="Baixar PDF"
             icon="i-heroicons-arrow-down-tray"
             variant="outline"
             color="primary"
+            class="dark:text-white dark:border-white/30"
             :loading="downloading"
             @click="downloadPdf"
           />
@@ -276,6 +278,7 @@ async function downloadPdf() {
             :label="saved ? 'Salva ✓' : 'Salvar prescrição'"
             icon="i-heroicons-check"
             color="primary"
+            class="dark:text-white"
             :loading="saving"
             :disabled="saved"
             @click="savePrescription"
@@ -283,8 +286,8 @@ async function downloadPdf() {
         </div>
       </div>
 
-      <!-- "Folha" estilo PDF -->
-      <div class="bg-gray-200 p-4 md:p-8 rounded-xl overflow-x-auto">
+      <!-- "Folha" estilo PDF — sempre fundo branco pois simula papel -->
+      <div class="bg-gray-200 dark:bg-gray-700 p-4 md:p-8 rounded-xl overflow-x-auto">
         <div
           id="prescription-document"
           class="bg-white mx-auto shadow-lg"

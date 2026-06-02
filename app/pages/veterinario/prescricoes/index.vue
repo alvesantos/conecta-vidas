@@ -95,64 +95,74 @@ function formatDate(dateStr: string) {
 function excerpt(text: string) {
   return text.length > 80 ? `${text.slice(0, 80)}...` : text;
 }
+
+const columns = [
+  { accessorKey: 'date', header: 'Data' },
+  { accessorKey: 'responsible_name', header: 'Responsável' },
+  { accessorKey: 'pet_name', header: 'Animal' },
+  { accessorKey: 'content', header: 'Prescrição' },
+  { id: 'actions', header: '' },
+];
 </script>
 
 <template>
-  <div class="max-w-5xl">
+  <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Prescrições</h1>
-        <p class="text-gray-500 text-sm mt-1">Crie e consulte as prescrições emitidas</p>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Prescrições</h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Crie e consulte as prescrições emitidas</p>
       </div>
       <UButton
         label="Nova Prescrição"
         icon="i-heroicons-plus"
         color="primary"
+        class="dark:text-white"
         to="/veterinario/prescricoes/nova"
       />
     </div>
 
     <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
 
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-600 text-left">
-          <tr>
-            <th class="px-4 py-3 font-medium">Data</th>
-            <th class="px-4 py-3 font-medium">Responsável</th>
-            <th class="px-4 py-3 font-medium">Animal</th>
-            <th class="px-4 py-3 font-medium">Prescrição</th>
-            <th class="px-4 py-3 font-medium text-right">Ações</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr v-if="pending">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400">Carregando...</td>
-          </tr>
-          <tr v-else-if="prescriptions.length === 0">
-            <td colspan="5" class="px-4 py-8 text-center text-gray-400">
-              Nenhuma prescrição emitida ainda.
-            </td>
-          </tr>
-          <tr v-for="p in prescriptions" :key="p.id" class="hover:bg-gray-50">
-            <td class="px-4 py-3 text-gray-800">{{ formatDate(p.date) }}</td>
-            <td class="px-4 py-3 text-gray-800">{{ p.responsible_name }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ p.pet_name || '—' }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ excerpt(p.content) }}</td>
-            <td class="px-4 py-3 text-right">
-              <UButton
-                size="xs"
-                variant="soft"
-                color="primary"
-                icon="i-heroicons-arrow-down-tray"
-                label="Baixar PDF"
-                :loading="downloadingId === p.id"
-                @click="downloadPdf(p.id)"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+      <UTable :data="prescriptions" :columns="columns" :loading="pending" class="w-full">
+        <template #date-cell="{ row }">
+          <span class="text-gray-800 dark:text-gray-100">{{ formatDate(row.original.date) }}</span>
+        </template>
+
+        <template #responsible_name-cell="{ row }">
+          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.responsible_name }}</span>
+        </template>
+
+        <template #pet_name-cell="{ row }">
+          <span class="text-gray-600 dark:text-gray-300">{{ row.original.pet_name || '—' }}</span>
+        </template>
+
+        <template #content-cell="{ row }">
+          <span class="text-gray-600 dark:text-gray-300">{{ excerpt(row.original.content) }}</span>
+        </template>
+
+        <template #actions-cell="{ row }">
+          <div class="flex justify-end">
+            <UButton
+              size="xs"
+              variant="soft"
+              color="primary"
+              icon="i-heroicons-arrow-down-tray"
+              label="Baixar PDF"
+              class="dark:text-white"
+              :loading="downloadingId === row.original.id"
+              @click="downloadPdf(row.original.id)"
+            />
+          </div>
+        </template>
+
+        <template #empty>
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <UIcon name="i-heroicons-document-text" class="size-10 mb-2" />
+            <p class="text-sm">Nenhuma prescrição emitida ainda.</p>
+          </div>
+        </template>
+      </UTable>
     </div>
   </div>
 </template>
