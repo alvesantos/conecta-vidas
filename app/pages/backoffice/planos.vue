@@ -3,7 +3,7 @@ import type { Plan, Perk } from '../../interfaces/plans';
 
 definePageMeta({ layout: 'backoffice', middleware: 'admin' });
 
-const { listAdmin, createPlan, updatePlan } = usePlans();
+const { listAdmin, createPlan, updatePlan, deletePlan } = usePlans();
 
 const plans = ref<Plan[]>([]); 
 const pending = ref(true);
@@ -86,6 +86,34 @@ const columns = [
   { accessorKey: 'is_active', header: 'Status' },
   { id: 'actions', header: '' },
 ];
+
+// --- Excluir plano ---
+const deleteOpen = ref(false);
+const deleteTarget = ref<Plan | null>(null);
+const deleteLoading = ref(false);
+const deleteError = ref('');
+
+function openDeletePlan(plan: Plan) {
+  deleteTarget.value = plan;
+  deleteError.value = '';
+  deleteOpen.value = true;
+}
+
+async function confirmDeletePlan() {
+  if (!deleteTarget.value) return;
+  deleteLoading.value = true;
+  deleteError.value = '';
+  try {
+    await deletePlan(String(deleteTarget.value.id));
+    deleteOpen.value = false;
+    await loadPlans();
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } };
+    deleteError.value = fetchErr?.data?.error ?? 'Erro ao excluir plano.';
+  } finally {
+    deleteLoading.value = false;
+  }
+}
 
 async function save() {
   saving.value = true;
@@ -170,14 +198,16 @@ async function save() {
 
         <template #actions-cell="{ row }">
           <div class="flex justify-end">
-            <UButton
-              size="xs"
-              variant="ghost"
-              icon="i-heroicons-pencil-square"
-              color="primary"
-              class="dark:text-white"
-              @click="openEdit(row.original)"
-            />
+            <UDropdownMenu
+              :items="[
+                [
+                  { label: 'Editar', icon: 'i-heroicons-pencil-square', onSelect: () => openEdit(row.original) },
+                  { label: 'Excluir', icon: 'i-heroicons-trash', color: 'error', onSelect: () => openDeletePlan(row.original) },
+                ],
+              ]"
+            >
+              <UButton size="md" variant="ghost" icon="i-heroicons-ellipsis-vertical" color="neutral" />
+            </UDropdownMenu>
           </div>
         </template>
 
@@ -202,25 +232,25 @@ async function save() {
           <div class="px-8 py-6 flex flex-col gap-4 overflow-y-auto flex-1">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <UFormField label="Título">
-              <UInput v-model="form.title" />
+            <UFormField label="Título" class="w-full">
+              <UInput v-model="form.title" class="w-full" />
             </UFormField>
-            <UFormField label="Preço (R$)">
-              <UInput v-model="form.price" type="number" step="0.01" />
+            <UFormField label="Preço (R$)" class="w-full">
+              <UInput v-model="form.price" type="number" step="0.01" class="w-full" />
             </UFormField>
-            <UFormField label="Consultas grátis / mês">
-              <UInput v-model="form.free_consultations" type="number" min="0" step="1" />
+            <UFormField label="Consultas grátis / mês" class="w-full">
+              <UInput v-model="form.free_consultations" type="number" min="0" step="1" class="w-full" />
             </UFormField>
-            <UFormField label="Cor (hex)">
-              <UInput v-model="form.color" />
+            <UFormField label="Cor (hex)" class="w-full">
+              <UInput v-model="form.color" class="w-full" />
             </UFormField>
-            <UFormField label="Foco">
-              <UInput v-model="form.focus" />
+            <UFormField label="Foco" class="w-full">
+              <UInput v-model="form.focus" class="w-full" />
             </UFormField>
           </div>
 
-          <UFormField label="Descrição do foco">
-            <UTextarea v-model="form.focus_desc" :rows="2" />
+          <UFormField label="Descrição do foco" class="w-full">
+            <UTextarea v-model="form.focus_desc" :rows="2" class="w-full" />
           </UFormField>
 
           <div class="flex items-center gap-2">
@@ -258,6 +288,23 @@ async function save() {
             <UButton variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
             <UButton color="primary" :label="editingId ? 'Salvar' : 'Criar'" :loading="saving" class="dark:text-white" @click="save" />
           </div>
+          </div>
+        </div>
+      </template>
+    </UModal>
+    <!-- Modal Excluir Plano -->
+    <UModal v-model:open="deleteOpen">
+      <template #content>
+        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Excluir plano</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            Tem certeza que deseja excluir o plano <strong>{{ deleteTarget?.title }}</strong>?
+            Esta ação é permanente.
+          </p>
+          <UAlert v-if="deleteError" color="error" variant="soft" :description="deleteError" />
+          <div class="flex justify-end gap-2 mt-2">
+            <UButton variant="outline" label="Cancelar" @click="deleteOpen = false" />
+            <UButton color="error" label="Excluir" :loading="deleteLoading" @click="confirmDeletePlan" />
           </div>
         </div>
       </template>

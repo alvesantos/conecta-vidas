@@ -171,6 +171,67 @@ async function save() {
   }
 }
 
+// --- Editar veterinário ---
+const editVetOpen = ref(false);
+const editVetTarget = ref<VetRow | null>(null);
+const editVetForm = reactive({ name: '', email: '', crmv: '' });
+const editVetSaving = ref(false);
+const editVetError = ref('');
+
+function openEditVet(row: VetRow) {
+  editVetTarget.value = row;
+  editVetForm.name = row.name;
+  editVetForm.email = row.email;
+  editVetForm.crmv = row.crmv ?? '';
+  editVetError.value = '';
+  editVetOpen.value = true;
+}
+
+async function saveEditVet() {
+  if (!editVetTarget.value) return;
+  editVetSaving.value = true;
+  editVetError.value = '';
+  try {
+    await api(`/admin/veterinarios/${editVetTarget.value.id}`, {
+      method: 'PUT',
+      body: {
+        name: editVetForm.name,
+        email: editVetForm.email,
+        crmv: editVetForm.crmv || null,
+      },
+    });
+    editVetOpen.value = false;
+    await loadVets();
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } };
+    editVetError.value = fetchErr?.data?.error ?? 'Erro ao salvar.';
+  } finally {
+    editVetSaving.value = false;
+  }
+}
+
+// --- Excluir veterinário ---
+const deleteVetOpen = ref(false);
+const deleteVetTarget = ref<VetRow | null>(null);
+const deleteVetLoading = ref(false);
+
+function openDeleteVet(row: VetRow) {
+  deleteVetTarget.value = row;
+  deleteVetOpen.value = true;
+}
+
+async function confirmDeleteVet() {
+  if (!deleteVetTarget.value) return;
+  deleteVetLoading.value = true;
+  try {
+    await api(`/admin/veterinarios/${deleteVetTarget.value.id}`, { method: 'DELETE' });
+    deleteVetOpen.value = false;
+    await loadVets();
+  } finally {
+    deleteVetLoading.value = false;
+  }
+}
+
 function formatCnpj(cnpj: string) {
   const c = cnpj?.replace(/\D/g, '') ?? '';
   if (c.length !== 14) return cnpj;
@@ -191,6 +252,7 @@ const columns = [
   { accessorKey: 'email', header: 'E-mail' },
   { accessorKey: 'recipient_id', header: 'Status' },
   { accessorKey: 'created_at', header: 'Data de cadastro' },
+  { id: 'actions', header: '' },
 ];
 </script>
 
@@ -245,6 +307,21 @@ const columns = [
           {{ formatDate(row.original.created_at) }}
         </template>
 
+        <template #actions-cell="{ row }">
+          <div class="flex justify-end">
+            <UDropdownMenu
+              :items="[
+                [
+                  { label: 'Editar', icon: 'i-heroicons-pencil-square', onSelect: () => openEditVet(row.original) },
+                  { label: 'Excluir', icon: 'i-heroicons-trash', color: 'error', onSelect: () => openDeleteVet(row.original) },
+                ],
+              ]"
+            >
+              <UButton size="md" variant="ghost" icon="i-heroicons-ellipsis-vertical" color="neutral" />
+            </UDropdownMenu>
+          </div>
+        </template>
+
         <template #empty>
           <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
             <UIcon name="i-mdi-stethoscope" class="size-10 mb-2" />
@@ -253,6 +330,49 @@ const columns = [
         </template>
       </UTable>
     </div>
+
+    <!-- Modal Editar Veterinário -->
+    <UModal v-model:open="editVetOpen">
+      <template #content>
+        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Editar veterinário</h3>
+
+          <UFormField label="Nome">
+            <UInput v-model="editVetForm.name" class="w-full" />
+          </UFormField>
+          <UFormField label="E-mail">
+            <UInput v-model="editVetForm.email" type="email" class="w-full" />
+          </UFormField>
+          <UFormField label="CRMV">
+            <UInput v-model="editVetForm.crmv" placeholder="Ex: 78210-SP" class="w-full" />
+          </UFormField>
+
+          <UAlert v-if="editVetError" color="error" variant="soft" :description="editVetError" />
+
+          <div class="flex justify-end gap-2 mt-2">
+            <UButton variant="outline" label="Cancelar" @click="editVetOpen = false" />
+            <UButton color="primary" label="Salvar" :loading="editVetSaving" class="dark:text-white" @click="saveEditVet" />
+          </div>
+        </div>
+      </template>
+    </UModal>
+
+    <!-- Modal Excluir Veterinário -->
+    <UModal v-model:open="deleteVetOpen">
+      <template #content>
+        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Excluir veterinário</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            Esta ação é <strong>permanente</strong> e excluirá o cadastro de
+            <strong>{{ deleteVetTarget?.name }}</strong>. Deseja continuar?
+          </p>
+          <div class="flex justify-end gap-2 mt-2">
+            <UButton variant="outline" label="Cancelar" @click="deleteVetOpen = false" />
+            <UButton color="error" label="Excluir" :loading="deleteVetLoading" @click="confirmDeleteVet" />
+          </div>
+        </div>
+      </template>
+    </UModal>
 
     <!-- Modal Criar Veterinário -->
     <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">

@@ -31,6 +31,10 @@ export function usePlans() {
     return api<Plan>(`/admin/plans/${id}`, { method: 'PUT', body: payload })
   }
 
+  function deletePlan(id: string) {
+    return api(`/admin/plans/${id}`, { method: 'DELETE' })
+  }
+
   return {
     listPublic,
     listAdmin,
@@ -38,5 +42,6 @@ export function usePlans() {
     subscribe,
     createPlan,
     updatePlan,
+    deletePlan,
   }
 }
