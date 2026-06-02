@@ -11,6 +11,7 @@ const { user, isLoggedIn, logout } = useAuth();
 
 const navItems: NavItem[] = [
   { label: 'Consultas', to: '/veterinario/consultas', icon: 'i-heroicons-calendar-days' },
+  { label: 'Prescrições', to: '/veterinario/prescricoes', icon: 'i-heroicons-document-text' },
   { label: 'Carteira', to: '/veterinario/carteira', icon: 'i-heroicons-banknotes' },
   { label: 'Prontuários', to: '/veterinario/prontuarios', icon: 'i-heroicons-clipboard-document-list' },
   { label: 'Configurações', to: '/veterinario/configuracoes', icon: 'i-heroicons-cog-6-tooth' },
