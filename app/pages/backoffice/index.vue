@@ -53,7 +53,7 @@ const totalSubscribed = computed(() => users.value.filter((u) => !!u.plan_title)
         <p class="text-3xl font-bold text-primary mt-2">{{ totalUsers }}</p>
       </div>
       <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Tutores</p>
+        <p class="text-sm text-gray-500">Responsáveis</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ totalTutors }}</p>
       </div>
       <div class="bg-white rounded-xl shadow p-6">
@@ -66,7 +66,7 @@ const totalSubscribed = computed(() => users.value.filter((u) => !!u.plan_title)
       </div>
 
       <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500">Pets cadastrados</p>
+        <p class="text-sm text-gray-500">Animais cadastrados</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ pets.length }}</p>
       </div>
       <div class="bg-white rounded-xl shadow p-6">
@@ -92,8 +92,8 @@ const totalSubscribed = computed(() => users.value.filter((u) => !!u.plan_title)
       >
         <UIcon name="i-mdi-paw" class="size-8 text-accent" />
         <div>
-          <p class="font-semibold text-gray-800">Gerenciar pets</p>
-          <p class="text-sm text-gray-500">Visualizar pets cadastrados e tutores</p>
+          <p class="font-semibold text-gray-800">Gerenciar animais</p>
+          <p class="text-sm text-gray-500">Visualizar animais cadastrados e responsáveis</p>
         </div>
       </NuxtLink>
       <NuxtLink

@@ -144,7 +144,7 @@ const accountItems = computed(() => {
     ];
   }
   const items: Array<Record<string, string>> = [
-    { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
+    { label: "Meus Animais", to: "/meu-pet", icon: "i-mdi-paw" },
   ];
   if (isAdmin.value) {
     items.push({

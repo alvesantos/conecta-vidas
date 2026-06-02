@@ -9,7 +9,7 @@ interface AdminUserRow {
   email: string;
   cpf: string | null;
   address: string | null;
-  type: 'tutor' | 'admin';
+  type: 'tutor' | 'admin' | 'veterinario';
   created_at: string;
   subscription_id: string | null;
   plan_id: string | null;
@@ -53,7 +53,7 @@ onMounted(async () => {
 // --- Editar usuário ---
 const editOpen = ref(false);
 const editTarget = ref<AdminUserRow | null>(null);
-const editForm = reactive({ name: '', email: '', type: 'tutor' as 'tutor' | 'admin', address: '' });
+const editForm = reactive({ name: '', email: '', type: 'tutor' as 'tutor' | 'admin' | 'veterinario', address: '' });
 const editSaving = ref(false);
 const editError = ref('');
 
@@ -160,8 +160,10 @@ async function clearPlan() {
   }
 }
 
-function typeLabel(type: 'tutor' | 'admin') {
-  return type === 'admin' ? 'Administrador' : 'Tutor';
+function typeLabel(type: 'tutor' | 'admin' | 'veterinario') {
+  if (type === 'admin') return 'Administrador';
+  if (type === 'veterinario') return 'Veterinário';
+  return 'Responsável';
 }
 </script>
 
@@ -170,7 +172,7 @@ function typeLabel(type: 'tutor' | 'admin') {
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Usuários</h1>
-        <p class="text-gray-500 text-sm mt-1">Lista completa de tutores e administradores</p>
+        <p class="text-gray-500 text-sm mt-1">Lista completa de responsáveis, veterinários e administradores</p>
       </div>
     </div>
 
@@ -209,7 +211,7 @@ function typeLabel(type: 'tutor' | 'admin') {
             <td class="px-4 py-3">
               <span
                 class="text-xs font-medium px-2 py-1 rounded-full"
-                :class="row.type === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'"
+                :class="row.type === 'admin' ? 'bg-purple-100 text-purple-700' : row.type === 'veterinario' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'"
               >
                 {{ typeLabel(row.type) }}
               </span>
@@ -266,7 +268,8 @@ function typeLabel(type: 'tutor' | 'admin') {
             <USelect
               v-model="editForm.type"
               :items="[
-                { label: 'Tutor', value: 'tutor' },
+                { label: 'Responsável', value: 'tutor' },
+                { label: 'Veterinário', value: 'veterinario' },
                 { label: 'Administrador', value: 'admin' },
               ]"
             />
@@ -288,7 +291,7 @@ function typeLabel(type: 'tutor' | 'admin') {
         <div class="p-6 flex flex-col gap-4">
           <h3 class="text-lg font-semibold text-gray-800">Excluir usuário</h3>
           <p class="text-sm text-gray-600">
-            Esta ação é <strong>permanente</strong> e excluirá também todos os pets e assinaturas
+            Esta ação é <strong>permanente</strong> e excluirá também todos os animais e assinaturas
             de <strong>{{ deleteTarget?.name }}</strong>. Deseja continuar?
           </p>
           <div class="flex justify-end gap-2 mt-2">

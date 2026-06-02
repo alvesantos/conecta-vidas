@@ -50,7 +50,7 @@ const accountItems = computed<NavItem[]>(() => {
     ];
   }
   const items: NavItem[] = [
-    { label: "Meu Pet", to: "/meu-pet", icon: "i-mdi-paw" },
+    { label: "Meus Animais", to: "/meu-pet", icon: "i-mdi-paw" },
   ];
   if (isAdmin.value) {
     items.push({

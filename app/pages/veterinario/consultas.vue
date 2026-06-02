@@ -117,8 +117,8 @@ function clearFilter() {
           <tr>
             <th class="px-4 py-3 font-medium">Data</th>
             <th class="px-4 py-3 font-medium">Horário</th>
-            <th class="px-4 py-3 font-medium">Tutor</th>
-            <th class="px-4 py-3 font-medium">Pet</th>
+            <th class="px-4 py-3 font-medium">Responsável</th>
+            <th class="px-4 py-3 font-medium">Animal</th>
             <th class="px-4 py-3 font-medium">Status</th>
             <th class="px-4 py-3 font-medium text-right">Ações</th>
           </tr>
