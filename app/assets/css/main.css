@@ -20,4 +20,8 @@
     background-color: #011428;
     color: #e2e8f0;
   }
+
+  button, [role="button"], a {
+    cursor: pointer;
+  }
 }

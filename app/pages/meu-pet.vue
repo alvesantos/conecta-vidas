@@ -214,8 +214,8 @@ onMounted(loadPets);
   <div class="max-w-4xl mx-auto">
     <div class="mb-8 flex items-start justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Meus Animais</h1>
-        <p class="text-gray-500 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Meus Animais</h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
       </div>
       <div v-if="!pending && !fetchError && pets.length > 0" class="flex flex-col items-end gap-1">
         <UButton
@@ -225,7 +225,7 @@ onMounted(loadPets);
           :disabled="!canAddPet"
           @click="openCreate"
         />
-        <span v-if="!canAddPet" class="text-xs text-gray-400">
+        <span v-if="!canAddPet" class="text-xs text-gray-400 dark:text-gray-500">
           Limite de {{ PET_LIMIT }} animais atingido
         </span>
       </div>
@@ -235,11 +235,11 @@ onMounted(loadPets);
       <div
         v-for="i in 2"
         :key="i"
-        class="bg-white rounded-2xl shadow p-8 flex flex-col items-center gap-4 animate-pulse"
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 flex flex-col items-center gap-4 animate-pulse"
       >
-        <div class="w-28 h-28 rounded-full bg-gray-200" />
-        <div class="h-5 w-32 bg-gray-200 rounded" />
-        <div class="h-4 w-20 bg-gray-100 rounded" />
+        <div class="w-28 h-28 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div class="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div class="h-4 w-20 bg-gray-100 dark:bg-gray-700 rounded" />
       </div>
     </div>
 
@@ -321,12 +321,25 @@ onMounted(loadPets);
     </div>
 
     <!-- Modal Criar / Editar -->
-    <UModal v-model:open="modalOpen" :ui="{ content: 'max-w-2xl' }">
+    <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">
       <template #content>
-        <div class="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
-          <h3 class="text-lg font-semibold text-gray-800">
-            {{ modalMode === 'create' ? 'Adicionar animal' : `Editar ${editTarget?.name}` }}
-          </h3>
+        <div class="flex flex-col max-h-[90vh]">
+          <!-- Header fixo com título e botão X -->
+          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+              {{ modalMode === 'create' ? 'Adicionar animal' : `Editar ${editTarget?.name}` }}
+            </h3>
+            <UButton
+              icon="i-heroicons-x-mark"
+              variant="ghost"
+              color="neutral"
+              size="md"
+              @click="modalOpen = false"
+            />
+          </div>
+
+          <!-- Conteúdo scrollável -->
+          <div class="px-8 py-6 flex flex-col gap-5 overflow-y-auto flex-1">
 
           <!-- Foto do pet -->
           <div class="flex flex-col items-center gap-2">
@@ -409,14 +422,17 @@ onMounted(loadPets);
 
           <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
-          <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
+          <div class="flex justify-end gap-3 pt-2">
+            <UButton size="lg" variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
             <UButton
+              size="lg"
               color="primary"
+              class="dark:text-white"
               :label="modalMode === 'create' ? 'Adicionar' : 'Salvar'"
               :loading="saving"
               @click="savePet"
             />
+          </div>
           </div>
         </div>
       </template>
