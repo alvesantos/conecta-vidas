@@ -3,7 +3,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="flex min-h-screen md:flex-row flex-col bg-gray-50">
+  <div class="flex min-h-screen md:flex-row flex-col bg-gray-50 dark:bg-gray-900">
     <BackofficeSidebar class="hidden md:flex shrink-0" />
     <BackofficeTopbar class="md:hidden" />
 

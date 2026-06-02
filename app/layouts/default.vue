@@ -3,7 +3,7 @@ const route = useRoute()
 </script>
 
 <template>
-  <div class="flex min-h-screen md:flex-row flex-col">
+  <div class="flex min-h-screen md:flex-row flex-col bg-foreground dark:bg-[#011428]">
     <!-- Sidebar (desktop) -->
     <AppSidebar class="hidden md:flex shrink-0" />
 
@@ -40,6 +40,11 @@ const route = useRoute()
           <div class="flex flex-col items-center gap-2 md:w-1/3 text-center">
             <span class="text-white text-sm leading-relaxed">Telemedicina veterinária com cuidado e segurança</span>
             <span class="text-white/70 text-xs">© {{ new Date().getFullYear() }} ConectaVet — Todos os direitos reservados</span>
+            <a
+              href="https://rogabsolutions.com"
+              target="_blank"
+              class="text-white/40 hover:text-white/70 text-xs transition-colors"
+            >Desenvolvido por Rogab Solutions</a>
           </div>
 
           <!-- Direita: contato -->
