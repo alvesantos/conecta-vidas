@@ -59,7 +59,7 @@ onMounted(async () => {
         :loading="pending"
         class="w-full"
         :ui="{ tbody: '[&>tr]:cursor-pointer' }"
-        @select="(row) => $router.push(`/backoffice/pets/${row.original.id}`)"
+        @select="(_, row) => $router.push(`/backoffice/pets/${row.original.id}`)"
       >
         <template #name-cell="{ row }">
           <div class="flex items-center gap-3">
