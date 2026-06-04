@@ -116,6 +116,21 @@ function validateStep1() {
     valid = false;
   } else clearError("tutorEmail");
 
+  if (!tutorZipCode.value || tutorZipCode.value.length < 8) {
+    setError("tutorZipCode", "CEP obrigatório");
+    valid = false;
+  } else clearError("tutorZipCode");
+
+  if (!tutorHouseNumber.value.trim()) {
+    setError("tutorHouseNumber", "Número obrigatório");
+    valid = false;
+  } else clearError("tutorHouseNumber");
+
+  if (!tutorAddress.value.trim()) {
+    setError("tutorAddress", "Endereço obrigatório");
+    valid = false;
+  } else clearError("tutorAddress");
+
   if (!tutorPassword.value) {
     setError("tutorPassword", "Senha obrigatória");
     valid = false;
@@ -335,22 +350,22 @@ async function submit() {
         </UFormField>
 
         <div class="grid grid-cols-2 gap-4">
-          <UFormField>
+          <UFormField :error="errors.tutorZipCode">
             <UInput
               v-model="tutorZipCode"
               v-maska="'#####-###'"
               type="text"
-              placeholder="CEP (opcional)"
+              placeholder="CEP *"
               size="lg"
               icon="i-heroicons-map"
               class="w-full"
             />
           </UFormField>
-          <UFormField>
+          <UFormField :error="errors.tutorHouseNumber">
             <UInput
               v-model="tutorHouseNumber"
               type="text"
-              placeholder="Número (opcional)"
+              placeholder="Número *"
               size="lg"
               icon="i-heroicons-home"
               class="w-full"
@@ -358,13 +373,15 @@ async function submit() {
           </UFormField>
         </div>
 
-        <UInput
-          v-model="tutorAddress"
-          type="text"
-          placeholder="Endereço (opcional)"
-          size="lg"
-          icon="i-heroicons-map-pin"
-        />
+        <UFormField :error="errors.tutorAddress">
+          <UInput
+            v-model="tutorAddress"
+            type="text"
+            placeholder="Rua/Bairro/Complemento *"
+            size="lg"
+            icon="i-heroicons-map-pin"
+          />
+        </UFormField>
 
         <UFormField :error="errors.tutorPassword">
           <UInput
