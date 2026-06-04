@@ -72,8 +72,16 @@ definePageMeta({
       <PrincingSection />
     </div>
 
+    <!-- PARCERIAS -->
+    <div class="pt-8 px-4 lg:px-6 flex flex-col items-center max-w-4xl mx-auto text-center">
+      <h3 class="text-primary dark:text-gray-100 text-xl sm:text-2xl lg:text-3xl font-semibold mb-6">
+        Tem Clínica Veterinária? Faça parte da Rede ConectaVet.
+      </h3>
+      <img src="/images/img-parcerias.png" alt="Parcerias ConectaVet" class="w-full rounded-2xl shadow-lg border border-accent/20" />
+    </div>
+
     <!-- VIDEOAULAS CAROUSEL -->
-    <div class="pt-4 px-4 lg:px-6">
+    <div class="pt-8 px-4 lg:px-6">
       <VideoLessonsCarousel />
     </div>
 

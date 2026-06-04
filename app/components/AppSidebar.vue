@@ -129,10 +129,10 @@ const navItems = [
     icon: "i-mdi-whatsapp",
   },
   {
-    label: "Videoaulas",
-    to: "/#videoaulas",
-    icon: "i-heroicons-play-circle",
-    active: false,
+    label: "Coletas a Domicílio",
+    to: "https://wa.me/5511978654921?text=Oi%2C%20cliquei%20em%20Coleta%20a%20Domicilio",
+    target: "_blank",
+    icon: "i-mdi-truck-delivery",
   },
   {
     label: "Produtos",
@@ -180,8 +180,8 @@ const accountItems = computed(() => {
 });
 
 const ui = computed(() => ({
-  link: `text-base hover:text-white hover:before:bg-white/10 aria-[current=page]:text-white aria-[current=page]:before:bg-white/20 ${collapsed.value ? "justify-center py-4" : "py-3"}`,
-  linkLeadingIcon: `shrink-0 group-hover:text-white group-aria-[current=page]:text-white size-6`,
+  link: `text-sm hover:text-white hover:before:bg-white/10 aria-[current=page]:text-white aria-[current=page]:before:bg-white/20 ${collapsed.value ? "justify-center py-3" : "py-2"}`,
+  linkLeadingIcon: `shrink-0 group-hover:text-white group-aria-[current=page]:text-white size-5`,
 }));
 
 const userInitials = computed(() => {

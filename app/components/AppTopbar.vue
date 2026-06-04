@@ -19,10 +19,10 @@ const navItems: NavItem[] = [
     icon: "i-mdi-whatsapp",
   },
   {
-    label: "Videoaulas",
-    to: "/#videoaulas",
-    icon: "i-heroicons-play-circle",
-    active: false,
+    label: "Coletas a Domicílio",
+    to: "https://wa.me/5511978654921?text=Oi%2C%20cliquei%20em%20Coleta%20a%20Domicilio",
+    target: "_blank",
+    icon: "i-mdi-truck-delivery",
   },
   {
     label: "Produtos",

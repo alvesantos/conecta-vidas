@@ -5,7 +5,7 @@ const slides = Array.from({ length: 10 }, (_, i) => {
     src: `/slide/img-${n}-carrossel.png`,
     alt: `Videoaula ConectaVet ${i + 1}`,
   };
-});
+}).filter(slide => !slide.src.includes('img-02'));
 
 const WHATSAPP_URL =
   "https://wa.me/5511978654921?text=" +
