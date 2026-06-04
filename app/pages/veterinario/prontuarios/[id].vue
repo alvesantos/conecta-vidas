@@ -56,11 +56,13 @@
             {{ record.consultation_notes }}
           </div>
           
-          <UFormField label="Prontuário (Observações, Prescrições e Exames)">
+          <UFormField label="Prontuário (Observações e Exames)">
             <UTextarea
               v-model="record.content"
-              :rows="6"
-              placeholder="Digite aqui as anotações do prontuário..."
+              :rows="10"
+              class="w-full"
+              textarea-class="resize-y"
+              placeholder="Digite aqui as anotações do prontuário durante a consulta..."
             />
           </UFormField>
           
