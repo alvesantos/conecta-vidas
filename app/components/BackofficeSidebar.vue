@@ -14,6 +14,7 @@ const items = [
   { label: 'Usuários', to: '/backoffice/usuarios', icon: 'i-heroicons-users' },
   { label: 'Veterinários', to: '/backoffice/veterinarios', icon: 'i-mdi-stethoscope' },
   { label: 'Animais', to: '/backoffice/pets', icon: 'i-mdi-paw' },
+  { label: 'Consultas', to: '/backoffice/consultas', icon: 'i-heroicons-calendar-days' },
   { label: 'Planos', to: '/backoffice/planos', icon: 'i-heroicons-credit-card' },
 ];
 
