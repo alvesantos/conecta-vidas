@@ -14,6 +14,8 @@ const apiError = ref("");
 const tutorName = ref("");
 const tutorCpf = ref("");
 const tutorEmail = ref("");
+const tutorZipCode = ref("");
+const tutorHouseNumber = ref("");
 const tutorAddress = ref("");
 const tutorPassword = ref("");
 const tutorConfirmPassword = ref("");
@@ -192,6 +194,8 @@ async function submit() {
       name: tutorName.value,
       cpf: tutorCpf.value,
       email: tutorEmail.value,
+      zip_code: tutorZipCode.value || undefined,
+      house_number: tutorHouseNumber.value || undefined,
       address: tutorAddress.value || undefined,
       password: tutorPassword.value,
     });
@@ -329,6 +333,30 @@ async function submit() {
             class="w-full"
           />
         </UFormField>
+
+        <div class="grid grid-cols-2 gap-4">
+          <UFormField>
+            <UInput
+              v-model="tutorZipCode"
+              v-maska="'#####-###'"
+              type="text"
+              placeholder="CEP (opcional)"
+              size="lg"
+              icon="i-heroicons-map"
+              class="w-full"
+            />
+          </UFormField>
+          <UFormField>
+            <UInput
+              v-model="tutorHouseNumber"
+              type="text"
+              placeholder="Número (opcional)"
+              size="lg"
+              icon="i-heroicons-home"
+              class="w-full"
+            />
+          </UFormField>
+        </div>
 
         <UInput
           v-model="tutorAddress"
