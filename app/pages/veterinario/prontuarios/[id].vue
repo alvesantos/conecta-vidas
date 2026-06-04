@@ -1,65 +1,3 @@
-<script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
-
-const route = useRoute();
-const tutorId = route.params.id as string;
-const { api } = useApi();
-const toast = useToast();
-
-interface MedicalRecordDetail {
-  id: string;
-  content: string;
-  created_at: string;
-  consultation_date: string;
-  consultation_time: string;
-  consultation_notes: string;
-  tutor_name: string;
-  pet_name: string | null;
-  pet_species: string | null;
-  pet_breed: string | null;
-}
-
-const records = ref<MedicalRecordDetail[]>([]);
-const pending = ref(true);
-const errorMsg = ref('');
-const savingId = ref<string | null>(null);
-
-async function loadRecords() {
-  pending.value = true;
-  errorMsg.value = '';
-  try {
-    records.value = await api<MedicalRecordDetail[]>(`/vet/medical-records/tutor/${tutorId}`);
-  } catch {
-    errorMsg.value = 'Erro ao carregar prontuários do responsável.';
-  } finally {
-    pending.value = false;
-  }
-}
-
-onMounted(loadRecords);
-
-async function saveRecord(record: MedicalRecordDetail) {
-  savingId.value = record.id;
-  try {
-    await api(`/vet/medical-records/${record.id}`, {
-      method: 'PUT',
-      body: { content: record.content }
-    });
-    toast.add({ title: 'Salvo', description: 'Prontuário atualizado com sucesso.', color: 'success' });
-  } catch {
-    toast.add({ title: 'Erro', description: 'Falha ao salvar.', color: 'error' });
-  } finally {
-    savingId.value = null;
-  }
-}
-
-function formatDate(dateStr: string) {
-  if (!dateStr) return '';
-  const [year, month, day] = dateStr.slice(0, 10).split('-');
-  return `${day}/${month}/${year}`;
-}
-</script>
-
 <template>
   <div>
     <div class="flex items-center gap-4 mb-6">
@@ -136,3 +74,65 @@ function formatDate(dateStr: string) {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+
+const route = useRoute();
+const tutorId = route.params.id as string;
+const { api } = useApi();
+const toast = useToast();
+
+interface MedicalRecordDetail {
+  id: string;
+  content: string;
+  created_at: string;
+  consultation_date: string;
+  consultation_time: string;
+  consultation_notes: string;
+  tutor_name: string;
+  pet_name: string | null;
+  pet_species: string | null;
+  pet_breed: string | null;
+}
+
+const records = ref<MedicalRecordDetail[]>([]);
+const pending = ref(true);
+const errorMsg = ref('');
+const savingId = ref<string | null>(null);
+
+async function loadRecords() {
+  pending.value = true;
+  errorMsg.value = '';
+  try {
+    records.value = await api<MedicalRecordDetail[]>(`/vet/medical-records/tutor/${tutorId}`);
+  } catch {
+    errorMsg.value = 'Erro ao carregar prontuários do responsável.';
+  } finally {
+    pending.value = false;
+  }
+}
+
+onMounted(loadRecords);
+
+async function saveRecord(record: MedicalRecordDetail) {
+  savingId.value = record.id;
+  try {
+    await api(`/vet/medical-records/${record.id}`, {
+      method: 'PUT',
+      body: { content: record.content }
+    });
+    toast.add({ title: 'Salvo', description: 'Prontuário atualizado com sucesso.', color: 'success' });
+  } catch {
+    toast.add({ title: 'Erro', description: 'Falha ao salvar.', color: 'error' });
+  } finally {
+    savingId.value = null;
+  }
+}
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.slice(0, 10).split('-');
+  return `${day}/${month}/${year}`;
+}
+</script>

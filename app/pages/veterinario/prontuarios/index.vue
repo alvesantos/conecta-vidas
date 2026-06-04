@@ -1,45 +1,3 @@
-<script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
-
-const { api } = useApi();
-
-interface TutorRecord {
-  tutor_id: string;
-  tutor_name: string;
-  last_consultation_date: string;
-}
-
-const tutors = ref<TutorRecord[]>([]);
-const pending = ref(true);
-const errorMsg = ref('');
-
-async function loadTutors() {
-  pending.value = true;
-  errorMsg.value = '';
-  try {
-    tutors.value = await api<TutorRecord[]>('/vet/medical-records/tutors');
-  } catch {
-    errorMsg.value = 'Erro ao carregar lista de responsáveis.';
-  } finally {
-    pending.value = false;
-  }
-}
-
-onMounted(loadTutors);
-
-function formatDate(dateStr: string) {
-  if (!dateStr) return '';
-  const [year, month, day] = dateStr.slice(0, 10).split('-');
-  return `${day}/${month}/${year}`;
-}
-
-const columns = [
-  { accessorKey: 'tutor_name', header: 'Responsável' },
-  { accessorKey: 'last_consultation_date', header: 'Última Consulta' },
-  { id: 'actions', header: '' },
-];
-</script>
-
 <template>
   <div>
     <div class="flex items-center justify-between mb-6">
@@ -87,3 +45,45 @@ const columns = [
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+
+const { api } = useApi();
+
+interface TutorRecord {
+  tutor_id: string;
+  tutor_name: string;
+  last_consultation_date: string;
+}
+
+const tutors = ref<TutorRecord[]>([]);
+const pending = ref(true);
+const errorMsg = ref('');
+
+async function loadTutors() {
+  pending.value = true;
+  errorMsg.value = '';
+  try {
+    tutors.value = await api<TutorRecord[]>('/vet/medical-records/tutors');
+  } catch {
+    errorMsg.value = 'Erro ao carregar lista de responsáveis.';
+  } finally {
+    pending.value = false;
+  }
+}
+
+onMounted(loadTutors);
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.slice(0, 10).split('-');
+  return `${day}/${month}/${year}`;
+}
+
+const columns = [
+  { accessorKey: 'tutor_name', header: 'Responsável' },
+  { accessorKey: 'last_consultation_date', header: 'Última Consulta' },
+  { id: 'actions', header: '' },
+];
+</script>
