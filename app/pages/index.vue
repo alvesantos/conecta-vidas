@@ -78,6 +78,15 @@ definePageMeta({
         Tem Clínica Veterinária? Faça parte da Rede ConectaVet.
       </h3>
       <img src="/images/img-parcerias.png" alt="Parcerias ConectaVet" class="w-full rounded-2xl shadow-lg border border-accent/20" />
+      <UButton
+        to="https://wa.me/5511978654921?text=Oi%2C%20tenho%20uma%20cl%C3%ADnica%20e%20gostaria%20de%20ser%20parceiro%20ConectaVet"
+        target="_blank"
+        icon="i-mdi-whatsapp"
+        size="lg"
+        class="mt-6 font-semibold text-lg px-8 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white"
+      >
+        Seja Parceiro
+      </UButton>
     </div>
 
     <!-- VIDEOAULAS CAROUSEL -->
