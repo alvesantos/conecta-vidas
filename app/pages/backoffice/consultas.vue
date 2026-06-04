@@ -1,3 +1,77 @@
+<template>
+  <div>
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Consultas Agendadas</h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+        Acompanhe e direcione as consultas para os veterinários.
+      </p>
+    </div>
+
+    <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+      <UTable :data="consultations" :columns="columns" :loading="pending" class="w-full">
+        <template #date-cell="{ row }">
+          <span class="text-gray-800 dark:text-gray-100">{{ formatDate(row.original.date) }}</span>
+        </template>
+        
+        <template #time-cell="{ row }">
+          <span class="text-gray-800 dark:text-gray-100">{{ row.original.time.slice(0, 5) }}</span>
+        </template>
+
+        <template #tutor_name-cell="{ row }">
+          <span class="text-gray-600 dark:text-gray-300">{{ row.original.tutor_name }}</span>
+        </template>
+
+        <template #pet_name-cell="{ row }">
+          <span class="text-gray-600 dark:text-gray-300">{{ row.original.pet_name || '—' }}</span>
+        </template>
+
+        <template #status-cell="{ row }">
+          <UBadge
+            :label="statusLabels[row.original.status] ?? row.original.status"
+            :color="(statusBadgeColor[row.original.status] as any) ?? 'neutral'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #assignment-cell="{ row }">
+          <div class="flex items-center gap-2" v-if="!row.original.vet_id">
+            <USelect
+              v-model="row.original.selectedVet"
+              :options="vets"
+              option-attribute="name"
+              value-attribute="id"
+              placeholder="Selecionar..."
+              size="sm"
+            />
+            <UButton
+              size="xs"
+              color="primary"
+              variant="soft"
+              :disabled="!row.original.selectedVet"
+              :loading="assigningId === row.original.id"
+              @click="assignVet(row.original.id, row.original.selectedVet!)"
+            >
+              Atribuir
+            </UButton>
+          </div>
+          <div v-else>
+            <span class="text-sm font-medium text-green-600 dark:text-green-400">Atribuída</span>
+          </div>
+        </template>
+
+        <template #empty>
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+            <UIcon name="i-heroicons-calendar-days" class="size-10 mb-2" />
+            <p class="text-sm">Nenhuma consulta agendada.</p>
+          </div>
+        </template>
+      </UTable>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 definePageMeta({ layout: 'backoffice', middleware: 'admin' });
 
@@ -87,77 +161,3 @@ const columns = [
   { id: 'assignment', header: 'Veterinário' }
 ];
 </script>
-
-<template>
-  <div>
-    <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Consultas Agendadas</h1>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
-        Acompanhe e direcione as consultas para os veterinários.
-      </p>
-    </div>
-
-    <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
-
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
-      <UTable :data="consultations" :columns="columns" :loading="pending" class="w-full">
-        <template #date-cell="{ row }">
-          <span class="text-gray-800 dark:text-gray-100">{{ formatDate(row.original.date) }}</span>
-        </template>
-        
-        <template #time-cell="{ row }">
-          <span class="text-gray-800 dark:text-gray-100">{{ row.original.time.slice(0, 5) }}</span>
-        </template>
-
-        <template #tutor_name-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">{{ row.original.tutor_name }}</span>
-        </template>
-
-        <template #pet_name-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">{{ row.original.pet_name || '—' }}</span>
-        </template>
-
-        <template #status-cell="{ row }">
-          <UBadge
-            :label="statusLabels[row.original.status] ?? row.original.status"
-            :color="(statusBadgeColor[row.original.status] as any) ?? 'neutral'"
-            variant="subtle"
-          />
-        </template>
-
-        <template #assignment-cell="{ row }">
-          <div class="flex items-center gap-2" v-if="!row.original.vet_id">
-            <USelect
-              v-model="row.original.selectedVet"
-              :options="vets"
-              option-attribute="name"
-              value-attribute="id"
-              placeholder="Selecionar..."
-              size="sm"
-            />
-            <UButton
-              size="xs"
-              color="primary"
-              variant="soft"
-              :disabled="!row.original.selectedVet"
-              :loading="assigningId === row.original.id"
-              @click="assignVet(row.original.id, row.original.selectedVet)"
-            >
-              Atribuir
-            </UButton>
-          </div>
-          <div v-else>
-            <span class="text-sm font-medium text-green-600 dark:text-green-400">Atribuída</span>
-          </div>
-        </template>
-
-        <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
-            <UIcon name="i-heroicons-calendar-days" class="size-10 mb-2" />
-            <p class="text-sm">Nenhuma consulta agendada.</p>
-          </div>
-        </template>
-      </UTable>
-    </div>
-  </div>
-</template>
