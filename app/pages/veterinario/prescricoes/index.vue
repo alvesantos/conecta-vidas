@@ -11,6 +11,7 @@ interface PrescriptionRow {
 }
 
 const { api } = useApi();
+const toast = useToast();
 
 const prescriptions = ref<PrescriptionRow[]>([]);
 const pending = ref(true);
@@ -86,6 +87,24 @@ async function downloadPdf(id: string) {
   }
 }
 
+const deletingId = ref<string | null>(null);
+const confirmDeleteId = ref<string | null>(null);
+
+async function removePrescription(id: string) {
+  deletingId.value = id;
+  errorMsg.value = '';
+  try {
+    await api(`/vet/prescriptions/${id}`, { method: 'DELETE' });
+    prescriptions.value = prescriptions.value.filter((p) => p.id !== id);
+    toast.add({ title: 'Prescrição removida', color: 'success' });
+  } catch {
+    toast.add({ title: 'Erro', description: 'Erro ao remover a prescrição.', color: 'error' });
+  } finally {
+    deletingId.value = null;
+    confirmDeleteId.value = null;
+  }
+}
+
 function formatDate(dateStr: string) {
   if (!dateStr) return '';
   const [year, month, day] = dateStr.slice(0, 10).split('-');
@@ -142,7 +161,7 @@ const columns = [
         </template>
 
         <template #actions-cell="{ row }">
-          <div class="flex justify-end">
+          <div class="flex justify-end gap-2">
             <UButton
               size="xs"
               variant="soft"
@@ -152,6 +171,15 @@ const columns = [
               class="dark:text-white"
               :loading="downloadingId === row.original.id"
               @click="downloadPdf(row.original.id)"
+            />
+            <UButton
+              size="xs"
+              variant="soft"
+              color="error"
+              icon="i-heroicons-trash"
+              :loading="deletingId === row.original.id"
+              title="Remover prescrição"
+              @click="confirmDeleteId = row.original.id"
             />
           </div>
         </template>
@@ -164,5 +192,32 @@ const columns = [
         </template>
       </UTable>
     </div>
+
+    <!-- Confirmação de remoção -->
+    <Teleport to="body">
+      <div v-if="confirmDeleteId" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" @click="confirmDeleteId = null"></div>
+        <UCard class="relative w-full max-w-md shadow-2xl z-10">
+          <template #header>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Remover prescrição</h3>
+          </template>
+          <p class="text-gray-600 dark:text-gray-300">
+            Tem certeza que deseja remover esta prescrição? Esta ação não pode ser desfeita.
+          </p>
+          <template #footer>
+            <div class="flex justify-end gap-2">
+              <UButton color="neutral" variant="soft" label="Cancelar" @click="confirmDeleteId = null" />
+              <UButton
+                color="error"
+                label="Remover"
+                icon="i-heroicons-trash"
+                :loading="deletingId === confirmDeleteId"
+                @click="removePrescription(confirmDeleteId!)"
+              />
+            </div>
+          </template>
+        </UCard>
+      </div>
+    </Teleport>
   </div>
 </template>
