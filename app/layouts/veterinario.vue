@@ -12,5 +12,8 @@ const route = useRoute();
         <slot />
       </main>
     </div>
+
+    <!-- Sala de consulta global (Meet + anotações) — persiste ao "remotar" e navegar -->
+    <ConsultationSession />
   </div>
 </template>
