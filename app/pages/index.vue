@@ -21,11 +21,11 @@ const heroFeatures = [
 </script>
 
 <template>
-  <div>
+  <div class="px-4 sm:px-6 lg:px-10 xl:px-20 pb-12">
     <!-- TOP BANNER -->
-    <div class="px-4 lg:px-6 pt-5">
+    <div class="pt-5">
       <div
-        class="mx-auto max-w-4xl flex items-center justify-center gap-2.5 rounded-full bg-accent/8 dark:bg-white/5 px-5 py-2.5 text-center"
+        class="flex items-center justify-center gap-2.5 rounded-full bg-accent/8 dark:bg-white/5 px-5 py-2.5 text-center"
       >
         <UIcon name="i-heroicons-heart" class="size-5 text-accent shrink-0" />
         <p class="text-sm sm:text-base text-primary/80 dark:text-gray-300">
@@ -38,10 +38,8 @@ const heroFeatures = [
     </div>
 
     <!-- HERO -->
-    <section class="px-4 lg:px-6 pt-8 lg:pt-12">
-      <div
-        class="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center max-w-7xl mx-auto"
-      >
+    <section class="pt-8 lg:pt-12">
+      <div class="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
         <!-- LEFT: CONTENT -->
         <div class="flex flex-col order-2 lg:order-1">
           <span
@@ -155,9 +153,9 @@ const heroFeatures = [
     </section>
 
     <!-- CARD ASSINE AGORA -->
-    <section class="px-4 lg:px-6 pt-10">
+    <section class="pt-10">
       <div
-        class="max-w-7xl mx-auto rounded-3xl bg-primary text-white p-6 sm:p-8 cursor-pointer transition-transform hover:-translate-y-0.5"
+        class="rounded-3xl bg-primary text-white p-6 sm:p-8 cursor-pointer transition-transform hover:-translate-y-0.5"
         @click="scrollToId('pricingSection')"
       >
         <div class="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
@@ -223,8 +221,8 @@ const heroFeatures = [
     </section>
 
     <!-- CARDS PARA PET / PARA VOCÊ -->
-    <section class="px-4 lg:px-6 pt-6">
-      <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-6">
+    <section class="pt-6">
+      <div class="grid md:grid-cols-2 gap-6">
         <!-- PARA SEU PET -->
         <div
           id="card-pet"
@@ -292,20 +290,18 @@ const heroFeatures = [
 
     <div class="h-full">
       <!-- BENEFITS AND WHATSAPP BANNER -->
-      <section class="pt-4 px-4 lg:px-6">
+      <section class="pt-4">
         <StoreAdvantages />
       </section>
     </div>
 
     <!-- PRICES -->
-    <div ref="pricingSection" id="pricingSection" class="pt-4 px-4 lg:px-6">
+    <div ref="pricingSection" id="pricingSection" class="pt-4">
       <PrincingSection />
     </div>
 
     <!-- PARCERIAS -->
-    <div
-      class="pt-8 px-4 lg:px-6 flex flex-col items-center max-w-4xl mx-auto text-center"
-    >
+    <div class="pt-8 flex flex-col items-center text-center">
       <h3
         class="text-primary dark:text-gray-100 text-xl sm:text-2xl lg:text-3xl font-semibold mb-6"
       >
@@ -328,12 +324,12 @@ const heroFeatures = [
     </div>
 
     <!-- VIDEOAULAS CAROUSEL -->
-    <div class="pt-8 px-4 lg:px-6">
+    <div class="pt-8">
       <VideoLessonsCarousel />
     </div>
 
     <!-- PAYMENT METHODS -->
-    <div class="pt-4 px-4 lg:px-6">
+    <div class="pt-4">
       <div
         class="grid grid-cols-4 p-4 gap-px border items-center text-center rounded-xl border-accent/70 divide-x divide-accent/70"
       >
