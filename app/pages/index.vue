@@ -310,7 +310,7 @@ const heroFeatures = [
       <img
         src="/images/img-parcerias.png"
         alt="Parcerias ConectaVet"
-        class="w-full rounded-2xl shadow-lg border border-accent/20"
+        class="w-full max-w-3xl rounded-2xl shadow-lg border border-accent/20"
       />
       <UButton
         to="https://wa.me/5511978654921?text=Oi%2C%20tenho%20uma%20cl%C3%ADnica%20e%20gostaria%20de%20ser%20parceiro%20ConectaVet"
