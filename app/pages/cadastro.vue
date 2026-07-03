@@ -98,6 +98,22 @@ function removeAvatar() {
   if (fileInputRef.value) fileInputRef.value.value = "";
 }
 
+// Valida CPF pelos dígitos verificadores (não apenas o comprimento).
+function isValidCpf(value: string): boolean {
+  const cpf = (value || "").replace(/\D/g, "");
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(cpf)) return false; // rejeita sequências repetidas
+
+  const digit = (factorStart: number, upTo: number) => {
+    let sum = 0;
+    for (let i = 0; i < upTo; i++) sum += Number(cpf[i]) * (factorStart - i);
+    const rest = (sum * 10) % 11;
+    return rest === 10 ? 0 : rest;
+  };
+
+  return digit(10, 9) === Number(cpf[9]) && digit(11, 10) === Number(cpf[10]);
+}
+
 function validateStep1() {
   let valid = true;
 
@@ -106,7 +122,7 @@ function validateStep1() {
     valid = false;
   } else clearError("tutorName");
 
-  if (tutorCpf.value.length < 14) {
+  if (!isValidCpf(tutorCpf.value)) {
     setError("tutorCpf", "CPF inválido");
     valid = false;
   } else clearError("tutorCpf");
