@@ -18,6 +18,47 @@ const heroFeatures = [
   { icon: "i-mdi-paw", label: "Foco no bem-estar da família toda" },
   { icon: "i-heroicons-academic-cap", label: "Profissionais qualificados" },
 ];
+
+const howItWorks = [
+  {
+    icon: "i-heroicons-user-plus",
+    title: "Cadastre-se",
+    desc: "Crie sua conta em poucos minutos. Cadastrar um pet é opcional — você pode fazer isso depois.",
+  },
+  {
+    icon: "i-heroicons-credit-card",
+    title: "Escolha um plano",
+    desc: "Assine o plano ideal e tenha consultas incluídas todos os meses, com descontos exclusivos.",
+  },
+  {
+    icon: "i-heroicons-video-camera",
+    title: "Fale com o profissional",
+    desc: "Agende e converse por vídeo com um veterinário ou médico, de onde você estiver.",
+  },
+];
+
+const faqItems = [
+  {
+    q: "As consultas são realmente online?",
+    a: "Sim. O atendimento acontece por vídeo, dentro da própria plataforma, onde quer que você esteja.",
+  },
+  {
+    q: "Vocês atendem pets e pessoas?",
+    a: "Sim — a ConectaVet oferece telemedicina veterinária e humana para cuidar de toda a família.",
+  },
+  {
+    q: "Preciso ter um pet para me cadastrar?",
+    a: "Não. O cadastro de pet é opcional e pode ser feito a qualquer momento na área Meus Animais.",
+  },
+  {
+    q: "Quantas consultas o plano inclui?",
+    a: "Depende do plano escolhido — cada um inclui um número de consultas gratuitas por mês.",
+  },
+  {
+    q: "Como falo com um profissional?",
+    a: "Agende pela plataforma ou pelo WhatsApp; você recebe o link da sala para entrar na hora da consulta.",
+  },
+];
 </script>
 
 <template>
@@ -153,7 +194,7 @@ const heroFeatures = [
     </section>
 
     <!-- CARD ASSINE AGORA -->
-    <section class="pt-10">
+    <section class="pt-16 sm:pt-20">
       <div
         class="rounded-3xl bg-primary text-white p-6 sm:p-8 cursor-pointer transition-transform hover:-translate-y-0.5"
         @click="scrollToId('pricingSection')"
@@ -221,7 +262,7 @@ const heroFeatures = [
     </section>
 
     <!-- CARDS PARA PET / PARA VOCÊ -->
-    <section class="pt-6">
+    <section class="pt-16 sm:pt-20">
       <div class="grid md:grid-cols-2 gap-6">
         <!-- PARA SEU PET -->
         <div
@@ -288,20 +329,64 @@ const heroFeatures = [
       </div>
     </section>
 
-    <div class="h-full">
+    <!-- COMO FUNCIONA -->
+    <section class="pt-16 sm:pt-20">
+      <div class="text-center max-w-2xl mx-auto">
+        <span
+          class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
+        >
+          Simples assim
+        </span>
+        <h2
+          class="hero-title mt-4 text-3xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+        >
+          Como funciona
+        </h2>
+        <p class="mt-3 text-body-muted text-base sm:text-lg">
+          Do cadastro à consulta, em poucos minutos — para o seu pet e para você.
+        </p>
+      </div>
+
+      <div class="mt-12 grid md:grid-cols-3 gap-6">
+        <div
+          v-for="(step, i) in howItWorks"
+          :key="step.title"
+          class="relative rounded-3xl border border-accent/15 dark:border-white/10 bg-white dark:bg-gray-800 p-7 shadow-sm"
+        >
+          <span
+            class="absolute -top-4 left-7 flex items-center justify-center size-9 rounded-full bg-accent text-white text-sm font-bold shadow"
+          >
+            {{ i + 1 }}
+          </span>
+          <span
+            class="flex items-center justify-center size-12 rounded-2xl bg-accent/10 text-accent"
+          >
+            <UIcon :name="step.icon" class="size-6" />
+          </span>
+          <h3 class="mt-5 text-lg font-semibold text-primary dark:text-white">
+            {{ step.title }}
+          </h3>
+          <p class="mt-2 text-body-muted text-sm leading-relaxed">
+            {{ step.desc }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-full pt-16 sm:pt-20">
       <!-- BENEFITS AND WHATSAPP BANNER -->
-      <section class="pt-4">
+      <section>
         <StoreAdvantages />
       </section>
     </div>
 
     <!-- PRICES -->
-    <div ref="pricingSection" id="pricingSection" class="pt-4">
+    <div ref="pricingSection" id="pricingSection" class="pt-16 sm:pt-20">
       <PrincingSection />
     </div>
 
     <!-- PARCERIAS -->
-    <div class="pt-8 flex flex-col items-center text-center">
+    <div class="pt-16 sm:pt-20 flex flex-col items-center text-center">
       <h3
         class="text-primary dark:text-gray-100 text-xl sm:text-2xl lg:text-3xl font-semibold mb-6"
       >
@@ -324,12 +409,49 @@ const heroFeatures = [
     </div>
 
     <!-- VIDEOAULAS CAROUSEL -->
-    <div class="pt-8">
+    <div class="pt-16 sm:pt-20">
       <VideoLessonsCarousel />
     </div>
 
+    <!-- FAQ -->
+    <section class="pt-16 sm:pt-20">
+      <div class="text-center max-w-2xl mx-auto">
+        <span
+          class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
+        >
+          Tire suas dúvidas
+        </span>
+        <h2
+          class="hero-title mt-4 text-3xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+        >
+          Perguntas frequentes
+        </h2>
+      </div>
+
+      <div class="mt-10 max-w-3xl mx-auto flex flex-col gap-3">
+        <details
+          v-for="item in faqItems"
+          :key="item.q"
+          class="group rounded-2xl border border-accent/15 dark:border-white/10 bg-white dark:bg-gray-800 px-5 sm:px-6 shadow-sm"
+        >
+          <summary
+            class="flex items-center justify-between gap-4 py-4 cursor-pointer list-none font-semibold text-primary dark:text-white"
+          >
+            {{ item.q }}
+            <UIcon
+              name="i-heroicons-chevron-down"
+              class="size-5 shrink-0 text-accent dark:text-white transition-transform duration-200 group-open:rotate-180"
+            />
+          </summary>
+          <p class="pb-5 -mt-1 text-body-muted text-sm sm:text-base leading-relaxed">
+            {{ item.a }}
+          </p>
+        </details>
+      </div>
+    </section>
+
     <!-- PAYMENT METHODS -->
-    <div class="pt-4">
+    <div class="pt-16 sm:pt-20">
       <div
         class="grid grid-cols-4 p-4 gap-px border items-center text-center rounded-xl border-accent/70 divide-x divide-accent/70"
       >
