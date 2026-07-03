@@ -197,6 +197,35 @@ function goToStep2() {
   if (validateStep1()) currentStep.value = 2;
 }
 
+async function registerTutor() {
+  await register({
+    name: tutorName.value,
+    cpf: tutorCpf.value,
+    email: tutorEmail.value,
+    zip_code: tutorZipCode.value || undefined,
+    house_number: tutorHouseNumber.value || undefined,
+    address: tutorAddress.value || undefined,
+    password: tutorPassword.value,
+  });
+}
+
+// Cadastro do pet é opcional: permite finalizar criando apenas a conta.
+async function finishWithoutPet() {
+  loading.value = true;
+  apiError.value = "";
+
+  try {
+    await registerTutor();
+    await router.push("/meu-pet");
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } };
+    apiError.value =
+      fetchErr?.data?.error ?? "Erro ao criar conta. Tente novamente.";
+  } finally {
+    loading.value = false;
+  }
+}
+
 async function submit() {
   if (!validateStep2()) return;
 
@@ -205,15 +234,7 @@ async function submit() {
 
   try {
     // 1. Criar apenas o usuário (tutor)
-    await register({
-      name: tutorName.value,
-      cpf: tutorCpf.value,
-      email: tutorEmail.value,
-      zip_code: tutorZipCode.value || undefined,
-      house_number: tutorHouseNumber.value || undefined,
-      address: tutorAddress.value || undefined,
-      password: tutorPassword.value,
-    });
+    await registerTutor();
 
     // 2. Criar o pet (com a foto, se houver) em uma única requisição multipart
     const formData = new FormData();
@@ -440,6 +461,18 @@ async function submit() {
       <!-- Step 2: Pet -->
       <div v-if="currentStep === 2" class="flex flex-col gap-4">
 
+        <!-- Aviso: cadastro de pet é opcional -->
+        <div
+          class="flex items-start gap-2.5 rounded-lg bg-accent/8 dark:bg-white/5 border border-accent/20 dark:border-white/10 px-4 py-3 text-sm text-primary/80 dark:text-gray-300"
+        >
+          <UIcon name="i-mdi-paw" class="size-5 shrink-0 text-accent mt-0.5" />
+          <span>
+            Cadastrar um pet é <strong>opcional</strong>. Você pode fazer isso
+            agora ou adicionar depois, a qualquer momento, na área
+            <strong>Meus Animais</strong>.
+          </span>
+        </div>
+
         <!-- Upload de avatar do pet -->
         <div class="flex flex-col items-center gap-2">
           <input
@@ -657,13 +690,23 @@ async function submit() {
             @click="currentStep = 1"
           />
           <UButton
-            label="Criar conta"
+            label="Criar conta com pet"
             size="lg"
             class="flex-1 justify-center bg-accent text-white"
             :loading="loading"
             @click="submit"
           />
         </div>
+
+        <UButton
+          label="Finalizar sem cadastrar pet"
+          size="lg"
+          variant="ghost"
+          block
+          class="justify-center dark:text-white dark:hover:bg-white/10"
+          :disabled="loading"
+          @click="finishWithoutPet"
+        />
       </div>
 
       <p class="text-center text-sm text-gray-500 dark:text-gray-400 -mt-2">
