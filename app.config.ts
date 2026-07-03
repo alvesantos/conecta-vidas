@@ -5,7 +5,9 @@ export default defineAppConfig({
         {
           color: 'primary',
           variant: 'solid',
-          class: 'dark:bg-accent dark:hover:bg-accent/80 dark:active:bg-accent/80 dark:disabled:bg-accent dark:aria-disabled:bg-accent dark:focus-visible:outline-accent',
+          // dark:text-white é essencial: sem ele, o texto herda text-inverted
+          // (escuro no tema dark) e some sobre o fundo accent do botão.
+          class: 'dark:bg-accent dark:text-white dark:hover:bg-accent/80 dark:active:bg-accent/80 dark:disabled:bg-accent dark:aria-disabled:bg-accent dark:focus-visible:outline-accent',
         },
         {
           color: 'primary',
