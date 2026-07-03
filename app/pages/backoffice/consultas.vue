@@ -65,7 +65,7 @@
 
     <!-- Modal de Atribuição -->
     <Teleport to="body">
-      <div v-if="isAssignModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+      <div v-if="isAssignModalOpen" class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" @click="isAssignModalOpen = false"></div>
         
         <UCard class="relative w-full max-w-lg shadow-2xl z-10 flex flex-col max-h-full">

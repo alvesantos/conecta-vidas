@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
+  sourcemap: {
+    client: false,
+    server: false,
+  },
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? "http://localhost:3001/api",
@@ -25,7 +29,7 @@ export default defineNuxtConfig({
     head: {
       title: "ConectaVidas",
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "icon", type: "image/x-icon", href: "/favicon-32x32.png" },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {
           rel: "preconnect",
@@ -41,6 +45,26 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/css/main.css"],
   vite: {
+    css: {
+      devSourcemap: false,
+    },
+    build: {
+      sourcemap: false,
+      rollupOptions: {
+        onwarn(warning, warn) {
+          const message = warning.message ?? "";
+          if (
+            warning.code === "SOURCEMAP_ERROR" ||
+            message.includes("Sourcemap is likely to be incorrect") ||
+            message.includes("contains an annotation that Rollup cannot interpret")
+          ) {
+            return;
+          }
+
+          warn(warning);
+        },
+      },
+    },
     optimizeDeps: {
       include: [
         "@vue/devtools-core",
@@ -54,6 +78,6 @@ export default defineNuxtConfig({
   },
 
   devServer: {
-    host: "[IP_ADDRESS]",
+    host: "127.0.0.1",
   },
 });

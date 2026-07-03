@@ -18,16 +18,21 @@ const {
   <Teleport to="body">
     <div
       v-if="active && !isOpen"
-      class="fixed bottom-4 right-4 z-[90] flex items-center gap-3 rounded-full bg-primary text-white shadow-2xl pl-4 pr-2 py-2 cursor-pointer hover:brightness-110 transition"
+      class="fixed bottom-4 right-4 z-90 flex items-center gap-3 rounded-full bg-primary text-white shadow-2xl pl-4 pr-2 py-2 cursor-pointer hover:brightness-110 transition"
       @click="resume"
     >
       <span class="relative flex size-3">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+        <span
+          class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"
+        ></span>
         <span class="relative inline-flex rounded-full size-3 bg-white"></span>
       </span>
       <div class="leading-tight">
         <p class="text-sm font-semibold">Consulta em andamento</p>
-        <p class="text-xs opacity-90">{{ active.tutor_name }}<span v-if="active.pet_name"> • {{ active.pet_name }}</span></p>
+        <p class="text-xs opacity-90">
+          {{ active.tutor_name
+          }}<span v-if="active.pet_name"> • {{ active.pet_name }}</span>
+        </p>
       </div>
       <UButton
         color="neutral"
@@ -42,14 +47,27 @@ const {
 
   <!-- Modal da sala de consulta -->
   <Teleport to="body">
-    <div v-if="active && isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-      <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" @click="minimize"></div>
+    <div
+      v-if="active && isOpen"
+      class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
+    >
+      <div
+        class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"
+        @click="minimize"
+      ></div>
 
-      <UCard class="relative w-full max-w-3xl shadow-2xl z-10 flex flex-col max-h-full">
+      <UCard
+        class="relative w-full max-w-3xl shadow-2xl z-10 flex flex-col max-h-full"
+      >
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-              <UIcon name="i-heroicons-video-camera" class="text-primary dark:text-white size-6" />
+            <h3
+              class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2"
+            >
+              <UIcon
+                name="i-heroicons-video-camera"
+                class="text-primary dark:text-white size-6"
+              />
               Sala de Consulta
             </h3>
             <div class="flex items-center gap-1">
@@ -66,23 +84,49 @@ const {
 
         <div class="flex flex-col gap-6 overflow-y-auto pr-2 pb-4">
           <!-- Info do Paciente e Tutor -->
-          <div class="grid grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+          <div
+            class="grid grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700"
+          >
             <div>
-              <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Tutor (Responsável)</p>
-              <p class="text-base font-medium text-gray-800 dark:text-gray-100">{{ active.tutor_name }}</p>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wider font-semibold"
+              >
+                Tutor (Responsável)
+              </p>
+              <p class="text-base font-medium text-gray-800 dark:text-gray-100">
+                {{ active.tutor_name }}
+              </p>
             </div>
             <div>
-              <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Paciente (Pet)</p>
-              <p class="text-base font-medium text-gray-800 dark:text-gray-100">{{ active.pet_name || '—' }}</p>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wider font-semibold"
+              >
+                Paciente (Pet)
+              </p>
+              <p class="text-base font-medium text-gray-800 dark:text-gray-100">
+                {{ active.pet_name || "—" }}
+              </p>
             </div>
           </div>
 
           <!-- Meet Link -->
-          <div class="bg-primary/5 border border-primary/20 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div
+            class="bg-primary/5 border border-primary/20 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          >
             <div class="min-w-0">
-              <p class="font-semibold text-primary dark:text-primary-400">Videoconferência</p>
+              <p class="font-semibold text-primary dark:text-primary-400">
+                Videoconferência
+              </p>
               <p class="text-sm text-gray-600 dark:text-gray-300">
-                <span v-if="active.meet_link">Link gerado: <a :href="active.meet_link" target="_blank" class="underline font-medium break-all">{{ active.meet_link }}</a></span>
+                <span v-if="active.meet_link"
+                  >Link gerado:
+                  <a
+                    :href="active.meet_link"
+                    target="_blank"
+                    class="underline font-medium break-all"
+                    >{{ active.meet_link }}</a
+                  ></span
+                >
                 <span v-else>Link da sala não gerado ainda.</span>
               </p>
             </div>
@@ -108,7 +152,9 @@ const {
           <!-- Bloco de Notas / Prontuário Ao Vivo -->
           <div class="flex flex-col gap-2 h-64">
             <div class="flex items-center justify-between">
-              <label class="font-semibold text-gray-700 dark:text-gray-200">Anotações (Evolução / Prontuário)</label>
+              <label class="font-semibold text-gray-700 dark:text-gray-200"
+                >Anotações (Evolução / Prontuário)</label
+              >
               <UButton
                 size="xs"
                 variant="soft"
@@ -125,20 +171,35 @@ const {
               class="w-full flex-1"
               textarea-class="h-full resize-none"
             />
-            <p class="text-xs text-gray-500 mt-1">Ao finalizar, estas anotações serão salvas no prontuário do responsável.</p>
+            <p class="text-xs text-gray-500 mt-1">
+              Ao finalizar, estas anotações serão salvas no prontuário do
+              responsável.
+            </p>
           </div>
         </div>
 
         <template #footer>
-          <div class="flex justify-between items-center border-t border-gray-100 dark:border-gray-800 pt-4">
-            <UButton color="neutral" variant="soft" icon="i-heroicons-minus" @click="minimize">Remotar</UButton>
+          <div
+            class="flex justify-between items-center border-t border-gray-100 dark:border-gray-800 pt-4"
+          >
+            <UButton
+              color="neutral"
+              variant="soft"
+              icon="i-heroicons-minus"
+              @click="minimize"
+              >Remotar</UButton
+            >
             <UButton
               color="success"
               icon="i-heroicons-check-badge"
               label="Finalizar Consulta"
               :disabled="active.status === 'realizada'"
               :loading="finalizing"
-              @click="() => { void finalize(); }"
+              @click="
+                () => {
+                  void finalize();
+                }
+              "
             />
           </div>
         </template>

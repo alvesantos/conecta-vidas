@@ -80,103 +80,100 @@ const faqItems = [
 
     <!-- HERO -->
     <section class="pt-8 lg:pt-12">
-      <div class="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
-        <!-- LEFT: CONTENT -->
-        <div class="flex flex-col order-2 lg:order-1">
-          <span
-            class="self-start inline-flex items-center rounded-full bg-primary text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
-          >
-            Telemedicina Veterinária &amp; Humana
-          </span>
+      <div
+        class="relative min-h-145 lg:min-h-170 overflow-hidden rounded-4xl bg-primary shadow-2xl"
+      >
+        <img
+          src="/hero.jpg"
+          alt="Cuidado que conecta vidas"
+          class="absolute inset-0 size-full object-cover object-[58%_center]"
+        />
+        <div
+          class="absolute inset-0 bg-linear-to-r from-primary via-primary/72 to-primary/8"
+        />
+        <div
+          class="absolute inset-0 bg-linear-to-t from-primary/52 via-transparent to-transparent"
+        />
 
-          <!-- TITLE -->
-          <h1
-            class="hero-title mt-5 text-4xl sm:text-5xl lg:text-6xl leading-[1.05] text-primary dark:text-white"
-          >
-            Saúde para toda a família.
-            <span class="text-accent">Incluindo quem late, mia e te ama.</span>
-          </h1>
-
-          <!-- SUBTITLE -->
-          <p
-            class="mt-5 text-base sm:text-lg text-primary/70 dark:text-gray-300 max-w-xl"
-          >
-            Consultas online, orientação especializada e muito mais para cuidar
-            de quem você ama, onde estiver.
-          </p>
-
-          <!-- BUTTONS -->
-          <div class="mt-7 flex flex-col sm:flex-row gap-3">
-            <UButton
-              size="xl"
-              color="primary"
-              trailing-icon="i-mdi-paw"
-              class="justify-center font-semibold px-6 dark:!bg-accent dark:!text-white dark:hover:!bg-accent/85"
-              @click="scrollToId('card-pet')"
+        <div
+          class="relative z-10 flex min-h-145 lg:min-h-170 flex-col justify-center px-5 py-10 sm:px-8 lg:px-12 xl:px-16"
+        >
+          <div class="max-w-2xl">
+            <span
+              class="self-start inline-flex items-center rounded-full bg-accent text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase shadow-lg shadow-primary/20"
             >
-              Quero cuidar do meu pet
-            </UButton>
-            <UButton
-              size="xl"
-              color="primary"
-              variant="outline"
-              trailing-icon="i-heroicons-user"
-              class="justify-center font-semibold px-6 dark:!bg-white/10 dark:!text-white dark:!ring-white/35 dark:hover:!bg-white/15"
-              @click="scrollToId('card-voce')"
-            >
-              Quero cuidar de mim
-            </UButton>
-          </div>
+              Telemedicina Veterinária &amp; Humana
+            </span>
 
-          <!-- FEATURES -->
-          <div class="mt-9 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-5">
-            <div
-              v-for="feature in heroFeatures"
-              :key="feature.label"
-              class="flex flex-col items-start gap-2"
+            <!-- TITLE -->
+            <h1
+              class="hero-title mt-5 text-4xl sm:text-5xl lg:text-6xl leading-[1.05] text-white"
             >
-              <span
-                class="flex items-center justify-center size-9 rounded-full bg-accent/10 text-accent"
+              Saúde para toda a família.
+              <span class="text-sky-200">Incluindo quem late, mia e te ama.</span>
+            </h1>
+
+            <!-- SUBTITLE -->
+            <p class="mt-5 max-w-xl text-base sm:text-lg text-white/80">
+              Consultas online, orientação especializada e muito mais para
+              cuidar de quem você ama, onde estiver.
+            </p>
+
+            <!-- BUTTONS -->
+            <div class="mt-7 flex flex-col sm:flex-row gap-3">
+              <UButton
+                size="xl"
+                color="primary"
+                trailing-icon="i-mdi-paw"
+                class="justify-center font-semibold px-6 bg-white! text-primary! hover:bg-white/90!"
+                @click="scrollToId('card-pet')"
               >
-                <UIcon :name="feature.icon" class="size-5" />
-              </span>
-              <span
-                class="text-xs sm:text-sm text-primary/70 dark:text-gray-300 leading-snug"
+                Quero cuidar do meu pet
+              </UButton>
+              <UButton
+                size="xl"
+                color="primary"
+                variant="outline"
+                trailing-icon="i-heroicons-user"
+                class="justify-center font-semibold px-6 text-white! ring-white/45! hover:bg-white/10!"
+                @click="scrollToId('card-voce')"
               >
-                {{ feature.label }}
-              </span>
+                Quero cuidar de mim
+              </UButton>
+            </div>
+
+            <!-- FEATURES -->
+            <div class="mt-9 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-5">
+              <div
+                v-for="feature in heroFeatures"
+                :key="feature.label"
+                class="flex flex-col items-start gap-2"
+              >
+                <span
+                  class="flex items-center justify-center size-9 rounded-full bg-white/15 text-white ring-1 ring-white/20"
+                >
+                  <UIcon :name="feature.icon" class="size-5" />
+                </span>
+                <span class="text-xs sm:text-sm text-white/80 leading-snug">
+                  {{ feature.label }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- RIGHT: IMAGE -->
-        <div class="relative order-1 lg:order-2">
-          <!-- TODO: substituir pela imagem definitiva da hero -->
           <div
-            class="aspect-4/3 rounded-3xl overflow-hidden bg-linear-to-br from-primary to-accent shadow-xl"
-          >
-            <img
-              src="/hero.jpg"
-              alt="Cuidado que conecta vidas"
-              class="w-full h-full object-cover object-center"
-            />
-          </div>
-
-          <!-- SELO -->
-          <div
-            class="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-col items-center justify-center size-24 sm:size-28 rounded-full bg-white/95 dark:bg-primary backdrop-blur shadow-lg border-2 border-accent/30 text-center"
+            class="absolute bottom-28 right-5 hidden size-24 flex-col items-center justify-center rounded-full border-2 border-accent/30 bg-white/95 text-center shadow-lg backdrop-blur sm:right-8 sm:flex sm:size-28 lg:bottom-auto lg:left-[48%] lg:right-auto lg:top-28"
           >
             <UIcon name="i-heroicons-heart" class="size-6 text-accent" />
             <span
-              class="mt-1 text-[9px] sm:text-[10px] font-semibold tracking-wide text-primary dark:text-white leading-tight px-2"
+              class="mt-1 text-[9px] sm:text-[10px] font-semibold tracking-wide text-primary leading-tight px-2"
             >
               CUIDADO QUE CONECTA VIDAS
             </span>
           </div>
 
-          <!-- CARD FLUTUANTE -->
           <div
-            class="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 max-w-56 flex items-start gap-2.5 rounded-2xl bg-white dark:bg-gray-800 shadow-lg px-4 py-3"
+            class="absolute bottom-5 right-5 max-w-56 items-start gap-2.5 rounded-2xl bg-white px-4 py-3 shadow-lg hidden sm:flex sm:bottom-8 sm:right-8"
           >
             <span
               class="flex items-center justify-center size-8 rounded-full bg-accent/10 text-accent shrink-0"
@@ -184,7 +181,7 @@ const faqItems = [
               <UIcon name="i-mdi-paw" class="size-4" />
             </span>
             <p
-              class="text-xs sm:text-sm text-primary/80 dark:text-gray-200 leading-snug"
+              class="text-xs sm:text-sm text-primary/80 leading-snug"
             >
               Você e seu pet merecem cuidados onde estiverem.
             </p>
@@ -287,7 +284,7 @@ const faqItems = [
             to="/solicitar-consulta"
             size="lg"
             color="primary"
-            class="mt-6 self-start font-semibold px-6 dark:!bg-accent dark:!text-white dark:hover:!bg-accent/85"
+            class="mt-6 self-start font-semibold px-6 dark:bg-accent! dark:text-white! dark:hover:bg-accent/85!"
             trailing-icon="i-heroicons-arrow-right"
           >
             Conhecer serviços para pets
