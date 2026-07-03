@@ -70,7 +70,7 @@ const heroFeatures = [
               size="xl"
               color="primary"
               trailing-icon="i-mdi-paw"
-              class="justify-center font-semibold px-6"
+              class="justify-center font-semibold px-6 dark:!bg-accent dark:!text-white dark:hover:!bg-accent/85"
               @click="scrollToId('card-pet')"
             >
               Quero cuidar do meu pet
@@ -80,7 +80,7 @@ const heroFeatures = [
               color="primary"
               variant="outline"
               trailing-icon="i-heroicons-user"
-              class="justify-center font-semibold px-6"
+              class="justify-center font-semibold px-6 dark:!bg-white/10 dark:!text-white dark:!ring-white/35 dark:hover:!bg-white/15"
               @click="scrollToId('card-voce')"
             >
               Quero cuidar de mim
@@ -246,7 +246,7 @@ const heroFeatures = [
             to="/solicitar-consulta"
             size="lg"
             color="primary"
-            class="mt-6 self-start font-semibold px-6"
+            class="mt-6 self-start font-semibold px-6 dark:!bg-accent dark:!text-white dark:hover:!bg-accent/85"
             trailing-icon="i-heroicons-arrow-right"
           >
             Conhecer serviços para pets

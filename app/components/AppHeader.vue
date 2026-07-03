@@ -190,7 +190,12 @@ watch(
             >
               Login
             </UButton>
-            <UButton to="/cadastro" color="primary" size="sm">
+            <UButton
+              to="/cadastro"
+              color="primary"
+              size="sm"
+              class="!bg-accent !text-white hover:!bg-accent/90 dark:!bg-accent dark:!text-white dark:hover:!bg-accent/85"
+            >
               Cadastro
             </UButton>
           </template>
