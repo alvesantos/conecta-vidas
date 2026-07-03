@@ -2,8 +2,8 @@
   <div class="max-w-4xl mx-auto">
     <!-- Cabeçalho -->
     <div class="mb-6">
-      <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Termos e Políticas</h1>
-      <p class="text-gray-500 text-sm mt-1">
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">Termos e Políticas</h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
         Leia atentamente o contrato antes de confirmar sua concordância.
       </p>
     </div>

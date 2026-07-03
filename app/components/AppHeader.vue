@@ -186,7 +186,7 @@ watch(
               color="primary"
               variant="ghost"
               size="sm"
-              class="text-white hover:bg-white/10"
+              class="!text-white hover:bg-white/10 dark:hover:bg-white/10"
             >
               Login
             </UButton>
