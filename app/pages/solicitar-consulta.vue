@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col items-center px-4 py-6 lg:py-10 max-w-4xl mx-auto w-full">
-    <h1 class="text-2xl lg:text-4xl font-semibold text-primary dark:text-white text-center mb-6">
+    <h1 class="text-2xl lg:text-4xl font-semibold text-body-strong text-center mb-6">
       Solicitar consulta
     </h1>
 
     <div v-if="!isLoggedIn" class="w-full flex flex-col items-center">
-      <p class="text-primary/70 dark:text-gray-300 text-center max-w-2xl mb-6 text-sm lg:text-base">
+      <p class="text-body-muted text-center max-w-2xl mb-6 text-sm lg:text-base">
         Faça login para agendar uma consulta diretamente pelo sistema ou clique na imagem abaixo para falar com a nossa equipe pelo WhatsApp.
       </p>
 
