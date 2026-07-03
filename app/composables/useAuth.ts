@@ -109,6 +109,21 @@ export function useAuth() {
   }
 
   /**
+   * Verifica a validade da sessão para guards de rota. Se o token estiver
+   * ausente ou expirado, limpa o estado local e retorna false — sem
+   * redirecionar (quem chama decide o destino). Assim uma rota protegida
+   * não chega a renderizar com sessão inválida para só depois estourar 401.
+   */
+  function ensureValidSession(): boolean {
+    if (!import.meta.client) return false
+    const token = localStorage.getItem('auth:token')
+    if (token && !isTokenExpired(token)) return true
+    user.value = null
+    clearStorage()
+    return false
+  }
+
+  /**
    * Retorna o token válido. Se estiver expirado, encerra a sessão e
    * retorna null — impedindo requests fadados ao 401.
    */
@@ -132,6 +147,7 @@ export function useAuth() {
     register,
     logout,
     handleSessionExpired,
+    ensureValidSession,
     getToken,
   }
 }

@@ -1,10 +1,12 @@
-// Middleware de rota: redireciona para /login se o usuário não estiver autenticado.
+// Middleware de rota: exige sessão válida.
 // Roda apenas no cliente porque o token fica no localStorage (sem cookie de sessão).
-export default defineNuxtRouteMiddleware(() => {
+export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server) return
 
-  const { isLoggedIn } = useAuth()
-  if (!isLoggedIn.value) {
-    return navigateTo('/login')
+  const { ensureValidSession } = useAuth()
+  // Valida a expiração do token antes de renderizar a rota protegida,
+  // evitando o estado "página abre e só depois estoura 401".
+  if (!ensureValidSession()) {
+    return navigateTo({ path: '/login', query: { redirect: to.fullPath } })
   }
 })
