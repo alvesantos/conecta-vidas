@@ -13,6 +13,36 @@ interface AuthResponse {
   user: AuthUser
 }
 
+function clearStorage() {
+  if (import.meta.client) {
+    localStorage.removeItem('auth:user')
+    localStorage.removeItem('auth:token')
+  }
+}
+
+/**
+ * Lê o `exp` (segundos) do payload do JWT sem depender de libs.
+ * Retorna null se o token for inválido/ilegível.
+ */
+function getTokenExp(token: string): number | null {
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return null
+    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+    const data = JSON.parse(json) as { exp?: number }
+    return typeof data.exp === 'number' ? data.exp : null
+  } catch {
+    return null
+  }
+}
+
+function isTokenExpired(token: string): boolean {
+  const exp = getTokenExp(token)
+  if (exp === null) return false // sem exp: deixa o backend decidir
+  // margem de 10s para evitar corrida com o relógio
+  return Date.now() >= (exp - 10) * 1000
+}
+
 export function useAuth() {
   const user = useState<AuthUser | null>('auth:user', () => {
     if (import.meta.client) {
@@ -54,19 +84,54 @@ export function useAuth() {
 
   function logout() {
     user.value = null
-    if (import.meta.client) {
-      localStorage.removeItem('auth:user')
-      localStorage.removeItem('auth:token')
-    }
+    clearStorage()
     navigateTo('/')
   }
 
-  function getToken(): string | null {
-    if (import.meta.client) {
-      return localStorage.getItem('auth:token')
+  /**
+   * Encerra a sessão por expiração/invalidez do token e leva ao login,
+   * preservando a rota atual para retorno. Usa window.location porque pode
+   * ser chamado de dentro de um callback assíncrono de fetch, fora do
+   * contexto do Nuxt (onde navigateTo/useRoute não estão disponíveis).
+   * Idempotente: não redireciona em looping caso já esteja na tela de login.
+   */
+  function handleSessionExpired() {
+    const wasLoggedIn = !!user.value
+    user.value = null
+    clearStorage()
+    if (!import.meta.client) return
+    if (window.location.pathname === '/login') return
+    const params = new URLSearchParams({ expired: '1' })
+    if (wasLoggedIn) {
+      params.set('redirect', window.location.pathname + window.location.search)
     }
-    return null
+    window.location.assign(`/login?${params.toString()}`)
   }
 
-  return { user, isLoggedIn, isAdmin, isVet, login, register, logout, getToken }
+  /**
+   * Retorna o token válido. Se estiver expirado, encerra a sessão e
+   * retorna null — impedindo requests fadados ao 401.
+   */
+  function getToken(): string | null {
+    if (!import.meta.client) return null
+    const token = localStorage.getItem('auth:token')
+    if (!token) return null
+    if (isTokenExpired(token)) {
+      handleSessionExpired()
+      return null
+    }
+    return token
+  }
+
+  return {
+    user,
+    isLoggedIn,
+    isAdmin,
+    isVet,
+    login,
+    register,
+    logout,
+    handleSessionExpired,
+    getToken,
+  }
 }

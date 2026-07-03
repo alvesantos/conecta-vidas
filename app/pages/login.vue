@@ -8,6 +8,10 @@ const loading = ref(false)
 const errorMsg = ref('')
 
 const { login, user } = useAuth()
+const route = useRoute()
+
+// Aviso quando a sessão expirou e o usuário foi redirecionado para cá.
+const sessionExpired = computed(() => route.query.expired === '1')
 
 async function handleLogin() {
   if (!email.value || !password.value) {
@@ -20,7 +24,10 @@ async function handleLogin() {
 
   try {
     await login(email.value, password.value)
-    if (user.value?.type === 'veterinario') {
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : null
+    if (redirect) {
+      await navigateTo(redirect)
+    } else if (user.value?.type === 'veterinario') {
       await navigateTo('/veterinario/consultas')
     } else if (user.value?.type === 'admin') {
       await navigateTo('/backoffice')
@@ -41,6 +48,14 @@ async function handleLogin() {
       <div class="flex flex-col items-center gap-3">
         <img src="/icon-com-texto.png" alt="Conecta Vet" class="h-48" />
         <p class="text-sm text-gray-500 dark:text-gray-400">Acesse sua conta</p>
+      </div>
+
+      <div
+        v-if="sessionExpired"
+        class="flex items-center gap-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 px-4 py-3 text-sm text-amber-700 dark:text-amber-400"
+      >
+        <UIcon name="i-heroicons-clock" class="size-5 shrink-0" />
+        Sua sessão expirou. Faça login novamente para continuar.
       </div>
 
       <div class="flex flex-col gap-4">

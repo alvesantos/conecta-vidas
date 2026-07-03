@@ -3,8 +3,8 @@ definePageMeta({ noPadding: true });
 import { vMaska } from "maska/vue";
 
 const router = useRouter();
-const config = useRuntimeConfig();
 const { register } = useAuth();
+const { api } = useApi();
 
 const currentStep = ref(1);
 const loading = ref(false);
@@ -232,11 +232,8 @@ async function submit() {
     if (petConditions.value) formData.append("conditions", petConditions.value);
     if (petAvatarFile.value) formData.append("avatar", petAvatarFile.value);
 
-    await $fetch(`${config.public.apiBase}/pets`, {
+    await api("/pets", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth:token") ?? ""}`,
-      },
       body: formData,
     });
 
