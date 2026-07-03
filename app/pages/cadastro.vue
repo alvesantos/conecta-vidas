@@ -292,7 +292,7 @@ async function submit() {
     >
       <!-- Logo -->
       <div class="flex flex-col items-center gap-2">
-        <img src="/icon-com-texto.png" alt="Conecta Vet" class="h-40" />
+        <img src="/conecta-icon.png" alt="ConectaVidas" class="h-40" />
         <p class="text-sm text-gray-500 dark:text-gray-400">Crie sua conta de responsável</p>
       </div>
 

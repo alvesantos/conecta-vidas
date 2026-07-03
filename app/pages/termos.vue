@@ -13,7 +13,7 @@
       <div class="bg-gray-50 border-b border-gray-200 px-3 sm:px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div class="flex items-center gap-2 text-gray-600 text-sm font-medium min-w-0">
           <UIcon name="i-heroicons-document-text" class="size-5 text-primary shrink-0" />
-          <span class="truncate">Termo e Contrato — Clientes ConectaVet</span>
+          <span class="truncate">Termo e Contrato, Clientes ConectaVidas</span>
         </div>
         <a
           :href="pdfUrl"

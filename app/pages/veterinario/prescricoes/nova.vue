@@ -297,11 +297,11 @@ async function downloadPdf() {
           <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0d9488; padding-bottom: 16px; margin-bottom: 24px;">
             <div>
               <h1 style="font-size: 22px; font-weight: 700; color: #0d9488; margin: 0;">Prescrição Veterinária</h1>
-              <p style="font-size: 13px; color: #6b7280; margin: 4px 0 0;">ConectaVet</p>
+              <p style="font-size: 13px; color: #6b7280; margin: 4px 0 0;">ConectaVidas</p>
             </div>
             <img
-              src="/icon-com-texto.png"
-              alt="ConectaVet"
+              src="/conecta-icon.png"
+              alt="ConectaVidas"
               style="height: 80px; width: auto; object-fit: contain;"
             />
           </div>

@@ -23,7 +23,7 @@ const howItWorks = [
   {
     icon: "i-heroicons-user-plus",
     title: "Cadastre-se",
-    desc: "Crie sua conta em poucos minutos. Cadastrar um pet é opcional — você pode fazer isso depois.",
+    desc: "Crie sua conta em poucos minutos. Cadastrar um pet é opcional e pode ser feito depois.",
   },
   {
     icon: "i-heroicons-credit-card",
@@ -44,7 +44,7 @@ const faqItems = [
   },
   {
     q: "Vocês atendem pets e pessoas?",
-    a: "Sim — a ConectaVet oferece telemedicina veterinária e humana para cuidar de toda a família.",
+    a: "Sim, oferecemos telemedicina veterinária e humana para cuidar de toda a família.",
   },
   {
     q: "Preciso ter um pet para me cadastrar?",
@@ -52,7 +52,7 @@ const faqItems = [
   },
   {
     q: "Quantas consultas o plano inclui?",
-    a: "Depende do plano escolhido — cada um inclui um número de consultas gratuitas por mês.",
+    a: "Depende do plano escolhido. Cada um inclui um número de consultas gratuitas por mês.",
   },
   {
     q: "Como falo com um profissional?",
@@ -156,7 +156,7 @@ const faqItems = [
             class="aspect-4/3 rounded-3xl overflow-hidden bg-linear-to-br from-primary to-accent shadow-xl"
           >
             <img
-              src="/cute_dog.png"
+              src="/hero.jpg"
               alt="Cuidado que conecta vidas"
               class="w-full h-full object-cover object-center"
             />
@@ -343,7 +343,7 @@ const faqItems = [
           Como funciona
         </h2>
         <p class="mt-3 text-body-muted text-base sm:text-lg">
-          Do cadastro à consulta, em poucos minutos — para o seu pet e para você.
+          Do cadastro à consulta, em poucos minutos, para o seu pet e para você.
         </p>
       </div>
 

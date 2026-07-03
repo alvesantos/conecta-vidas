@@ -36,7 +36,7 @@ const route = useRoute()
           <!-- Centro: slogan + copyright -->
           <div class="flex flex-col items-center gap-2 md:w-1/3 text-center">
             <span class="text-white text-sm leading-relaxed">Telemedicina veterinária com cuidado e segurança</span>
-            <span class="text-white/70 text-xs">© {{ new Date().getFullYear() }} ConectaVet — Todos os direitos reservados</span>
+            <span class="text-white/70 text-xs">© {{ new Date().getFullYear() }} ConectaVidas. Todos os direitos reservados</span>
             <a
               href="https://rogabsolutions.com"
               target="_blank"
