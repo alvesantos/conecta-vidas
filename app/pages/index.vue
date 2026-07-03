@@ -81,13 +81,8 @@ const faqItems = [
     <!-- HERO -->
     <section class="pt-8 lg:pt-12">
       <div
-        class="relative min-h-145 lg:min-h-170 overflow-hidden rounded-4xl bg-primary shadow-2xl"
+        class="relative min-h-145 lg:min-h-170 overflow-hidden rounded-4xl bg-primary bg-[url('/background-hero.png')] bg-cover bg-position-[58%_center] shadow-2xl"
       >
-        <img
-          src="/hero.jpg"
-          alt="Cuidado que conecta vidas"
-          class="absolute inset-0 size-full object-cover object-[58%_center]"
-        />
         <div
           class="absolute inset-0 bg-linear-to-r from-primary via-primary/72 to-primary/8"
         />
