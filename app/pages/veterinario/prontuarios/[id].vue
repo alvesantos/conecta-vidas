@@ -18,7 +18,7 @@
     </div>
 
     <div v-if="pending" class="flex justify-center py-12">
-      <UIcon name="i-heroicons-arrow-path" class="animate-spin size-8 text-primary" />
+      <UIcon name="i-heroicons-arrow-path" class="animate-spin size-8 text-primary dark:text-white" />
     </div>
     <UAlert v-else-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
     <div v-else-if="records.length === 0" class="text-center py-12 text-gray-500">

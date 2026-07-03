@@ -91,7 +91,7 @@
               >
                 <div class="flex items-center justify-between">
                   <p class="font-medium text-gray-800 dark:text-gray-100">{{ vet.name }}</p>
-                  <UIcon v-if="selectedVetIdForModal === vet.id" name="i-heroicons-check-circle-solid" class="text-primary size-5" />
+                  <UIcon v-if="selectedVetIdForModal === vet.id" name="i-heroicons-check-circle-solid" class="text-primary dark:text-white size-5" />
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400 flex flex-col">
                   <span><strong>CRMV:</strong> {{ vet.crmv || 'Não informado' }}</span>

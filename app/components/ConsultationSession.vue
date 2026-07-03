@@ -49,7 +49,7 @@ const {
         <template #header>
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-              <UIcon name="i-heroicons-video-camera" class="text-primary size-6" />
+              <UIcon name="i-heroicons-video-camera" class="text-primary dark:text-white size-6" />
               Sala de Consulta
             </h3>
             <div class="flex items-center gap-1">
