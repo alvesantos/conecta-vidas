@@ -9,44 +9,30 @@ export interface AuthUser {
 }
 
 interface AuthResponse {
-  token: string
   user: AuthUser
 }
 
-function clearStorage() {
+// Chave apenas do objeto de usuário (dado não-sensível) para hidratar a UI.
+// O token de sessão vive em cookies httpOnly no servidor — inacessível ao JS,
+// o que protege contra XSS. A autoridade da sessão é sempre o cookie.
+const USER_KEY = 'auth:user'
+
+function clearStoredUser() {
   if (import.meta.client) {
-    localStorage.removeItem('auth:user')
+    localStorage.removeItem(USER_KEY)
+    // Limpa a chave legada do token (migração do modelo localStorage → cookie).
     localStorage.removeItem('auth:token')
   }
 }
 
-/**
- * Lê o `exp` (segundos) do payload do JWT sem depender de libs.
- * Retorna null se o token for inválido/ilegível.
- */
-function getTokenExp(token: string): number | null {
-  try {
-    const payload = token.split('.')[1]
-    if (!payload) return null
-    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
-    const data = JSON.parse(json) as { exp?: number }
-    return typeof data.exp === 'number' ? data.exp : null
-  } catch {
-    return null
-  }
-}
-
-function isTokenExpired(token: string): boolean {
-  const exp = getTokenExp(token)
-  if (exp === null) return false // sem exp: deixa o backend decidir
-  // margem de 10s para evitar corrida com o relógio
-  return Date.now() >= (exp - 10) * 1000
-}
+// Deduplica refreshes concorrentes: várias requisições que tomem 401 ao mesmo
+// tempo compartilham uma única chamada a /auth/refresh.
+let refreshInFlight: Promise<boolean> | null = null
 
 export function useAuth() {
   const user = useState<AuthUser | null>('auth:user', () => {
     if (import.meta.client) {
-      const stored = localStorage.getItem('auth:user')
+      const stored = localStorage.getItem(USER_KEY)
       return stored ? JSON.parse(stored) : null
     }
     return null
@@ -59,8 +45,7 @@ export function useAuth() {
   function persist(data: AuthResponse) {
     user.value = data.user
     if (import.meta.client) {
-      localStorage.setItem('auth:user', JSON.stringify(data.user))
-      localStorage.setItem('auth:token', data.token)
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user))
     }
   }
 
@@ -69,6 +54,8 @@ export function useAuth() {
     const data = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/login`, {
       method: 'POST',
       body: { email, password },
+      // Necessário para o navegador aceitar/enviar os cookies de sessão.
+      credentials: 'include',
     })
     persist(data)
   }
@@ -78,27 +65,62 @@ export function useAuth() {
     const data = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/register`, {
       method: 'POST',
       body: payload,
+      credentials: 'include',
     })
     persist(data)
   }
 
-  function logout() {
+  async function logout() {
+    const config = useRuntimeConfig()
+    try {
+      // Revoga o refresh token e limpa os cookies no servidor.
+      await $fetch(`${config.public.apiBase}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+    } catch {
+      // Mesmo se falhar, seguimos limpando o estado local.
+    }
     user.value = null
-    clearStorage()
+    clearStoredUser()
     navigateTo('/')
   }
 
   /**
-   * Encerra a sessão por expiração/invalidez do token e leva ao login,
-   * preservando a rota atual para retorno. Usa window.location porque pode
-   * ser chamado de dentro de um callback assíncrono de fetch, fora do
-   * contexto do Nuxt (onde navigateTo/useRoute não estão disponíveis).
-   * Idempotente: não redireciona em looping caso já esteja na tela de login.
+   * Tenta renovar a sessão via cookie de refresh (httpOnly). Retorna true se
+   * renovou (novos cookies emitidos), false caso contrário. Concorrente-seguro.
+   */
+  function tryRefresh(): Promise<boolean> {
+    if (!import.meta.client) return Promise.resolve(false)
+    if (refreshInFlight) return refreshInFlight
+
+    const config = useRuntimeConfig()
+    refreshInFlight = $fetch<AuthResponse>(`${config.public.apiBase}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+      .then((data) => {
+        persist(data)
+        return true
+      })
+      .catch(() => false)
+      .finally(() => {
+        refreshInFlight = null
+      })
+
+    return refreshInFlight
+  }
+
+  /**
+   * Encerra a sessão local (sem chamar o backend) por expiração/invalidez e
+   * leva ao login preservando a rota atual. Usa window.location porque pode
+   * ser chamado de dentro de um callback assíncrono de fetch, fora do contexto
+   * do Nuxt. Idempotente: não redireciona se já estiver na tela de login.
    */
   function handleSessionExpired() {
     const wasLoggedIn = !!user.value
     user.value = null
-    clearStorage()
+    clearStoredUser()
     if (!import.meta.client) return
     if (window.location.pathname === '/login') return
     const params = new URLSearchParams({ expired: '1' })
@@ -109,33 +131,13 @@ export function useAuth() {
   }
 
   /**
-   * Verifica a validade da sessão para guards de rota. Se o token estiver
-   * ausente ou expirado, limpa o estado local e retorna false — sem
-   * redirecionar (quem chama decide o destino). Assim uma rota protegida
-   * não chega a renderizar com sessão inválida para só depois estourar 401.
+   * Guard de rota: com o token em cookie httpOnly, o cliente não consegue mais
+   * validar a expiração localmente. Basta a presença do usuário; a validade
+   * real é garantida pelo fluxo de refresh no `useApi` (401 → refresh → retry)
+   * e pelo refresh silencioso no boot (`auth.client.ts`).
    */
   function ensureValidSession(): boolean {
-    if (!import.meta.client) return false
-    const token = localStorage.getItem('auth:token')
-    if (token && !isTokenExpired(token)) return true
-    user.value = null
-    clearStorage()
-    return false
-  }
-
-  /**
-   * Retorna o token válido. Se estiver expirado, encerra a sessão e
-   * retorna null — impedindo requests fadados ao 401.
-   */
-  function getToken(): string | null {
-    if (!import.meta.client) return null
-    const token = localStorage.getItem('auth:token')
-    if (!token) return null
-    if (isTokenExpired(token)) {
-      handleSessionExpired()
-      return null
-    }
-    return token
+    return !!user.value
   }
 
   return {
@@ -146,8 +148,8 @@ export function useAuth() {
     login,
     register,
     logout,
+    tryRefresh,
     handleSessionExpired,
     ensureValidSession,
-    getToken,
   }
 }

@@ -1,24 +1,36 @@
 export function useApi() {
   const config = useRuntimeConfig()
-  const { getToken, handleSessionExpired } = useAuth()
+  const { tryRefresh, handleSessionExpired } = useAuth()
 
-  function api<T>(path: string, options?: Parameters<typeof $fetch>[1]) {
-    const token = getToken()
-
-    return $fetch<T>(`${config.public.apiBase}${path}`, {
+  async function api<T>(path: string, options?: Parameters<typeof $fetch>[1]): Promise<T> {
+    const url = `${config.public.apiBase}${path}`
+    // `credentials: 'include'` envia os cookies httpOnly de sessão em toda
+    // requisição — não há mais header Authorization montado no cliente.
+    const requestOptions = {
       ...options,
+      credentials: 'include' as const,
       headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options?.headers as Record<string, string> ?? {}),
       },
-      onResponseError({ response }) {
-        // Sessão inválida/expirada: limpa o estado local e leva ao login,
-        // evitando o estado inconsistente de "parece logado mas dá erro".
-        if (response.status === 401 || response.status === 403) {
-          handleSessionExpired()
-        }
-      },
-    })
+    }
+
+    try {
+      return await $fetch<T>(url, requestOptions)
+    } catch (err) {
+      const status = (err as { response?: { status?: number } })?.response?.status
+      if (status !== 401) throw err
+
+      // Access token expirado: tenta renovar de forma transparente (via cookie
+      // de refresh) e refaz a requisição uma única vez.
+      const renewed = await tryRefresh()
+      if (renewed) {
+        return await $fetch<T>(url, requestOptions)
+      }
+
+      // Refresh falhou (refresh token expirado/revogado): encerra a sessão.
+      handleSessionExpired()
+      throw err
+    }
   }
 
   return { api }
