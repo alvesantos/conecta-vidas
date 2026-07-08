@@ -26,11 +26,10 @@
           <!-- right -->
           <div class="text-foreground w-full flex justify-center">
             <UButton
-              size="xl"
-              class="bg-[#18c256] hover:bg-[#139645] text-white flex items-center gap-2 rounded-lg px-6 py-4 cursor-pointer"
+              class="bg-[#18c256] hover:bg-[#139645] text-white flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm sm:px-6 sm:py-4 sm:text-base cursor-pointer"
             >
               <!-- WhatsApp icon -->
-              <UIcon name="ph-whatsapp-logo" class="size-8" />
+              <UIcon name="ph-whatsapp-logo" class="size-5 sm:size-7" />
               <!-- Button text -->
               <span>Falar no WhatsApp</span>
             </UButton>

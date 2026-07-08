@@ -122,12 +122,12 @@ onMounted(async () => {
         :key="plan.id"
         class="relative flex flex-col rounded-3xl border bg-white dark:bg-gray-800 p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
         :class="highlightedPlanId === plan.id
-          ? 'border-accent ring-1 ring-accent/40 sm:scale-[1.02]'
+          ? 'border-accent ring-1 ring-accent/40 dark:border-sky-400 dark:ring-sky-400/40 sm:scale-[1.02]'
           : 'border-accent/15 dark:border-white/10'"
       >
         <span
           v-if="highlightedPlanId === plan.id"
-          class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full shadow"
+          class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent dark:bg-sky-400 text-white dark:text-primary text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full shadow"
         >
           MAIS POPULAR
         </span>
@@ -153,7 +153,7 @@ onMounted(async () => {
           >
             <UIcon
               name="i-heroicons-check-circle"
-              class="size-5 shrink-0 text-accent mt-0.5"
+              class="size-5 shrink-0 text-accent dark:text-sky-400 mt-0.5"
             />
             <span class="text-sm text-primary/80 dark:text-gray-300 line-clamp-2">
               {{ perk.label }}
@@ -166,7 +166,12 @@ onMounted(async () => {
           size="lg"
           :color="highlightedPlanId === plan.id ? 'primary' : 'neutral'"
           :variant="highlightedPlanId === plan.id ? 'solid' : 'outline'"
-          class="mt-6 font-semibold"
+          :class="[
+            'mt-6 font-semibold',
+            highlightedPlanId === plan.id
+              ? 'dark:bg-sky-400! dark:text-primary! dark:hover:bg-sky-300!'
+              : 'dark:text-white! dark:ring-white/25! dark:hover:bg-white/10!',
+          ]"
           @click="navigateToRoute('/assinaturas')"
         >
           Ver detalhes
@@ -180,7 +185,7 @@ onMounted(async () => {
         variant="link"
         color="primary"
         trailing-icon="i-heroicons-arrow-right"
-        class="font-semibold"
+        class="font-semibold dark:text-sky-400!"
       >
         Ver todos os planos e benefícios
       </UButton>

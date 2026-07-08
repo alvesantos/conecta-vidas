@@ -30,20 +30,23 @@ function openWhatsApp() {
         </p>
       </div>
 
-      <div class="mx-auto w-full max-w-6xl">
+      <div class="relative mx-auto w-full max-w-5xl px-8 sm:px-12">
         <UCarousel
           v-slot="{ item }"
+          arrows
           loop
-          :autoplay="{ delay: 3500 }"
+          :autoplay="{ delay: 4500 }"
           :items="slides"
           :ui="{
-            item: 'basis-4/5 lg:basis-1/2',
+            item: 'basis-full',
+            prev: '-start-6 sm:-start-10',
+            next: '-end-6 sm:-end-10',
           }"
         >
-          <div class="px-1.5 sm:px-2">
+          <div class="px-1">
             <button
               type="button"
-              class="cursor-pointer block w-full mx-auto aspect-3/2 overflow-hidden rounded-lg shadow-md ring-1 ring-black/5 hover:scale-[1.01] transition-transform"
+              class="cursor-pointer block w-full mx-auto aspect-7/4 overflow-hidden rounded-xl shadow-md ring-1 ring-black/5 hover:scale-[1.01] transition-transform"
               @click="openWhatsApp"
             >
               <img
