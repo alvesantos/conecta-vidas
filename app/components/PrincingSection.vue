@@ -35,6 +35,11 @@ const displayedPerks = (plan: Plan) => {
   return limited;
 };
 
+// Landing: apenas os destaques principais de cada plano
+const topPerks = (plan: Plan) => (plan.perks ?? []).slice(0, 3);
+
+const highlightedPlanId = computed(() => plans.value[1]?.id ?? null);
+
 const navigateToRoute = (route: string) => {
   router.push(route);
 };
@@ -94,7 +99,96 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <!-- ============ LANDING: VERSÃO MINIMALISTA ============ -->
+  <div v-if="reduced">
+    <div class="text-center max-w-2xl mx-auto">
+      <span
+        class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
+      >
+        Planos
+      </span>
+      <h2 class="mt-4 text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary dark:text-white">
+        Escolha o plano ideal
+      </h2>
+      <p class="mt-3 text-body-muted text-base sm:text-lg">
+        Cuidado contínuo para o seu pet, a partir de
+        <strong class="text-primary dark:text-white">R$ 39,90/mês</strong>.
+      </p>
+    </div>
+
+    <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div
+        v-for="plan in plans"
+        :key="plan.id"
+        class="relative flex flex-col rounded-3xl border bg-white dark:bg-gray-800 p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+        :class="highlightedPlanId === plan.id
+          ? 'border-accent ring-1 ring-accent/40 sm:scale-[1.02]'
+          : 'border-accent/15 dark:border-white/10'"
+      >
+        <span
+          v-if="highlightedPlanId === plan.id"
+          class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full shadow"
+        >
+          MAIS POPULAR
+        </span>
+
+        <h3 class="text-lg font-semibold text-primary dark:text-white">
+          {{ plan.title }}
+        </h3>
+        <p class="mt-3 flex items-baseline gap-1">
+          <span class="text-3xl font-bold text-primary dark:text-white">
+            {{ priceOf(plan).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+          </span>
+          <span class="text-sm text-body-muted">/mês</span>
+        </p>
+        <p class="mt-2 text-sm text-body-muted line-clamp-2 min-h-10">
+          {{ plan.focus }}
+        </p>
+
+        <ul class="mt-5 space-y-2.5 flex-1">
+          <li
+            v-for="perk in topPerks(plan)"
+            :key="perk.label"
+            class="flex items-start gap-2.5"
+          >
+            <UIcon
+              name="i-heroicons-check-circle"
+              class="size-5 shrink-0 text-accent mt-0.5"
+            />
+            <span class="text-sm text-primary/80 dark:text-gray-300 line-clamp-2">
+              {{ perk.label }}
+            </span>
+          </li>
+        </ul>
+
+        <UButton
+          block
+          size="lg"
+          :color="highlightedPlanId === plan.id ? 'primary' : 'neutral'"
+          :variant="highlightedPlanId === plan.id ? 'solid' : 'outline'"
+          class="mt-6 font-semibold"
+          @click="navigateToRoute('/assinaturas')"
+        >
+          Ver detalhes
+        </UButton>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center">
+      <UButton
+        to="/assinaturas"
+        variant="link"
+        color="primary"
+        trailing-icon="i-heroicons-arrow-right"
+        class="font-semibold"
+      >
+        Ver todos os planos e benefícios
+      </UButton>
+    </div>
+  </div>
+
+  <!-- ============ ASSINATURAS: VERSÃO COMPLETA ============ -->
+  <div v-else>
     <UCard>
       <h4 class="lg:block hidden lg:text-2xl font-semibold text-primary dark:text-gray-100 text-center mb-4">
         Assine e tenha acesso a conteúdos exclusivos de primeiros socorros e cuidados com seu pet.

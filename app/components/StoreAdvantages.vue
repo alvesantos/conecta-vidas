@@ -1,35 +1,4 @@
 <script lang="ts" setup>
-const advantageIcons = [
-  {
-    icon: '/eneli_studio_icons/eneli_studio_clock.png',
-    label: 'Atendimento rápido'
-  },
-  {
-    icon: '/eneli_studio_icons/eneli_studio_house.png',
-    label: 'Sem sair de casa'
-  },
-  {
-    icon: '/eneli_studio_icons/eneli_studio_check_shield.png',
-    label: 'Orientação segura'
-  },
-  {
-    icon: '/eneli_studio_icons/eneli_studio_heart.png',
-    label: 'Mais cuidado, menos preocupação'
-  }
-]
-
-const AdvantageItem = (props: { icon: string, label: string }) =>
-  h('div', {
-    class: 'bg-foreground dark:bg-transparent p-4 text-center text-accent dark:text-white'
-  }, [
-    h('img', {
-      src: props.icon,
-      class: 'mx-auto mb-4 w-16 h-16 object-contain dark:brightness-0 dark:invert'
-    }),
-
-    h('p', {}, props.label)
-  ])
-
   const handleBannerClick = () => {
     const msg = encodeURIComponent('Olá! Vim pelo site da ConectaVet e gostaria de saber mais sobre os planos.');
     window.open(`https://wa.me/5511978654921?text=${msg}`, '_blank');
@@ -38,44 +7,8 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
 
 <template>
   <div>
-    <section>
-      <UCard :ui="{ body: 'bg-foreground dark:bg-primary' }">
-
-        <!-- MOBILE -->
-        <UCarousel
-          class="lg:hidden"
-          v-slot="{ item }"
-          loop
-          dots
-          :autoplay="{ delay: 2000 }"
-          :items="advantageIcons"
-          :ui="{
-            item: 'basis-full',
-            dot: 'data-[state=active]:bg-accent size-3',
-          }"
-        >
-          <AdvantageItem
-            :icon="item.icon"
-            :label="item.label"
-          />
-        </UCarousel>
-
-        <div class="text-transparent lg:hidden">a</div>
-
-        <!-- DESKTOP ==================== -->
-        <div class="hidden lg:grid grid-cols-4 gap-px bg-gray-300 dark:bg-primary">
-          <AdvantageItem
-            v-for="item in advantageIcons"
-            :key="item.label"
-            :icon="item.icon"
-            :label="item.label"
-          />
-        </div>
-      </UCard>
-    </section>
-
     <!-- WHATSAPP BANNER -->
-    <section class="pt-4">
+    <section>
       <UCard @click="handleBannerClick" :ui="{ body: 'bg-primary relative' }">
         <img
           src="/dog_banner.png"
@@ -83,15 +16,10 @@ const AdvantageItem = (props: { icon: string, label: string }) =>
           class="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.85] lg:object-[center_58%]"
         />
 
-        <div class="lg:min-h-50 min-h-42 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-4 z-10 relative">
-          <!-- left -->
-          <div class="text-foreground">
-            <img src="/eneli_studio_icons/eneli_studio_paw_inverted.png" class="lg:w-full w-[20%]" />
-          </div>
-
+        <div class="lg:min-h-50 min-h-42 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-4 z-10 relative">
           <!-- middle -->
           <div class="text-foreground lg:text-2xl text-start pb-4">
-            <h4 class="pt-2">Fale agora com um médico veterinário e tire suas dúvidas!</h4>
+            <h4 class="pt-2">Fale agora com um profissional e tire suas dúvidas!</h4>
             <p class="lg:text-lg text-sm text-foreground/60">Orientação profissional na palma da sua mão.</p>
           </div>
 

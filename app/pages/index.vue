@@ -37,6 +37,54 @@ const howItWorks = [
   },
 ];
 
+const services = [
+  {
+    icon: "i-heroicons-document-check",
+    title: "Atestados",
+    desc: "Atestados médicos com validade e segurança, sem sair de casa.",
+  },
+  {
+    icon: "i-heroicons-clipboard-document-list",
+    title: "Relatórios",
+    desc: "Relatórios médicos completos para diversas finalidades.",
+  },
+  {
+    icon: "i-heroicons-document-text",
+    title: "Receitas",
+    desc: "Receitas médicas digitais, válidas e seguras.",
+  },
+  {
+    icon: "i-heroicons-arrow-path",
+    title: "Renovação de receitas",
+    desc: "Renove suas receitas de uso contínuo de forma prática e rápida.",
+  },
+  {
+    icon: "i-heroicons-paper-airplane",
+    title: "Encaminhamentos",
+    desc: "Encaminhamentos para especialistas, exames e tratamentos.",
+  },
+  {
+    icon: "i-heroicons-document-magnifying-glass",
+    title: "Avaliação de laudos",
+    desc: "Análise e orientação de exames e laudos por médicos qualificados.",
+  },
+  {
+    icon: "i-mdi-heart-pulse",
+    title: "Acompanhamento clínico",
+    desc: "Acompanhamento da sua saúde ao longo do tempo, com cuidado contínuo.",
+  },
+  {
+    icon: "i-heroicons-user-circle",
+    title: "Atendimento com médicos qualificados",
+    desc: "Atendimento humanizado com médicos experientes e prontos para te ajudar.",
+  },
+  {
+    icon: "i-heroicons-user-group",
+    title: "Atendimento para todas as idades",
+    desc: "Cuidado completo para crianças, adolescentes, adultos e idosos.",
+  },
+];
+
 const faqItems = [
   {
     q: "As consultas são realmente online?",
@@ -321,6 +369,48 @@ const faqItems = [
       </div>
     </section>
 
+    <!-- SERVIÇOS / TÓPICOS -->
+    <section class="pt-16 sm:pt-20">
+      <div class="text-center max-w-2xl mx-auto">
+        <span
+          class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
+        >
+          Tudo em um só lugar
+        </span>
+        <h2
+          class="hero-title mt-4 text-3xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+        >
+          O que você encontra
+        </h2>
+        <p class="mt-3 text-body-muted text-base sm:text-lg">
+          Documentos, orientação e acompanhamento — com médicos qualificados,
+          onde você estiver.
+        </p>
+      </div>
+
+      <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div
+          v-for="service in services"
+          :key="service.title"
+          class="group flex items-start gap-4 rounded-3xl border border-accent/15 dark:border-white/10 bg-white dark:bg-gray-800 p-5 sm:p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-md"
+        >
+          <span
+            class="flex items-center justify-center size-12 shrink-0 rounded-2xl bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-white"
+          >
+            <UIcon :name="service.icon" class="size-6" />
+          </span>
+          <div>
+            <h3 class="text-base sm:text-lg font-semibold text-primary dark:text-white leading-tight">
+              {{ service.title }}
+            </h3>
+            <p class="mt-1.5 text-body-muted text-sm leading-relaxed">
+              {{ service.desc }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- COMO FUNCIONA -->
     <section class="pt-16 sm:pt-20">
       <div class="text-center max-w-2xl mx-auto">
@@ -375,29 +465,6 @@ const faqItems = [
     <!-- PRICES -->
     <div ref="pricingSection" id="pricingSection" class="pt-16 sm:pt-20">
       <PrincingSection />
-    </div>
-
-    <!-- PARCERIAS -->
-    <div class="pt-16 sm:pt-20 flex flex-col items-center text-center">
-      <h3
-        class="text-primary dark:text-gray-100 text-xl sm:text-2xl lg:text-3xl font-semibold mb-6"
-      >
-        Tem Clínica Veterinária? Faça parte da Rede ConectaVet.
-      </h3>
-      <img
-        src="/images/img-parcerias.png"
-        alt="Parcerias ConectaVet"
-        class="w-full max-w-3xl rounded-2xl shadow-lg border border-accent/20"
-      />
-      <UButton
-        to="https://wa.me/5511978654921?text=Oi%2C%20tenho%20uma%20cl%C3%ADnica%20e%20gostaria%20de%20ser%20parceiro%20ConectaVet"
-        target="_blank"
-        icon="i-mdi-whatsapp"
-        size="lg"
-        class="mt-6 font-semibold text-lg px-8 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white"
-      >
-        Seja Parceiro
-      </UButton>
     </div>
 
     <!-- VIDEOAULAS CAROUSEL -->
