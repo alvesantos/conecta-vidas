@@ -152,14 +152,14 @@ const faqItems = [
             <h1
               class="hero-title mt-5 text-4xl sm:text-5xl lg:text-6xl leading-[1.05] text-white"
             >
-              Saúde para toda a família.
-              <span class="text-sky-200">Incluindo quem late, mia e te ama.</span>
+              Conectando medicinas,
+              <span class="text-sky-200">unificando vidas.</span>
             </h1>
 
             <!-- SUBTITLE -->
             <p class="mt-5 max-w-xl text-base sm:text-lg text-white/80">
-              Consultas online, orientação especializada e muito mais para
-              cuidar de quem você ama, onde estiver.
+              Telemedicina integrada para toda a família, com médicos para você e
+              médicos veterinários para o seu animal.
             </p>
 
             <!-- BUTTONS -->
@@ -205,17 +205,6 @@ const faqItems = [
           </div>
 
           <div
-            class="absolute bottom-28 right-5 hidden size-24 flex-col items-center justify-center rounded-full border-2 border-accent/30 bg-white/95 text-center shadow-lg backdrop-blur sm:right-8 sm:flex sm:size-28 lg:bottom-auto lg:left-[48%] lg:right-auto lg:top-28"
-          >
-            <UIcon name="i-heroicons-heart" class="size-6 text-accent" />
-            <span
-              class="mt-1 text-[9px] sm:text-[10px] font-semibold tracking-wide text-primary leading-tight px-2"
-            >
-              CUIDADO QUE CONECTA VIDAS
-            </span>
-          </div>
-
-          <div
             class="absolute bottom-5 right-5 max-w-56 items-start gap-2.5 rounded-2xl bg-white px-4 py-3 shadow-lg hidden sm:flex sm:bottom-8 sm:right-8"
           >
             <span
@@ -233,71 +222,26 @@ const faqItems = [
       </div>
     </section>
 
-    <!-- CARD ASSINE AGORA -->
-    <section class="pt-16 sm:pt-20">
+    <!-- CTA ASSINE -->
+    <section class="pt-12 sm:pt-16">
       <div
-        class="rounded-3xl bg-primary text-white p-6 sm:p-8 cursor-pointer transition-transform hover:-translate-y-0.5"
-        @click="scrollToId('pricingSection')"
+        class="flex flex-col sm:flex-row sm:items-center justify-center gap-x-3 gap-y-4 text-center"
       >
-        <div class="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
-          <!-- LEFT -->
-          <div class="flex items-center gap-4 lg:max-w-md">
-            <img
-              src="/eneli_studio_icons/eneli_studio_pet_shield.png"
-              alt="Proteção"
-              class="size-16 sm:size-20 object-contain shrink-0"
-            />
-            <div>
-              <h3 class="text-xl sm:text-2xl font-semibold leading-tight">
-                Assine agora e tenha segurança!
-              </h3>
-              <p class="mt-2 text-sm sm:text-base text-white/70 leading-snug">
-                Saber agir quando seu filho de quatro patas mais precisar pode
-                custar menos de dois reais por dia!
-              </p>
-            </div>
-          </div>
-
-          <!-- RIGHT: BENEFITS -->
-          <div class="lg:ml-auto grid sm:grid-cols-1 gap-3">
-            <div class="flex items-center gap-2.5">
-              <UIcon
-                name="i-heroicons-check-circle"
-                class="size-5 text-green-400 shrink-0"
-              />
-              <span class="text-sm sm:text-base text-white/90"
-                >Telemedicina veterinária 24/7</span
-              >
-            </div>
-            <div class="flex items-center gap-2.5">
-              <UIcon
-                name="i-heroicons-check-circle"
-                class="size-5 text-green-400 shrink-0"
-              />
-              <span class="text-sm sm:text-base text-white/90"
-                >Orientação, acolhimento e segurança</span
-              >
-            </div>
-            <div class="flex items-center gap-2.5">
-              <UIcon
-                name="i-heroicons-check-circle"
-                class="size-5 text-green-400 shrink-0"
-              />
-              <span class="text-sm sm:text-base text-white/90"
-                >Descontos exclusivos em parceiros</span
-              >
-            </div>
-            <div class="flex items-center gap-2.5">
-              <UIcon
-                name="i-heroicons-calendar-days"
-                class="size-5 text-white/80 shrink-0"
-              />
-              <span class="text-sm sm:text-base text-white/90"
-                >Telemedicina humana agendada</span
-              >
-            </div>
-          </div>
-        </div>
+        <p class="text-base sm:text-lg text-primary/80 dark:text-gray-300">
+          Segurança para o seu pet por
+          <span class="font-semibold text-primary dark:text-white"
+            >menos de R$ 2 por dia.</span
+          >
+        </p>
+        <UButton
+          variant="link"
+          color="primary"
+          trailing-icon="i-heroicons-arrow-right"
+          class="font-semibold"
+          @click="scrollToId('pricingSection')"
+        >
+          Ver planos
+        </UButton>
       </div>
     </section>
 
@@ -383,7 +327,7 @@ const faqItems = [
           O que você encontra
         </h2>
         <p class="mt-3 text-body-muted text-base sm:text-lg">
-          Documentos, orientação e acompanhamento — com médicos qualificados,
+          Documentos, orientação e acompanhamento com médicos qualificados,
           onde você estiver.
         </p>
       </div>
@@ -509,31 +453,6 @@ const faqItems = [
       </div>
     </section>
 
-    <!-- PAYMENT METHODS -->
-    <div class="pt-16 sm:pt-20">
-      <div
-        class="grid grid-cols-4 p-4 gap-px border items-center text-center rounded-xl border-accent/70 divide-x divide-accent/70"
-      >
-        <div>
-          <UIcon name="i-ph-lock" class="size-7 lg:size-8" />
-          <div class="text-center sm:text-sm text-[.5rem]">100% seguro</div>
-        </div>
-        <div>
-          <UIcon name="i-ph-pix-logo" class="size-7 lg:size-8" />
-          <div class="text-center sm:text-sm text-[.5rem]">Pix</div>
-        </div>
-        <div>
-          <UIcon name="i-ph-credit-card" class="size-7 lg:size-8" />
-          <div class="text-center sm:text-sm text-[.5rem]">
-            Cartão de crédito
-          </div>
-        </div>
-        <div>
-          <UIcon name="i-ph-barcode" class="size-7 lg:size-8" />
-          <div class="text-center sm:text-sm text-[.5rem]">Boleto bancário</div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
