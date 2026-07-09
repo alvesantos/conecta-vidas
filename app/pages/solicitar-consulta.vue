@@ -4,6 +4,23 @@
       Solicitar consulta
     </h1>
 
+    <div class="flex items-center gap-2 mb-8 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
+      <button
+        class="px-6 py-2 rounded-md text-sm font-medium transition-colors"
+        :class="consultaType === 'humana' ? 'bg-white dark:bg-gray-700 text-primary shadow' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+        @click="consultaType = 'humana'"
+      >
+        Consulta Humana
+      </button>
+      <button
+        class="px-6 py-2 rounded-md text-sm font-medium transition-colors"
+        :class="consultaType === 'vet' ? 'bg-white dark:bg-gray-700 text-primary shadow' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+        @click="consultaType = 'vet'"
+      >
+        Consulta Veterinária
+      </button>
+    </div>
+
     <div v-if="!isLoggedIn" class="w-full flex flex-col items-center">
       <p class="text-body-muted text-center max-w-2xl mb-6 text-sm lg:text-base">
         Faça login para agendar uma consulta diretamente pelo sistema ou clique na imagem abaixo para falar com a nossa equipe pelo WhatsApp.
@@ -15,8 +32,8 @@
         @click="openWhatsApp"
       >
         <img
-          src="/images/img-consulta.png"
-          alt="Solicitar consulta ConectaVet"
+          :src="consultaImage"
+          :alt="consultaAlt"
           class="w-full h-auto object-contain"
         />
       </button>
@@ -87,8 +104,8 @@
           @click="openWhatsApp"
         >
           <img
-            src="/images/img-consulta.png"
-            alt="Solicitar consulta ConectaVet"
+            :src="consultaImage"
+            :alt="consultaAlt"
             class="w-full h-auto object-contain"
           />
         </button>
@@ -110,10 +127,23 @@ const { isLoggedIn } = useAuth();
 const { api } = useApi();
 const toast = useToast();
 
-const WHATSAPP_URL = "https://wa.me/5511978654921?text=" + encodeURIComponent("Oi, gostaria de solicitar uma consulta com a ConectaVet.");
+const consultaType = ref<'humana' | 'vet'>('humana');
+
+const consultaImage = computed(() =>
+  consultaType.value === 'vet' ? '/images/img-consulta-vet.png' : '/images/img-consulta-humana.png'
+);
+
+const consultaAlt = computed(() =>
+  consultaType.value === 'vet' ? 'Solicitar consulta veterinária ConectaVet' : 'Solicitar consulta humana ConectaVet'
+);
+
+const WHATSAPP_URL = computed(() => {
+  const tipo = consultaType.value === 'vet' ? 'veterinária' : 'humana';
+  return "https://wa.me/5511978654921?text=" + encodeURIComponent(`Oi, gostaria de solicitar uma consulta ${tipo} com a ConectaVet.`);
+});
 
 function openWhatsApp() {
-  window.open(WHATSAPP_URL, "_blank", "noopener");
+  window.open(WHATSAPP_URL.value, "_blank", "noopener");
 }
 
 const activeTab = ref<'agendar' | 'whatsapp'>('agendar');
