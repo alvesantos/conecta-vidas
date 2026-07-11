@@ -111,7 +111,7 @@ onMounted(async () => {
         Escolha o plano ideal
       </h2>
       <p class="mt-3 text-body-muted text-base sm:text-lg">
-        Cuidado contínuo para o seu pet, a partir de
+        Cuidado contínuo para o seu animal, a partir de
         <strong class="text-primary dark:text-white">R$ 39,90/mês</strong>.
       </p>
     </div>
@@ -196,7 +196,7 @@ onMounted(async () => {
   <div v-else>
     <UCard>
       <h4 class="lg:block hidden lg:text-2xl font-semibold text-primary dark:text-gray-100 text-center mb-4">
-        Assine e tenha acesso a conteúdos exclusivos de primeiros socorros e cuidados com seu pet.
+        Assine e tenha acesso a conteúdos exclusivos de primeiros socorros e cuidados com seu animal.
       </h4>
       <h4 class="block lg:hidden text-2xl font-semibold text-primary dark:text-gray-100 text-center mb-4">Assine já!</h4>
 
@@ -305,7 +305,7 @@ onMounted(async () => {
         <img src="/maffy_gift.png" class="ml-2 w-[20%] lg:w-[8%] h-auto object-contain lg:mr-20" />
         <div class="flex flex-col justify-center px-4">
           <p class="text-primary dark:text-gray-100 font-bold text-sm lg:text-3xl">PRESENTINHOS INCLUSOS!</p>
-          <p class="text-xs lg:text-xl dark:text-gray-300">Presente Dia do Pai de Pet e Presente Dia da Mãe de Pet pelo MAFFYBOX!</p>
+          <p class="text-xs lg:text-xl dark:text-gray-300">Presente Dia do Pai de Animal e Presente Dia da Mãe de Animal pelo MAFFYBOX!</p>
         </div>
       </div>
     </UCard>

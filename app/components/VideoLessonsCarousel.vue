@@ -30,7 +30,7 @@ function openWhatsApp() {
         </p>
       </div>
 
-      <div class="relative mx-auto w-full max-w-5xl px-8 sm:px-12">
+      <div class="relative mx-auto w-full max-w-5xl px-2 sm:px-12">
         <UCarousel
           v-slot="{ item }"
           arrows
@@ -39,8 +39,8 @@ function openWhatsApp() {
           :items="slides"
           :ui="{
             item: 'basis-full',
-            prev: '-start-6 sm:-start-10',
-            next: '-end-6 sm:-end-10',
+            prev: 'start-1 sm:-start-10',
+            next: 'end-1 sm:-end-10',
           }"
         >
           <div class="px-1">

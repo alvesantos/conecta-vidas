@@ -55,11 +55,11 @@ const route = useRoute()
               <span class="text-sm">(11) 97865-4921</span>
             </a>
             <a
-              href="mailto:suporteconectavet@gmail.com"
+              href="mailto:suporteconectavidas@gmail.com"
               class="flex items-center gap-2 text-white hover:text-white/70 transition-colors"
             >
               <UIcon name="i-heroicons-envelope" class="size-5 shrink-0" />
-              <span class="text-sm">suporteconectavet@gmail.com</span>
+              <span class="text-sm">suporteconectavidas@gmail.com</span>
             </a>
           </div>
 

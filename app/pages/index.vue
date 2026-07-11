@@ -15,7 +15,7 @@ const heroFeatures = [
     icon: "i-heroicons-calendar-days",
     label: "Quando precisar, e onde estiver",
   },
-  { icon: "i-mdi-paw", label: "Foco no bem-estar da família toda" },
+  { icon: "i-mdi-stethoscope", label: "Foco no bem-estar da família toda" },
   { icon: "i-heroicons-academic-cap", label: "Profissionais qualificados" },
 ];
 
@@ -23,7 +23,7 @@ const howItWorks = [
   {
     icon: "i-heroicons-user-plus",
     title: "Cadastre-se",
-    desc: "Crie sua conta em poucos minutos. Cadastrar um pet é opcional e pode ser feito depois.",
+    desc: "Crie sua conta em poucos minutos. Cadastrar um animal é opcional e pode ser feito depois.",
   },
   {
     icon: "i-heroicons-credit-card",
@@ -103,8 +103,8 @@ const faqItems = [
     a: "Sim. O ConectaVidas oferece atendimento para pessoas de todas as idades, desde crianças até idosos, sempre respeitando as necessidades individuais de cada paciente e os critérios de avaliação médica.",
   },
   {
-    q: "Preciso ter um pet para realizar uma consulta médica para mim?",
-    a: "Não. O ConectaVidas oferece telemedicina humana e veterinária de forma independente. Você pode utilizar os serviços médicos mesmo que não possua um pet.",
+    q: "Preciso ter um animal para realizar uma consulta médica para mim?",
+    a: "Não. O ConectaVidas oferece telemedicina humana e veterinária de forma independente. Você pode utilizar os serviços médicos mesmo que não possua um animal.",
   },
   {
     q: "Os profissionais do ConectaVidas são de confiança?",
@@ -112,15 +112,15 @@ const faqItems = [
   },
   {
     q: "Quais casos podem ser atendidos por telemedicina?",
-    a: "A telemedicina é indicada para situações de baixa complexidade ou acompanhamentos, incluindo sintomas leves, renovação de receitas recorrentes, pedidos de exames complementares, acompanhamento de tratamento de condições crônicas, esclarecimento de dúvidas sobre condutas anteriores, orientações gerais de saúde para pacientes humanos e cuidados preventivos para pets, sempre conforme avaliação profissional.",
+    a: "A telemedicina é indicada para situações de baixa complexidade ou acompanhamentos, incluindo sintomas leves, renovação de receitas recorrentes, pedidos de exames complementares, acompanhamento de tratamento de condições crônicas, esclarecimento de dúvidas sobre condutas anteriores, orientações gerais de saúde para pacientes humanos e cuidados preventivos para animais, sempre conforme avaliação profissional.",
   },
   {
-    q: "O que acontece se o meu caso ou o do meu pet for uma urgência?",
+    q: "O que acontece se o meu caso ou o do meu animal for uma urgência?",
     a: "Casos de urgência e emergência não devem ser atendidos por telemedicina. ⚠️ Atenção: situações como acidentes graves, dificuldade respiratória intensa, dor torácica severa ou desmaios exigem atendimento presencial imediato. Nessas situações, a orientação é procurar o pronto-socorro, hospital ou serviço veterinário presencial mais próximo.",
   },
   {
     q: "Como faço para agendar uma consulta?",
-    a: "O agendamento é simples e rápido. Basta escolher a modalidade desejada e clicar no botão “Agendar Consulta”. Você será direcionado imediatamente para o WhatsApp do ConectaVidas, onde nossa equipe de suporte concluirá o agendamento de forma personalizada e humanizada, encontrando o melhor dia e horário para você ou seu pet.",
+    a: "O agendamento é simples e rápido. Basta escolher a modalidade desejada e clicar no botão “Agendar Consulta”. Você será direcionado imediatamente para o WhatsApp do ConectaVidas, onde nossa equipe de suporte concluirá o agendamento de forma personalizada e humanizada, encontrando o melhor dia e horário para você ou seu animal.",
   },
   {
     q: "Como recebo receitas, atestados e relatórios após a consulta?",
@@ -166,16 +166,16 @@ onMounted(() => {
         <p class="text-sm sm:text-base text-primary/80 dark:text-gray-300">
           Uma plataforma de telemedicina que conecta a saúde de toda a família,
           <span class="font-semibold text-primary dark:text-white"
-            >incluindo seus pets.</span
+            >incluindo seus animais.</span
           >
         </p>
       </div>
     </div>
 
     <!-- HERO -->
-    <section class="pt-8 lg:pt-12">
+    <section class="pt-8 lg:pt-12 -mx-4 sm:mx-0">
       <div
-        class="relative overflow-hidden rounded-3xl sm:rounded-4xl bg-primary shadow-2xl lg:min-h-170"
+        class="relative overflow-hidden rounded-none sm:rounded-4xl bg-primary shadow-2xl lg:min-h-170"
       >
         <!-- IMAGEM: banner no topo (mobile/tablet) e fundo absoluto (desktop) -->
         <div
@@ -230,7 +230,7 @@ onMounted(() => {
                 class="justify-center font-semibold px-6 bg-white! text-primary! hover:bg-white/90!"
                 @click="scrollToId('card-pet')"
               >
-                Quero cuidar do meu pet
+                Quero cuidar do meu animal
               </UButton>
               <UButton
                 size="xl"
@@ -249,7 +249,7 @@ onMounted(() => {
               <div
                 v-for="feature in heroFeatures"
                 :key="feature.label"
-                class="flex flex-col items-start gap-2"
+                class="flex flex-col items-center text-center sm:items-start sm:text-left gap-2"
               >
                 <span
                   class="flex items-center justify-center size-9 rounded-full bg-white/15 text-white ring-1 ring-white/20"
@@ -274,7 +274,7 @@ onMounted(() => {
             <p
               class="text-xs sm:text-sm text-primary/80 leading-snug"
             >
-              Você e seu pet merecem cuidados onde estiverem.
+              Você e seu animal merecem cuidados onde estiverem.
             </p>
           </div>
         </div>
@@ -284,19 +284,20 @@ onMounted(() => {
     <!-- CTA ASSINE -->
     <section class="pt-12 sm:pt-16">
       <div
-        class="reveal flex flex-col sm:flex-row sm:items-center justify-center gap-x-3 gap-y-4 text-center"
+        class="reveal flex flex-col items-center sm:flex-row sm:justify-center gap-x-3 gap-y-3 text-center"
       >
         <p class="text-base sm:text-lg text-primary/80 dark:text-gray-300">
-          Segurança para o seu pet por
+          Segurança para você e seu animal por
           <span class="font-semibold text-primary dark:text-white"
             >menos de R$ 2 por dia.</span
           >
         </p>
         <UButton
+          size="xl"
           variant="link"
           color="primary"
           trailing-icon="i-heroicons-arrow-right"
-          class="font-semibold dark:text-sky-400!"
+          class="font-semibold text-base sm:text-lg dark:text-sky-400!"
           @click="scrollToId('pricingSection')"
         >
           Ver planos
@@ -319,7 +320,7 @@ onMounted(() => {
               <UIcon name="i-mdi-paw" class="size-7 sm:size-8" />
             </span>
             <h3 class="hero-title text-xl sm:text-3xl text-accent">
-              Para seu Pet
+              Para seu Animal
             </h3>
           </div>
           <p class="mt-4 text-sm sm:text-base text-primary/70 dark:text-gray-300 leading-relaxed">
@@ -333,7 +334,7 @@ onMounted(() => {
             class="mt-6 self-start font-semibold px-6 dark:bg-accent! dark:text-white! dark:hover:bg-accent/85!"
             trailing-icon="i-heroicons-arrow-right"
           >
-            Conhecer serviços para pets
+            Conhecer serviços para animais
           </UButton>
         </div>
 
@@ -376,13 +377,8 @@ onMounted(() => {
     <!-- SERVIÇOS / TÓPICOS -->
     <section class="pt-12 sm:pt-20">
       <div class="reveal text-center max-w-2xl mx-auto">
-        <span
-          class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
-        >
-          Tudo em um só lugar
-        </span>
         <h2
-          class="hero-title mt-3 sm:mt-4 text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
         >
           O que você encontra
         </h2>
@@ -419,18 +415,13 @@ onMounted(() => {
     <!-- COMO FUNCIONA -->
     <section class="pt-12 sm:pt-20">
       <div class="reveal text-center max-w-2xl mx-auto">
-        <span
-          class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
-        >
-          Simples assim
-        </span>
         <h2
-          class="hero-title mt-3 sm:mt-4 text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
         >
           Como funciona
         </h2>
         <p class="mt-3 text-body-muted text-sm sm:text-lg">
-          Do cadastro à consulta, em poucos minutos, para o seu pet e para você.
+          Do cadastro à consulta, em poucos minutos, para o seu animal e para você.
         </p>
       </div>
 
@@ -481,13 +472,8 @@ onMounted(() => {
     <!-- FAQ -->
     <section class="pt-12 sm:pt-20">
       <div class="reveal text-center max-w-2xl mx-auto">
-        <span
-          class="inline-flex items-center rounded-full bg-accent/10 dark:bg-white/10 text-accent dark:text-white text-xs font-semibold tracking-wide px-3.5 py-1.5 uppercase"
-        >
-          Tire suas dúvidas
-        </span>
         <h2
-          class="hero-title mt-3 sm:mt-4 text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
         >
           Perguntas frequentes
         </h2>
