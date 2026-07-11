@@ -182,7 +182,7 @@ onMounted(() => {
           class="relative h-56 sm:h-80 lg:absolute lg:inset-0 lg:h-auto"
         >
           <div
-            class="absolute inset-0 bg-[url('/background/background_hero_best.png')] bg-cover bg-position-[72%_20%] sm:bg-position-[62%_25%] lg:bg-position-[58%_center]"
+            class="absolute inset-0 bg-[url('/background/background_hero_best.png')] bg-cover bg-position-[72%_20%] sm:bg-position-[62%_25%] lg:bg-position-[58%_center] lg:scale-x-[-1]"
           />
           <!-- Fade inferior p/ fundir a imagem no bloco (só mobile/tablet) -->
           <div
@@ -190,10 +190,10 @@ onMounted(() => {
           />
           <!-- Overlays só no desktop -->
           <div
-            class="hidden lg:block absolute inset-0 bg-linear-to-r from-primary from-5% via-primary/55 via-45% to-transparent to-80%"
+            class="hidden lg:block absolute inset-0 bg-linear-to-r from-primary from-0% via-primary/45 via-28% to-transparent to-55%"
           />
           <div
-            class="hidden lg:block absolute inset-0 bg-linear-to-t from-primary/35 via-transparent to-transparent"
+            class="hidden lg:block absolute inset-0 bg-linear-to-t from-primary/25 via-transparent to-transparent"
           />
         </div>
 
