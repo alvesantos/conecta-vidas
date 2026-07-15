@@ -31,6 +31,11 @@ const navItems: NavItem[] = [
     icon: "i-mdi-truck-delivery",
   },
   {
+    label: "Parcerias",
+    to: "/parcerias",
+    icon: "i-mdi-handshake",
+  },
+  {
     label: "Produtos",
     to: "https://maffy.com.br",
     target: "_blank",
