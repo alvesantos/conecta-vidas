@@ -147,3 +147,15 @@ export function portalForUser(type: UserType): PortalDef {
   if (type === 'admin') return PORTALS.adm
   return PORTALS.cliente
 }
+
+export function userTypeLabel(type: UserType): string {
+  if (type === 'medico') return 'Médico'
+  if (type === 'veterinario') return 'Veterinário'
+  if (type === 'admin') return 'Administrador'
+  return 'Cliente'
+}
+
+export function portalsForUser(type: UserType): PortalDef[] {
+  return PORTAL_KEYS.map(key => PORTALS[key])
+    .filter(portal => portal.allowedTypes.includes(type))
+}

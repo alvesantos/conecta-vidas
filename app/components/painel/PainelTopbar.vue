@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PORTALS, type PortalKey } from '~/config/portals'
+import { PORTALS, portalsForUser, userTypeLabel, type PortalKey } from '~/config/portals'
 
 const props = defineProps<{ portal: PortalKey }>()
 defineEmits<{ menu: [] }>()
@@ -13,11 +13,20 @@ const currentItem = computed(() =>
     .find(item => route.path === item.to || route.path.startsWith(`${item.to}/`)),
 )
 const initials = computed(() => user.value?.name.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')
-const accountItems = computed(() => [[
-  { label: 'Voltar ao site', icon: 'i-heroicons-arrow-left-circle', to: '/' },
-], [
-  { label: 'Sair', icon: 'i-heroicons-arrow-left-on-rectangle', onSelect: logout },
-]])
+const roleLabel = computed(() => user.value ? userTypeLabel(user.value.type) : '')
+const accountItems = computed(() => [
+  user.value && portalsForUser(user.value.type).length > 1
+    ? portalsForUser(user.value.type).map(portal => ({
+        label: portal.label,
+        icon: portal.icon,
+        to: portal.home,
+      }))
+    : [],
+  [
+    { label: 'Voltar ao site', icon: 'i-heroicons-arrow-left-circle', to: '/' },
+    { label: 'Sair', icon: 'i-heroicons-arrow-left-on-rectangle', onSelect: logout },
+  ],
+])
 </script>
 
 <template>
@@ -31,7 +40,10 @@ const accountItems = computed(() => [[
     <UDropdownMenu :items="accountItems" :content="{ align: 'end' }">
       <button class="flex min-h-11 items-center gap-2 rounded-full px-1.5 pr-3 hover:bg-black/5 dark:hover:bg-white/10">
         <span class="flex size-8 items-center justify-center rounded-full bg-[var(--portal-accent)] text-xs font-semibold text-white">{{ initials }}</span>
-        <span class="hidden max-w-36 truncate text-sm font-medium text-body-strong sm:block">{{ user?.name }}</span>
+        <span class="hidden min-w-0 sm:block">
+          <span class="block max-w-36 truncate text-sm font-medium leading-4 text-body-strong">{{ user?.name }}</span>
+          <span class="block text-[11px] leading-4 text-body-muted">{{ roleLabel }} · {{ definition.loginLabel }}</span>
+        </span>
         <UIcon name="i-heroicons-chevron-down" class="size-4 text-body-muted" />
       </button>
     </UDropdownMenu>

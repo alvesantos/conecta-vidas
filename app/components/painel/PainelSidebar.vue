@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PORTALS, type PortalKey } from '~/config/portals'
+import { PORTALS, portalsForUser, type PortalKey } from '~/config/portals'
 
 const props = defineProps<{
   portal: PortalKey
@@ -9,6 +9,13 @@ const props = defineProps<{
 
 defineEmits<{ collapse: []; navigate: [] }>()
 const definition = computed(() => PORTALS[props.portal])
+const { user } = useAuth()
+const availablePortals = computed(() => user.value ? portalsForUser(user.value.type) : [])
+const portalItems = computed(() => [availablePortals.value.map(portal => ({
+  label: portal.label,
+  icon: portal.icon,
+  to: portal.home,
+}))])
 </script>
 
 <template>
@@ -43,6 +50,12 @@ const definition = computed(() => PORTALS[props.portal])
     </nav>
 
     <div class="space-y-1 border-t border-gray-200 p-3 dark:border-white/10">
+      <UDropdownMenu v-if="availablePortals.length > 1" :items="portalItems" :content="{ side: 'right', align: 'end' }">
+        <button class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 dark:hover:bg-white/10" :class="{ 'justify-center': collapsed }" :aria-label="collapsed ? 'Trocar de portal' : undefined">
+          <UIcon name="i-heroicons-arrows-right-left" class="size-5 shrink-0" />
+          <span v-if="!collapsed">Trocar de portal</span>
+        </button>
+      </UDropdownMenu>
       <NuxtLink to="/" class="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 dark:hover:bg-white/10" :class="{ 'justify-center': collapsed }">
         <UIcon name="i-heroicons-arrow-left-circle" class="size-5 shrink-0" />
         <span v-if="!collapsed">Voltar ao site</span>

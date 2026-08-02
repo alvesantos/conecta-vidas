@@ -9,7 +9,8 @@ interface AdminUserRow {
   email: string;
   cpf: string | null;
   address: string | null;
-  type: 'tutor' | 'admin' | 'veterinario';
+  type: 'tutor' | 'admin' | 'veterinario' | 'medico';
+  status?: 'pending' | 'active' | 'rejected' | 'suspended';
   created_at: string;
   subscription_id: string | null;
   plan_id: string | null;
@@ -53,7 +54,7 @@ onMounted(async () => {
 // --- Editar usuário ---
 const editOpen = ref(false);
 const editTarget = ref<AdminUserRow | null>(null);
-const editForm = reactive({ name: '', email: '', type: 'tutor' as 'tutor' | 'admin' | 'veterinario', address: '' });
+const editForm = reactive({ name: '', email: '', type: 'tutor' as AdminUserRow['type'], address: '' });
 const editSaving = ref(false);
 const editError = ref('');
 
@@ -160,16 +161,18 @@ async function clearPlan() {
   }
 }
 
-function typeLabel(type: 'tutor' | 'admin' | 'veterinario') {
+function typeLabel(type: AdminUserRow['type']) {
   if (type === 'admin') return 'Administrador';
+  if (type === 'medico') return 'Médico';
   if (type === 'veterinario') return 'Veterinário';
-  return 'Responsável';
+  return 'Cliente';
 }
 
 const columns = [
   { accessorKey: 'name', header: 'Nome' },
   { accessorKey: 'email', header: 'E-mail' },
   { accessorKey: 'type', header: 'Tipo' },
+  { accessorKey: 'status', header: 'Status' },
   { accessorKey: 'plan_title', header: 'Plano' },
   { id: 'actions', header: '' },
 ];
@@ -180,7 +183,7 @@ const columns = [
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Usuários</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Lista completa de responsáveis, veterinários e administradores</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Lista completa de clientes, médicos, veterinários e administradores</p>
       </div>
     </div>
 
@@ -209,7 +212,15 @@ const columns = [
         <template #type-cell="{ row }">
           <UBadge
             :label="typeLabel(row.original.type)"
-            :color="row.original.type === 'admin' ? 'purple' : row.original.type === 'veterinario' ? 'success' : 'info'"
+            :color="row.original.type === 'admin' ? 'purple' : row.original.type === 'medico' ? 'warning' : row.original.type === 'veterinario' ? 'success' : 'info'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #status-cell="{ row }">
+          <UBadge
+            :label="row.original.status === 'pending' ? 'Pendente' : row.original.status === 'rejected' ? 'Rejeitado' : row.original.status === 'suspended' ? 'Suspenso' : 'Ativo'"
+            :color="row.original.status === 'pending' ? 'warning' : row.original.status === 'active' || !row.original.status ? 'success' : 'error'"
             variant="subtle"
           />
         </template>
@@ -267,7 +278,8 @@ const columns = [
             <USelect
               v-model="editForm.type"
               :items="[
-                { label: 'Responsável', value: 'tutor' },
+                { label: 'Cliente', value: 'tutor' },
+                { label: 'Médico', value: 'medico' },
                 { label: 'Veterinário', value: 'veterinario' },
                 { label: 'Administrador', value: 'admin' },
               ]"

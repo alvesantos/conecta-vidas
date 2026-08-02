@@ -5,7 +5,7 @@ const { api } = useApi();
 
 interface AdminUserRow {
   id: string;
-  type: 'tutor' | 'admin';
+  type: 'tutor' | 'admin' | 'medico' | 'veterinario';
   plan_title?: string | null;
 }
 
@@ -49,6 +49,8 @@ onMounted(async () => {
 const totalUsers = computed(() => users.value.length);
 const totalAdmins = computed(() => users.value.filter((u) => u.type === 'admin').length);
 const totalTutors = computed(() => users.value.filter((u) => u.type === 'tutor').length);
+const totalDoctors = computed(() => users.value.filter((u) => u.type === 'medico').length);
+const totalVets = computed(() => users.value.filter((u) => u.type === 'veterinario').length);
 const totalSubscribed = computed(() => users.value.filter((u) => !!u.plan_title).length);
 
 function calcAge(dateStr: string) {
@@ -73,7 +75,7 @@ const birthdayColumns = [
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Backoffice</h1>
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Painel Administrativo</h1>
     <p class="text-gray-500 dark:text-gray-200 text-sm mt-1">Visão geral do sistema</p>
 
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -109,11 +111,11 @@ const birthdayColumns = [
       </NuxtLink>
     </div>
 
-    <div v-if="pending" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-      <div v-for="i in 6" :key="i" class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 animate-pulse h-28" />
+    <div v-if="pending" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+      <div v-for="i in 8" :key="i" class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 animate-pulse h-28" />
     </div>
 
-    <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+    <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
         <p class="text-sm text-gray-500 dark:text-gray-200">Usuários</p>
         <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ totalUsers }}</p>
@@ -125,6 +127,14 @@ const birthdayColumns = [
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
         <p class="text-sm text-gray-500 dark:text-gray-200">Administradores</p>
         <p class="text-3xl font-bold text-primary dark:text-white mt-2">{{ totalAdmins }}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-200">Médicos</p>
+        <p class="text-3xl font-bold text-green-600 mt-2">{{ totalDoctors }}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 dark:text-gray-200">Veterinários</p>
+        <p class="text-3xl font-bold text-accent mt-2">{{ totalVets }}</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
         <p class="text-sm text-gray-500 dark:text-gray-200">Com plano</p>
