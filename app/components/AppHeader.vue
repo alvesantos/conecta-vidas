@@ -9,7 +9,9 @@ interface NavItem {
 const menuOpen = ref(false);
 const route = useRoute();
 
-const { user, isLoggedIn, isAdmin, isVet, logout } = useAuth();
+import { portalForUser } from "~/config/portals";
+
+const { user, isLoggedIn, logout } = useAuth();
 
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
@@ -60,24 +62,14 @@ const accountItems = computed<NavItem[]>(() => {
       },
     ];
   }
-  const items: NavItem[] = [
-    { label: "Meus Animais", to: "/meu-pet", icon: "i-mdi-paw" },
+  if (!user.value) return [];
+  const portal = portalForUser(user.value.type);
+  return [
+    { label: portal.label, to: portal.home, icon: portal.icon },
+    ...(user.value.type === "tutor"
+      ? [{ label: "Meus Animais", to: "/painel/cliente/pets", icon: "i-mdi-paw" }]
+      : []),
   ];
-  if (isAdmin.value) {
-    items.push({
-      label: "Backoffice",
-      to: "/backoffice",
-      icon: "i-heroicons-shield-check",
-    });
-  }
-  if (isVet.value) {
-    items.push({
-      label: "Painel Veterinário",
-      to: "/veterinario/consultas",
-      icon: "i-mdi-stethoscope",
-    });
-  }
-  return items;
 });
 
 // Itens do menu suspenso (avatar) no desktop

@@ -1,4 +1,6 @@
-export type UserType = 'tutor' | 'admin' | 'veterinario'
+import type { UserType } from '~/config/portals'
+
+export type { UserType } from '~/config/portals'
 
 export interface AuthUser {
   id: string
@@ -6,6 +8,8 @@ export interface AuthUser {
   email: string
   type: UserType
   crmv?: string | null
+  crm?: string | null
+  status?: 'pending' | 'active' | 'rejected' | 'suspended'
 }
 
 interface AuthResponse {
