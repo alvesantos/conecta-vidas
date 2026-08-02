@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ middleware: 'auth' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'cliente' });
 
 interface Pet {
   id: string;

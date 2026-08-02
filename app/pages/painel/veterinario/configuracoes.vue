@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'veterinario' });
 
 interface VetProfile {
   id: string;

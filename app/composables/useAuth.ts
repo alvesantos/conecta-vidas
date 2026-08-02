@@ -1,4 +1,5 @@
 import type { UserType } from '~/config/portals'
+import type { PortalKey } from '~/config/portals'
 
 export type { UserType } from '~/config/portals'
 
@@ -53,11 +54,11 @@ export function useAuth() {
     }
   }
 
-  async function login(email: string, password: string): Promise<void> {
+  async function login(email: string, password: string, portal?: PortalKey): Promise<void> {
     const config = useRuntimeConfig()
     const data = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/login`, {
       method: 'POST',
-      body: { email, password },
+      body: { email, password, portal },
       // Necessário para o navegador aceitar/enviar os cookies de sessão.
       credentials: 'include',
     })

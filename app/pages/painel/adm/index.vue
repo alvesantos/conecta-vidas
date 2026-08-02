@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 const { api } = useApi();
 
@@ -78,7 +78,7 @@ const birthdayColumns = [
 
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
       <NuxtLink
-        to="/backoffice/usuarios"
+        to="/painel/adm/usuarios"
         class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
       >
         <UIcon name="i-heroicons-users" class="size-8 text-accent" />
@@ -88,7 +88,7 @@ const birthdayColumns = [
         </div>
       </NuxtLink>
       <NuxtLink
-        to="/backoffice/pets"
+        to="/painel/adm/pets"
         class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
       >
         <UIcon name="i-mdi-paw" class="size-8 text-accent" />
@@ -98,7 +98,7 @@ const birthdayColumns = [
         </div>
       </NuxtLink>
       <NuxtLink
-        to="/backoffice/planos"
+        to="/painel/adm/planos"
         class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
       >
         <UIcon name="i-heroicons-credit-card" class="size-8 text-accent" />

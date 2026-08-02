@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Plan } from '../../interfaces/plans';
 
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 interface AdminUserRow {
   id: string;

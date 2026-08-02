@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { vMaska } from 'maska/vue';
 
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 interface VetRow {
   id: string;

@@ -44,6 +44,23 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/css/main.css"],
+  routeRules: {
+    "/backoffice": {
+      redirect: { to: "/painel/adm", statusCode: 301 },
+    },
+    "/backoffice/**": {
+      redirect: { to: "/painel/adm/**", statusCode: 301 },
+    },
+    "/veterinario": {
+      redirect: { to: "/painel/veterinario/consultas", statusCode: 301 },
+    },
+    "/veterinario/**": {
+      redirect: { to: "/painel/veterinario/**", statusCode: 301 },
+    },
+    "/meu-pet": {
+      redirect: { to: "/painel/cliente/pets", statusCode: 301 },
+    },
+  },
   vite: {
     css: {
       devSourcemap: false,

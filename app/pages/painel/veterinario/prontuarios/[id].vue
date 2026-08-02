@@ -5,7 +5,7 @@
         icon="i-heroicons-arrow-left"
         color="neutral"
         variant="ghost"
-        to="/veterinario/prontuarios"
+        to="/painel/veterinario/prontuarios"
       />
       <div>
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'veterinario' });
 
 const route = useRoute();
 const tutorId = route.params.id as string;

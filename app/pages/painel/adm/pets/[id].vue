@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 interface AdminPetDetail {
   id: string;
@@ -67,7 +67,7 @@ onMounted(async () => {
 
 <template>
   <div class="max-w-4xl">
-    <NuxtLink to="/backoffice/pets" class="text-sm text-accent hover:underline flex items-center gap-1">
+    <NuxtLink to="/painel/adm/pets" class="text-sm text-accent hover:underline flex items-center gap-1">
       <UIcon name="i-heroicons-arrow-left" class="size-4" /> Voltar para a lista
     </NuxtLink>
 

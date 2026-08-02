@@ -30,7 +30,7 @@
               color="primary"
               variant="soft"
               icon="i-heroicons-arrow-right"
-              :to="`/veterinario/prontuarios/${row.original.tutor_id}`"
+              :to="`/painel/veterinario/prontuarios/${row.original.tutor_id}`"
             />
           </div>
         </template>
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'veterinario' });
 
 const { api } = useApi();
 

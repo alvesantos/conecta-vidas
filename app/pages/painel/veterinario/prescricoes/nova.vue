@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'veterinario' });
 
 interface Responsible {
   id: string;
@@ -186,7 +186,7 @@ async function downloadPdf() {
 <template>
   <div>
     <NuxtLink
-      to="/veterinario/prescricoes"
+      to="/painel/veterinario/prescricoes"
       class="text-sm text-accent hover:underline flex items-center gap-1 mb-4"
     >
       <UIcon name="i-heroicons-arrow-left" class="size-4" /> Voltar para prescrições

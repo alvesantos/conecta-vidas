@@ -122,7 +122,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 interface ConsultationRow {
   id: string;

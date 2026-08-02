@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 interface AdminPetRow {
   id: string;
@@ -59,7 +59,7 @@ onMounted(async () => {
         :loading="pending"
         class="w-full"
         :ui="{ tbody: '[&>tr]:cursor-pointer' }"
-        @select="(_, row) => $router.push(`/backoffice/pets/${row.original.id}`)"
+        @select="(_, row) => $router.push(`/painel/adm/pets/${row.original.id}`)"
       >
         <template #name-cell="{ row }">
           <div class="flex items-center gap-3">

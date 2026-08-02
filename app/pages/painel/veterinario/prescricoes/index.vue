@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'veterinario', middleware: 'veterinario' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'veterinario' });
 
 interface PrescriptionRow {
   id: string;
@@ -136,7 +136,7 @@ const columns = [
         icon="i-heroicons-plus"
         color="primary"
         class="dark:text-white"
-        to="/veterinario/prescricoes/nova"
+        to="/painel/veterinario/prescricoes/nova"
       />
     </div>
 

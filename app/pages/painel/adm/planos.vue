@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Plan, Perk } from '../../interfaces/plans';
 
-definePageMeta({ layout: 'backoffice', middleware: 'admin' });
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 const { listAdmin, createPlan, updatePlan, deletePlan } = usePlans();
 

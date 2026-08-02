@@ -232,7 +232,7 @@ async function finishWithoutPet() {
 
   try {
     await registerTutor();
-    await router.push("/meu-pet");
+    await router.push("/painel/cliente/pets");
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
     apiError.value =
@@ -274,7 +274,7 @@ async function submit() {
       body: formData,
     });
 
-    await router.push("/meu-pet");
+    await router.push("/painel/cliente/pets");
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
     apiError.value =
