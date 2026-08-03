@@ -18,8 +18,26 @@ const portal = computed(() => PORTALS[activePortal.value])
 const registerLink = computed(() =>
   activePortal.value === 'cliente'
     ? '/cadastro'
-    : `/cadastro/profissional?tipo=${activePortal.value}`,
+    : `/cadastro/${activePortal.value}`,
 )
+const registerLabel = computed(() => {
+  if (activePortal.value === 'medico') return 'Cadastre-se como médico'
+  if (activePortal.value === 'veterinario') return 'Cadastre-se como veterinário'
+  return 'Cadastre-se como cliente'
+})
+
+watch(activePortal, async (value) => {
+  errorMsg.value = ''
+  accountStatus.value = null
+  await navigateTo({
+    path: '/login',
+    query: {
+      ...route.query,
+      portal: value,
+      redirect: undefined,
+    },
+  }, { replace: true })
+})
 
 // Aviso quando a sessão expirou e o usuário foi redirecionado para cá.
 const sessionExpired = computed(() => route.query.expired === '1')
@@ -37,7 +55,7 @@ async function handleLogin() {
   try {
     await login(email.value, password.value, activePortal.value)
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : null
-    if (redirect) {
+    if (redirect && (redirect === portal.value.base || redirect.startsWith(`${portal.value.base}/`))) {
       await navigateTo(redirect)
     } else {
       await navigateTo(portal.value.home)
@@ -60,7 +78,9 @@ async function handleLogin() {
     <div class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-6 sm:p-10 lg:p-14 flex flex-col gap-7">
       <div class="flex flex-col items-center gap-3">
         <img src="/conecta-icon.png" alt="ConectaVidas" class="h-36 sm:h-44" />
-        <p class="text-sm text-gray-500 dark:text-gray-400">Acesse sua conta</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Entrar como {{ portal.loginLabel }}
+        </p>
       </div>
 
       <div class="grid grid-cols-2 gap-1 rounded-xl bg-gray-100 p-1 dark:bg-white/5 sm:grid-cols-4" aria-label="Escolha o portal">
@@ -70,6 +90,7 @@ async function handleLogin() {
           class="flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-medium transition-colors"
           :class="activePortal === key ? 'bg-white text-body-strong shadow-sm dark:bg-white/10' : 'text-body-muted hover:text-body-strong'"
           :aria-pressed="activePortal === key"
+          type="button"
           @click="activePortal = key"
         >
           <UIcon :name="PORTALS[key].icon" class="size-4 shrink-0" />
@@ -138,12 +159,11 @@ async function handleLogin() {
       />
 
       <p v-if="activePortal !== 'adm'" class="text-center text-sm text-gray-500 dark:text-gray-400">
-        Não tem uma conta?
         <NuxtLink :to="registerLink" class="font-medium hover:underline" :style="{ color: portal.accent }">
-          Cadastre-se
+          {{ registerLabel }}
         </NuxtLink>
         <span v-if="activePortal === 'medico' || activePortal === 'veterinario'" class="mt-1 block text-xs">
-          O cadastro profissional passa por aprovação.
+          Cadastro profissional com {{ activePortal === 'medico' ? 'CRM' : 'CRMV' }} e aprovação administrativa.
         </span>
       </p>
     </div>

@@ -54,9 +54,8 @@ const navItems: NavItem[] = [
 const accountItems = computed<NavItem[]>(() => {
   if (!isLoggedIn.value) {
     return [
-      { label: "Cadastro", to: "/cadastro", icon: "i-heroicons-user-plus" },
       {
-        label: "Login",
+        label: "Acesso",
         to: "/login",
         icon: "i-heroicons-arrow-right-on-rectangle",
       },
@@ -185,15 +184,7 @@ watch(
               size="sm"
               class="!text-primary/80 hover:!bg-primary/5 dark:!text-white dark:hover:!bg-white/10"
             >
-              Login
-            </UButton>
-            <UButton
-              to="/cadastro"
-              color="primary"
-              size="sm"
-              class="!bg-accent !text-white hover:!bg-accent/90 dark:!bg-accent dark:!text-white dark:hover:!bg-accent/85"
-            >
-              Cadastro
+              Acesso
             </UButton>
           </template>
 

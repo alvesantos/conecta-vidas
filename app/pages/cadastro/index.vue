@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ noPadding: true });
+definePageMeta({ noPadding: true })
 import { vMaska } from "maska/vue";
 
 const router = useRouter();
@@ -132,20 +132,9 @@ function validateStep1() {
     valid = false;
   } else clearError("tutorEmail");
 
-  if (!tutorZipCode.value || tutorZipCode.value.length < 8) {
-    setError("tutorZipCode", "CEP obrigatório");
-    valid = false;
-  } else clearError("tutorZipCode");
-
-  if (!tutorHouseNumber.value.trim()) {
-    setError("tutorHouseNumber", "Número obrigatório");
-    valid = false;
-  } else clearError("tutorHouseNumber");
-
-  if (!tutorAddress.value.trim()) {
-    setError("tutorAddress", "Endereço obrigatório");
-    valid = false;
-  } else clearError("tutorAddress");
+  clearError("tutorZipCode");
+  clearError("tutorHouseNumber");
+  clearError("tutorAddress");
 
   if (!tutorPassword.value) {
     setError("tutorPassword", "Senha obrigatória");
@@ -335,7 +324,7 @@ async function submit() {
           <span
             class="text-xs font-medium"
             :class="currentStep >= 2 ? 'text-accent' : 'text-gray-400'"
-            >Animal</span
+            >Animal (opcional)</span
           >
         </div>
       </div>
@@ -389,7 +378,7 @@ async function submit() {
               v-model="tutorZipCode"
               v-maska="'#####-###'"
               type="text"
-              placeholder="CEP *"
+              placeholder="CEP (opcional)"
               size="lg"
               icon="i-heroicons-map"
               class="w-full"
@@ -399,7 +388,7 @@ async function submit() {
             <UInput
               v-model="tutorHouseNumber"
               type="text"
-              placeholder="Número *"
+              placeholder="Número (opcional)"
               size="lg"
               icon="i-heroicons-home"
               class="w-full"
@@ -411,7 +400,7 @@ async function submit() {
           <UInput
             v-model="tutorAddress"
             type="text"
-            placeholder="Rua/Bairro/Complemento *"
+            placeholder="Rua/Bairro/Complemento (opcional)"
             size="lg"
             icon="i-heroicons-map-pin"
           />
@@ -715,11 +704,12 @@ async function submit() {
         </div>
 
         <UButton
-          label="Finalizar sem cadastrar pet"
+          label="Criar conta sem cadastrar animal"
           size="lg"
-          variant="ghost"
+          variant="outline"
           block
-          class="justify-center dark:text-white dark:hover:bg-white/10"
+          leading-icon="i-heroicons-user-check"
+          class="justify-center dark:text-white dark:border-white/40 dark:hover:bg-white/10"
           :disabled="loading"
           @click="finishWithoutPet"
         />

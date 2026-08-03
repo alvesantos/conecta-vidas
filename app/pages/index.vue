@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { portalForUser } from "~/config/portals";
+
 definePageMeta({
   noPadding: true,
 });
@@ -18,6 +20,13 @@ const heroFeatures = [
   { icon: "i-mdi-stethoscope", label: "Foco no bem-estar da família toda" },
   { icon: "i-heroicons-academic-cap", label: "Profissionais qualificados" },
 ];
+
+const { user, isLoggedIn } = useAuth();
+const clientPortalTarget = computed(() =>
+  isLoggedIn.value && user.value
+    ? portalForUser(user.value.type).home
+    : "/login?portal=cliente&redirect=/painel/cliente",
+);
 
 const howItWorks = [
   {
@@ -224,23 +233,23 @@ onMounted(() => {
             <!-- BUTTONS -->
             <div class="mt-6 sm:mt-7 flex flex-col sm:flex-row gap-3">
               <UButton
+                :to="clientPortalTarget"
                 size="xl"
                 color="primary"
                 trailing-icon="i-mdi-paw"
                 class="justify-center font-semibold px-6 bg-white! text-primary! hover:bg-white/90!"
-                @click="scrollToId('card-pet')"
               >
-                Quero cuidar do meu animal
+                Acessar cuidado animal
               </UButton>
               <UButton
+                :to="clientPortalTarget"
                 size="xl"
                 color="primary"
                 variant="outline"
                 trailing-icon="i-heroicons-user"
                 class="justify-center font-semibold px-6 text-white! ring-white/45! hover:bg-white/10!"
-                @click="scrollToId('card-voce')"
               >
-                Quero cuidar de mim
+                Acessar cuidado humano
               </UButton>
             </div>
 
@@ -328,13 +337,13 @@ onMounted(() => {
             para todas as fases da vida do seu melhor amigo.
           </p>
           <UButton
-            to="/solicitar-consulta"
+            :to="clientPortalTarget"
             size="lg"
             color="primary"
             class="mt-6 self-start font-semibold px-6 dark:bg-accent! dark:text-white! dark:hover:bg-accent/85!"
             trailing-icon="i-heroicons-arrow-right"
           >
-            Conhecer serviços para animais
+            Ir para o Portal do Cliente
           </UButton>
         </div>
 
@@ -361,14 +370,13 @@ onMounted(() => {
             programas de prevenção para você e sua família.
           </p>
           <UButton
-            to="https://wa.me/5511978654921?text=Oi%2C%20gostaria%20de%20conhecer%20os%20servi%C3%A7os%20de%20telemedicina%20humana"
-            target="_blank"
+            :to="clientPortalTarget"
             size="lg"
             color="success"
             class="mt-6 self-start font-semibold px-6"
             trailing-icon="i-heroicons-arrow-right"
           >
-            Conhecer serviços para você
+            Ir para o Portal do Cliente
           </UButton>
         </div>
       </div>

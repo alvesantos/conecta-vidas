@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { vMaska } from 'maska/vue'
 
-definePageMeta({ noPadding: true })
+definePageMeta({
+  noPadding: true,
+  validate: route => ['medico', 'veterinario'].includes(String(route.params.tipo)),
+})
 
 type ProfessionalType = 'medico' | 'veterinario'
 
 const route = useRoute()
 const config = useRuntimeConfig()
-const initialType: ProfessionalType = route.query.tipo === 'veterinario' ? 'veterinario' : 'medico'
-const type = ref<ProfessionalType>(initialType)
+const type = computed<ProfessionalType>(() =>
+  route.params.tipo === 'veterinario' ? 'veterinario' : 'medico',
+)
 const loading = ref(false)
 const completed = ref(false)
 const errorMsg = ref('')
@@ -33,11 +37,6 @@ const typeOptions = [
 ]
 const selected = computed(() => typeOptions.find(option => option.value === type.value)!)
 const registrationLabel = computed(() => type.value === 'medico' ? 'CRM' : 'CRMV')
-
-watch(type, () => {
-  form.registration = ''
-  delete errors.registration
-})
 
 function isValidCpf(value: string) {
   const cpf = value.replace(/\D/g, '')
@@ -105,29 +104,26 @@ async function submit() {
           Seus dados foram enviados para análise. Você poderá acessar o Portal {{ selected.label }}
           assim que o cadastro for aprovado.
         </p>
-        <UButton to="/login" label="Voltar ao login" class="mt-7" :style="{ backgroundColor: selected.accent }" />
+        <UButton :to="`/login?portal=${type}`" label="Voltar ao acesso" class="mt-7" :style="{ backgroundColor: selected.accent }" />
       </div>
 
       <form v-else class="space-y-6" @submit.prevent="submit">
         <div class="text-center">
           <img src="/conecta-icon.png" alt="ConectaVidas" class="mx-auto h-32" />
-          <h1 class="text-2xl font-bold text-body-strong">Cadastro profissional</h1>
-          <p class="mt-1 text-sm text-body-muted">Escolha sua área e envie os dados para credenciamento.</p>
+          <h1 class="text-2xl font-bold text-body-strong">Cadastro de {{ selected.label }}</h1>
+          <p class="mt-1 text-sm text-body-muted">
+            Envie seus dados e {{ registrationLabel }} para credenciamento profissional.
+          </p>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 rounded-xl bg-gray-100 p-1 dark:bg-white/5">
-          <button
-            v-for="option in typeOptions"
-            :key="option.value"
-            type="button"
-            class="flex min-h-12 items-center justify-center gap-2 rounded-lg text-sm font-medium"
-            :class="type === option.value ? 'bg-white shadow-sm dark:bg-white/10' : 'text-body-muted'"
-            :aria-pressed="type === option.value"
-            @click="type = option.value"
-          >
-            <UIcon :name="option.icon" class="size-5" />
-            {{ option.label }}
-          </button>
+        <div class="flex items-center gap-3 rounded-xl border p-4" :style="{ borderColor: `${selected.accent}55` }">
+          <span class="flex size-11 items-center justify-center rounded-full text-white" :style="{ backgroundColor: selected.accent }">
+            <UIcon :name="selected.icon" class="size-6" />
+          </span>
+          <div>
+            <p class="font-semibold text-body-strong">{{ selected.label }}</p>
+            <p class="text-xs text-body-muted">Cadastro sujeito à validação do {{ registrationLabel }}.</p>
+          </div>
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
