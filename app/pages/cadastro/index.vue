@@ -14,6 +14,9 @@ const apiError = ref("");
 const tutorName = ref("");
 const tutorCpf = ref("");
 const tutorEmail = ref("");
+const tutorPhone = ref("");
+const tutorBirthDate = ref("");
+const tutorBiologicalSex = ref("");
 const tutorZipCode = ref("");
 const tutorHouseNumber = ref("");
 const tutorAddress = ref("");
@@ -64,6 +67,13 @@ const sizeOptions = [
 const booleanOptions = [
   { label: "Sim", value: "sim" },
   { label: "Não", value: "nao" },
+];
+
+const biologicalSexOptions = [
+  { label: "Feminino", value: "feminino" },
+  { label: "Masculino", value: "masculino" },
+  { label: "Intersexo", value: "intersexo" },
+  { label: "Prefiro não informar", value: "nao_informado" },
 ];
 
 const petAge = computed(() => {
@@ -152,7 +162,7 @@ function validateStep1() {
   return valid;
 }
 
-function validateStep2() {
+function validatePet() {
   let valid = true;
 
   if (!petName.value.trim()) {
@@ -202,11 +212,18 @@ function goToStep2() {
   if (validateStep1()) currentStep.value = 2;
 }
 
+function goToStep3() {
+  currentStep.value = 3;
+}
+
 async function registerTutor() {
   await register({
     name: tutorName.value,
     cpf: tutorCpf.value,
     email: tutorEmail.value,
+    phone: tutorPhone.value || undefined,
+    birth_date: tutorBirthDate.value || undefined,
+    biological_sex: tutorBiologicalSex.value || undefined,
     zip_code: tutorZipCode.value || undefined,
     house_number: tutorHouseNumber.value || undefined,
     address: tutorAddress.value || undefined,
@@ -221,7 +238,7 @@ async function finishWithoutPet() {
 
   try {
     await registerTutor();
-    await router.push("/painel/cliente/pets");
+    await router.push("/painel/cliente");
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
     apiError.value =
@@ -232,7 +249,7 @@ async function finishWithoutPet() {
 }
 
 async function submit() {
-  if (!validateStep2()) return;
+  if (!validatePet()) return;
 
   loading.value = true;
   apiError.value = "";
@@ -277,7 +294,7 @@ async function submit() {
 <template>
   <div class="min-h-screen flex items-center justify-center py-10">
     <div
-      class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-14 flex flex-col gap-8"
+      class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-6 sm:p-10 lg:p-14 flex flex-col gap-8"
     >
       <!-- Logo -->
       <div class="flex flex-col items-center gap-2">
@@ -287,46 +304,17 @@ async function submit() {
 
       <!-- Steps indicator -->
       <div class="flex items-center gap-0">
-        <div class="flex flex-col items-center gap-1 flex-1">
-          <div
-            class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors"
-            :class="
-              currentStep >= 1
-                ? 'bg-accent text-white'
-                : 'bg-gray-100 text-gray-400'
-            "
-          >
-            1
+        <template v-for="(step, index) in ['Dados pessoais', 'Endereço', 'Animal']" :key="step">
+          <div v-if="index > 0" class="mb-5 h-px flex-1 transition-colors" :class="currentStep >= index + 1 ? 'bg-accent' : 'bg-gray-200 dark:bg-white/10'" />
+          <div class="flex min-w-20 flex-col items-center gap-1">
+            <div class="flex size-9 items-center justify-center rounded-full text-sm font-semibold transition-colors" :class="currentStep >= index + 1 ? 'bg-accent text-white' : 'bg-gray-100 text-gray-400 dark:bg-white/10'">
+              {{ index + 1 }}
+            </div>
+            <span class="text-center text-[11px] font-medium sm:text-xs" :class="currentStep >= index + 1 ? 'text-accent' : 'text-gray-400'">
+              {{ step }}<span v-if="index > 0" class="block text-[9px] font-normal">(opcional)</span>
+            </span>
           </div>
-          <span
-            class="text-xs font-medium"
-            :class="currentStep >= 1 ? 'text-accent' : 'text-gray-400'"
-            >Responsável</span
-          >
-        </div>
-
-        <div
-          class="h-px flex-1 mb-5 transition-colors"
-          :class="currentStep >= 2 ? 'bg-accent' : 'bg-gray-200'"
-        />
-
-        <div class="flex flex-col items-center gap-1 flex-1">
-          <div
-            class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors"
-            :class="
-              currentStep >= 2
-                ? 'bg-accent text-white'
-                : 'bg-gray-100 text-gray-400'
-            "
-          >
-            2
-          </div>
-          <span
-            class="text-xs font-medium"
-            :class="currentStep >= 2 ? 'text-accent' : 'text-gray-400'"
-            >Animal (opcional)</span
-          >
-        </div>
+        </template>
       </div>
 
       <!-- Step 1: Tutor -->
@@ -372,39 +360,18 @@ async function submit() {
           />
         </UFormField>
 
-        <div class="grid grid-cols-2 gap-4">
-          <UFormField :error="errors.tutorZipCode">
-            <UInput
-              v-model="tutorZipCode"
-              v-maska="'#####-###'"
-              type="text"
-              placeholder="CEP (opcional)"
-              size="lg"
-              icon="i-heroicons-map"
-              class="w-full"
-            />
+        <UFormField>
+          <UInput v-model="tutorPhone" v-maska="['(##) ####-####', '(##) #####-####']" type="tel" placeholder="Telefone (opcional)" size="lg" icon="i-heroicons-phone" class="w-full" />
+        </UFormField>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <UFormField label="Data de nascimento (opcional)">
+            <UInput v-model="tutorBirthDate" type="date" size="lg" icon="i-heroicons-calendar" class="w-full" />
           </UFormField>
-          <UFormField :error="errors.tutorHouseNumber">
-            <UInput
-              v-model="tutorHouseNumber"
-              type="text"
-              placeholder="Número (opcional)"
-              size="lg"
-              icon="i-heroicons-home"
-              class="w-full"
-            />
+          <UFormField label="Sexo biológico (opcional)">
+            <USelect v-model="tutorBiologicalSex" :items="biologicalSexOptions" placeholder="Selecione" size="lg" icon="i-heroicons-identification" class="w-full" />
           </UFormField>
         </div>
-
-        <UFormField :error="errors.tutorAddress">
-          <UInput
-            v-model="tutorAddress"
-            type="text"
-            placeholder="Rua/Bairro/Complemento (opcional)"
-            size="lg"
-            icon="i-heroicons-map-pin"
-          />
-        </UFormField>
 
         <UFormField :error="errors.tutorPassword">
           <UInput
@@ -463,8 +430,31 @@ async function submit() {
         />
       </div>
 
-      <!-- Step 2: Pet -->
+      <!-- Step 2: optional address -->
       <div v-if="currentStep === 2" class="flex flex-col gap-4">
+        <div class="rounded-lg border border-accent/20 bg-accent/8 px-4 py-3 text-sm text-body-muted dark:border-white/10 dark:bg-white/5">
+          O endereço é opcional e poderá ser preenchido ou atualizado depois no seu perfil.
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <UFormField>
+            <UInput v-model="tutorZipCode" v-maska="'#####-###'" placeholder="CEP" size="lg" icon="i-heroicons-map" class="w-full" />
+          </UFormField>
+          <UFormField>
+            <UInput v-model="tutorHouseNumber" placeholder="Número" size="lg" icon="i-heroicons-home" class="w-full" />
+          </UFormField>
+        </div>
+        <UFormField>
+          <UInput v-model="tutorAddress" placeholder="Rua, bairro e complemento" size="lg" icon="i-heroicons-map-pin" class="w-full" />
+        </UFormField>
+        <div class="flex gap-3 pt-2">
+          <UButton label="Voltar" size="lg" variant="outline" class="flex-1 justify-center" @click="currentStep = 1" />
+          <UButton label="Continuar" size="lg" trailing-icon="i-heroicons-arrow-right" class="flex-1 justify-center bg-accent text-white" @click="goToStep3" />
+        </div>
+        <UButton label="Pular endereço" variant="ghost" block @click="goToStep3" />
+      </div>
+
+      <!-- Step 3: Pet -->
+      <div v-if="currentStep === 3" class="flex flex-col gap-4">
 
         <!-- Aviso: cadastro de pet é opcional -->
         <div
@@ -692,7 +682,7 @@ async function submit() {
             class="flex-1 justify-center dark:text-white dark:border-white dark:hover:bg-white/10"
             leading-icon="i-heroicons-arrow-left"
             :disabled="loading"
-            @click="currentStep = 1"
+            @click="currentStep = 2"
           />
           <UButton
             label="Criar conta com pet"
