@@ -20,6 +20,7 @@ interface Pet {
 }
 
 const { api } = useApi();
+const { loadProfiles } = usePatientProfile();
 const config = useRuntimeConfig();
 
 const PET_LIMIT = 5;
@@ -200,6 +201,7 @@ async function savePet() {
 
     modalOpen.value = false;
     await loadPets();
+    await loadProfiles(true);
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
     formError.value = fetchErr?.data?.error ?? 'Erro ao salvar animal.';
@@ -216,6 +218,7 @@ async function deletePet(pet: Pet) {
   try {
     await api(`/pets/${pet.id}`, { method: 'DELETE' });
     await loadPets();
+    await loadProfiles(true);
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
     fetchError.value = fetchErr?.data?.error ?? 'Não foi possível excluir o animal.';

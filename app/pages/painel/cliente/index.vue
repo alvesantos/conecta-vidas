@@ -17,6 +17,7 @@ interface Consultation {
   time: string
   status: 'agendada' | 'confirmada' | 'realizada' | 'cancelada'
   kind?: 'humana' | 'veterinaria'
+  pet_id?: string | null
   vet_name?: string | null
   pet_name?: string | null
 }
@@ -25,6 +26,7 @@ const { user } = useAuth()
 const { api } = useApi()
 const { getMySubscription } = usePlans()
 const config = useRuntimeConfig()
+const { activeProfile, loadProfiles } = usePatientProfile()
 
 const pets = ref<Pet[]>([])
 const consultations = ref<Consultation[]>([])
@@ -34,11 +36,16 @@ const errorMsg = ref('')
 
 const firstName = computed(() => user.value?.name?.trim().split(/\s+/)[0] || 'Cliente')
 const uploadsBase = computed(() => config.public.apiBase.replace(/\/api\/?$/, ''))
+const visibleConsultations = computed(() => consultations.value.filter(item =>
+  activeProfile.value.kind === 'humana'
+    ? item.kind === 'humana' && !item.pet_id
+    : item.kind === 'veterinaria' && item.pet_id === activeProfile.value.petId,
+))
 
 const upcomingConsultations = computed(() => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  return consultations.value
+  return visibleConsultations.value
     .filter(item => item.status !== 'cancelada' && item.status !== 'realizada')
     .filter(item => new Date(`${item.date.slice(0, 10)}T00:00:00`) >= today)
     .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))
@@ -72,6 +79,7 @@ async function loadDashboard() {
 }
 
 onMounted(loadDashboard)
+onMounted(() => loadProfiles())
 
 function avatarSrc(path?: string | null) {
   return path ? `${uploadsBase.value}${path}` : null
@@ -107,6 +115,20 @@ function statusLabel(status: Consultation['status']) {
     </section>
 
     <UAlert v-if="errorMsg" color="warning" variant="soft" :description="errorMsg" />
+
+    <UAlert
+      v-if="!pending && pets.length === 0"
+      title="Tem um pet?"
+      description="Adicione o perfil dele e tenha acesso imediato às consultas veterinárias."
+      color="info"
+      variant="soft"
+      icon="i-mdi-paw-plus"
+      :actions="[{ label: 'Adicionar pet', to: '/painel/cliente/pets', color: 'primary' }]"
+    />
+
+    <div v-if="!pending" class="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-[#071b30]">
+      Exibindo informações de <strong>{{ activeProfile.label }}</strong>.
+    </div>
 
     <section v-if="pending" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <USkeleton v-for="item in 3" :key="item" class="h-36 rounded-xl" />
