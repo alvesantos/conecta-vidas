@@ -20,10 +20,16 @@ const tutorBiologicalSex = ref("");
 const tutorZipCode = ref("");
 const tutorHouseNumber = ref("");
 const tutorAddress = ref("");
+const tutorAddressComplement = ref("");
+const tutorNeighborhood = ref("");
+const tutorCity = ref("");
+const tutorState = ref("");
 const tutorPassword = ref("");
 const tutorConfirmPassword = ref("");
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
+const cepLoading = ref(false);
+const wantsPet = ref(false);
 
 // Pet
 const petName = ref("");
@@ -142,9 +148,23 @@ function validateStep1() {
     valid = false;
   } else clearError("tutorEmail");
 
-  clearError("tutorZipCode");
-  clearError("tutorHouseNumber");
-  clearError("tutorAddress");
+  if (tutorPhone.value.replace(/\D/g, "").length < 10) {
+    setError("tutorPhone", "Informe um telefone/WhatsApp válido");
+    valid = false;
+  } else clearError("tutorPhone");
+
+  if (!tutorBirthDate.value) {
+    setError("tutorBirthDate", "Data de nascimento obrigatória");
+    valid = false;
+  } else if (new Date(`${tutorBirthDate.value}T12:00:00`) > new Date()) {
+    setError("tutorBirthDate", "A data de nascimento não pode ser futura");
+    valid = false;
+  } else clearError("tutorBirthDate");
+
+  if (!tutorBiologicalSex.value) {
+    setError("tutorBiologicalSex", "Sexo biológico obrigatório");
+    valid = false;
+  } else clearError("tutorBiologicalSex");
 
   if (!tutorPassword.value) {
     setError("tutorPassword", "Senha obrigatória");
@@ -160,6 +180,63 @@ function validateStep1() {
   } else clearError("tutorConfirmPassword");
 
   return valid;
+}
+
+function validateStep2() {
+  let valid = true;
+  const requiredFields = [
+    ["tutorZipCode", tutorZipCode.value.replace(/\D/g, "").length === 8, "CEP obrigatório"],
+    ["tutorAddress", Boolean(tutorAddress.value.trim()), "Rua obrigatória"],
+    ["tutorHouseNumber", Boolean(tutorHouseNumber.value.trim()), "Número obrigatório"],
+    ["tutorNeighborhood", Boolean(tutorNeighborhood.value.trim()), "Bairro obrigatório"],
+    ["tutorCity", Boolean(tutorCity.value.trim()), "Cidade obrigatória"],
+    ["tutorState", tutorState.value.trim().length === 2, "Estado obrigatório"],
+  ] as const;
+
+  requiredFields.forEach(([field, condition, message]) => {
+    if (!condition) {
+      setError(field, message);
+      valid = false;
+    } else clearError(field);
+  });
+
+  return valid;
+}
+
+async function lookupCep() {
+  const cep = tutorZipCode.value.replace(/\D/g, "");
+  if (cep.length !== 8) {
+    setError("tutorZipCode", "Informe um CEP válido");
+    return;
+  }
+
+  cepLoading.value = true;
+  clearError("tutorZipCode");
+  try {
+    const result = await $fetch<{
+      erro?: boolean;
+      logradouro?: string;
+      complemento?: string;
+      bairro?: string;
+      localidade?: string;
+      uf?: string;
+    }>(`https://viacep.com.br/ws/${cep}/json/`);
+
+    if (result.erro) {
+      setError("tutorZipCode", "CEP não encontrado");
+      return;
+    }
+
+    tutorAddress.value = result.logradouro || tutorAddress.value;
+    tutorAddressComplement.value = result.complemento || tutorAddressComplement.value;
+    tutorNeighborhood.value = result.bairro || tutorNeighborhood.value;
+    tutorCity.value = result.localidade || tutorCity.value;
+    tutorState.value = result.uf || tutorState.value;
+  } catch {
+    setError("tutorZipCode", "Não foi possível consultar o CEP");
+  } finally {
+    cepLoading.value = false;
+  }
 }
 
 function validatePet() {
@@ -213,7 +290,7 @@ function goToStep2() {
 }
 
 function goToStep3() {
-  currentStep.value = 3;
+  if (validateStep2()) currentStep.value = 3;
 }
 
 async function registerTutor() {
@@ -221,12 +298,16 @@ async function registerTutor() {
     name: tutorName.value,
     cpf: tutorCpf.value,
     email: tutorEmail.value,
-    phone: tutorPhone.value || undefined,
-    birth_date: tutorBirthDate.value || undefined,
-    biological_sex: tutorBiologicalSex.value || undefined,
-    zip_code: tutorZipCode.value || undefined,
-    house_number: tutorHouseNumber.value || undefined,
-    address: tutorAddress.value || undefined,
+    phone: tutorPhone.value,
+    birth_date: tutorBirthDate.value,
+    biological_sex: tutorBiologicalSex.value,
+    zip_code: tutorZipCode.value,
+    house_number: tutorHouseNumber.value,
+    address: tutorAddress.value,
+    address_complement: tutorAddressComplement.value || undefined,
+    address_neighborhood: tutorNeighborhood.value,
+    address_city: tutorCity.value,
+    address_state: tutorState.value,
     password: tutorPassword.value,
   });
 }
@@ -311,7 +392,7 @@ async function submit() {
               {{ index + 1 }}
             </div>
             <span class="text-center text-[11px] font-medium sm:text-xs" :class="currentStep >= index + 1 ? 'text-accent' : 'text-gray-400'">
-              {{ step }}<span v-if="index > 0" class="block text-[9px] font-normal">(opcional)</span>
+            {{ step }}<span v-if="index === 2" class="block text-[9px] font-normal">(opcional)</span>
             </span>
           </div>
         </template>
@@ -360,18 +441,26 @@ async function submit() {
           />
         </UFormField>
 
-        <UFormField>
-          <UInput v-model="tutorPhone" v-maska="['(##) ####-####', '(##) #####-####']" type="tel" placeholder="Telefone (opcional)" size="lg" icon="i-heroicons-phone" class="w-full" />
+        <UFormField :error="errors.tutorPhone">
+          <UInput v-model="tutorPhone" v-maska="['(##) ####-####', '(##) #####-####']" type="tel" placeholder="Telefone/WhatsApp *" size="lg" icon="i-heroicons-phone" class="w-full" />
         </UFormField>
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <UFormField label="Data de nascimento (opcional)">
+          <UFormField label="Data de nascimento *" :error="errors.tutorBirthDate">
             <UInput v-model="tutorBirthDate" type="date" size="lg" icon="i-heroicons-calendar" class="w-full" />
           </UFormField>
-          <UFormField label="Sexo biológico (opcional)">
+          <UFormField label="Sexo biológico *" :error="errors.tutorBiologicalSex">
             <USelect v-model="tutorBiologicalSex" :items="biologicalSexOptions" placeholder="Selecione" size="lg" icon="i-heroicons-identification" class="w-full" />
           </UFormField>
         </div>
+
+        <UAlert
+          title="Ficha de saúde"
+          description="Após criar a conta, você poderá preencher tipo sanguíneo, alergias, comorbidades e medicamentos em Perfil > Ficha de saúde."
+          color="info"
+          variant="soft"
+          icon="i-heroicons-clipboard-document-check"
+        />
 
         <UFormField :error="errors.tutorPassword">
           <UInput
@@ -430,44 +519,57 @@ async function submit() {
         />
       </div>
 
-      <!-- Step 2: optional address -->
+      <!-- Step 2: required structured address -->
       <div v-if="currentStep === 2" class="flex flex-col gap-4">
         <div class="rounded-lg border border-accent/20 bg-accent/8 px-4 py-3 text-sm text-body-muted dark:border-white/10 dark:bg-white/5">
-          O endereço é opcional e poderá ser preenchido ou atualizado depois no seu perfil.
+          Informe seu endereço completo. Ao preencher o CEP, buscaremos os dados automaticamente.
         </div>
-        <div class="grid grid-cols-2 gap-4">
-          <UFormField>
-            <UInput v-model="tutorZipCode" v-maska="'#####-###'" placeholder="CEP" size="lg" icon="i-heroicons-map" class="w-full" />
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <UFormField :error="errors.tutorZipCode">
+            <UInput v-model="tutorZipCode" v-maska="'#####-###'" placeholder="CEP *" size="lg" icon="i-heroicons-map" class="w-full" :loading="cepLoading" @blur="lookupCep" />
           </UFormField>
-          <UFormField>
-            <UInput v-model="tutorHouseNumber" placeholder="Número" size="lg" icon="i-heroicons-home" class="w-full" />
+          <UFormField :error="errors.tutorHouseNumber">
+            <UInput v-model="tutorHouseNumber" placeholder="Número *" size="lg" icon="i-heroicons-home" class="w-full" />
           </UFormField>
         </div>
-        <UFormField>
-          <UInput v-model="tutorAddress" placeholder="Rua, bairro e complemento" size="lg" icon="i-heroicons-map-pin" class="w-full" />
+        <UFormField :error="errors.tutorAddress">
+          <UInput v-model="tutorAddress" placeholder="Rua *" size="lg" icon="i-heroicons-map-pin" class="w-full" />
         </UFormField>
+        <UFormField>
+          <UInput v-model="tutorAddressComplement" placeholder="Complemento (opcional)" size="lg" icon="i-heroicons-building-office" class="w-full" />
+        </UFormField>
+        <UFormField :error="errors.tutorNeighborhood">
+          <UInput v-model="tutorNeighborhood" placeholder="Bairro *" size="lg" icon="i-heroicons-map-pin" class="w-full" />
+        </UFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_120px]">
+          <UFormField :error="errors.tutorCity">
+            <UInput v-model="tutorCity" placeholder="Cidade *" size="lg" icon="i-heroicons-building-office-2" class="w-full" />
+          </UFormField>
+          <UFormField :error="errors.tutorState">
+            <UInput v-model="tutorState" maxlength="2" placeholder="UF *" size="lg" class="w-full uppercase" @update:model-value="tutorState = String($event).toUpperCase()" />
+          </UFormField>
+        </div>
         <div class="flex gap-3 pt-2">
           <UButton label="Voltar" size="lg" variant="outline" class="flex-1 justify-center" @click="currentStep = 1" />
           <UButton label="Continuar" size="lg" trailing-icon="i-heroicons-arrow-right" class="flex-1 justify-center bg-accent text-white" @click="goToStep3" />
         </div>
-        <UButton label="Pular endereço" variant="ghost" block @click="goToStep3" />
       </div>
 
       <!-- Step 3: Pet -->
       <div v-if="currentStep === 3" class="flex flex-col gap-4">
 
-        <!-- Aviso: cadastro de pet é opcional -->
+        <!-- Escolha explícita: cadastro de pet é opcional -->
         <div
-          class="flex items-start gap-2.5 rounded-lg bg-accent/8 dark:bg-white/5 border border-accent/20 dark:border-white/10 px-4 py-3 text-sm text-primary/80 dark:text-gray-300"
+          class="flex items-center justify-between gap-4 rounded-lg bg-accent/8 dark:bg-white/5 border border-accent/20 dark:border-white/10 px-4 py-4 text-sm text-primary/80 dark:text-gray-300"
         >
-          <UIcon name="i-mdi-paw" class="size-5 shrink-0 text-accent mt-0.5" />
-          <span>
-            Cadastrar um pet é <strong>opcional</strong>. Você pode fazer isso
-            agora ou adicionar depois, a qualquer momento, na área
-            <strong>Meus Animais</strong>.
-          </span>
+          <div class="flex items-center gap-2.5">
+            <UIcon name="i-mdi-paw" class="size-5 shrink-0 text-accent" />
+            <span class="font-medium">Deseja cadastrar um pet agora?</span>
+          </div>
+          <USwitch v-model="wantsPet" />
         </div>
 
+        <template v-if="wantsPet">
         <!-- Upload de avatar do pet -->
         <div class="flex flex-col items-center gap-2">
           <input
@@ -666,6 +768,8 @@ async function submit() {
           :rows="3"
         />
 
+        </template>
+
         <UAlert
           v-if="apiError"
           color="error"
@@ -685,24 +789,24 @@ async function submit() {
             @click="currentStep = 2"
           />
           <UButton
-            label="Criar conta com pet"
+            v-if="wantsPet"
+            label="Finalizar cadastro"
             size="lg"
             class="flex-1 justify-center bg-accent text-white"
             :loading="loading"
             @click="submit"
           />
+          <UButton
+            v-else
+            label="Pular e concluir"
+            size="lg"
+            variant="outline"
+            class="flex-1 justify-center dark:text-white dark:border-white/40 dark:hover:bg-white/10"
+            leading-icon="i-heroicons-user-check"
+            :loading="loading"
+            @click="finishWithoutPet"
+          />
         </div>
-
-        <UButton
-          label="Criar conta sem cadastrar animal"
-          size="lg"
-          variant="outline"
-          block
-          leading-icon="i-heroicons-user-check"
-          class="justify-center dark:text-white dark:border-white/40 dark:hover:bg-white/10"
-          :disabled="loading"
-          @click="finishWithoutPet"
-        />
       </div>
 
       <p class="text-center text-sm text-gray-500 dark:text-gray-400 -mt-2">
