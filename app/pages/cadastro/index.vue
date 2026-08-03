@@ -130,6 +130,14 @@ function isValidCpf(value: string): boolean {
   return digit(10, 9) === Number(cpf[9]) && digit(11, 10) === Number(cpf[10]);
 }
 
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
+function isValidPassword(value: string): boolean {
+  return value.length >= 8 && /[A-Za-zÀ-ÿ]/.test(value) && /\d/.test(value);
+}
+
 function validateStep1() {
   let valid = true;
 
@@ -145,6 +153,9 @@ function validateStep1() {
 
   if (!tutorEmail.value.trim()) {
     setError("tutorEmail", "E-mail obrigatório");
+    valid = false;
+  } else if (!isValidEmail(tutorEmail.value)) {
+    setError("tutorEmail", "Informe um e-mail válido");
     valid = false;
   } else clearError("tutorEmail");
 
@@ -168,6 +179,9 @@ function validateStep1() {
 
   if (!tutorPassword.value) {
     setError("tutorPassword", "Senha obrigatória");
+    valid = false;
+  } else if (!isValidPassword(tutorPassword.value)) {
+    setError("tutorPassword", "Use ao menos 8 caracteres, com letra e número");
     valid = false;
   } else clearError("tutorPassword");
 
@@ -483,6 +497,9 @@ async function submit() {
               />
             </template>
           </UInput>
+          <template #hint>
+            <span class="text-xs text-gray-400">Mínimo de 8 caracteres, com letra e número.</span>
+          </template>
         </UFormField>
 
         <UFormField :error="errors.tutorConfirmPassword">
