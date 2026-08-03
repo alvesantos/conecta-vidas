@@ -6,8 +6,8 @@ interface Pet {
   name: string;
   species: string;
   breed: string;
-  size: string;
-  coat: string;
+  size?: string | null;
+  coat?: string | null;
   coat_color?: string;
   birth_date: string;
   weight?: number | string | null;
@@ -66,6 +66,7 @@ const modalOpen = ref(false);
 const modalMode = ref<'create' | 'edit'>('edit');
 const editTarget = ref<Pet | null>(null);
 const saving = ref(false);
+const deletingId = ref<string | null>(null);
 const formError = ref('');
 const avatarFile = ref<File | null>(null);
 const avatarPreview = ref<string | null>(null);
@@ -127,8 +128,8 @@ function openEdit(pet: Pet) {
   form.name = pet.name;
   form.species = pet.species;
   form.breed = pet.breed;
-  form.size = pet.size;
-  form.coat = pet.coat;
+  form.size = pet.size ?? '';
+  form.coat = pet.coat ?? '';
   form.coat_color = pet.coat_color ?? '';
   form.birth_date = pet.birth_date?.slice(0, 10) ?? '';
   form.weight = pet.weight != null ? String(pet.weight) : '';
@@ -204,6 +205,22 @@ async function savePet() {
     formError.value = fetchErr?.data?.error ?? 'Erro ao salvar animal.';
   } finally {
     saving.value = false;
+  }
+}
+
+async function deletePet(pet: Pet) {
+  if (!window.confirm(`Excluir o perfil de ${pet.name}? O histórico clínico será preservado.`)) return;
+
+  deletingId.value = pet.id;
+  fetchError.value = '';
+  try {
+    await api(`/pets/${pet.id}`, { method: 'DELETE' });
+    await loadPets();
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } };
+    fetchError.value = fetchErr?.data?.error ?? 'Não foi possível excluir o animal.';
+  } finally {
+    deletingId.value = null;
   }
 }
 
@@ -309,14 +326,25 @@ onMounted(loadPets);
           {{ pet.breed }}
         </span>
 
-        <UButton
-          label="Editar"
-          size="sm"
-          variant="outline"
-          color="primary"
-          icon="i-heroicons-pencil-square"
-          @click="openEdit(pet)"
-        />
+        <div class="flex gap-2">
+          <UButton
+            label="Editar"
+            size="sm"
+            variant="outline"
+            color="primary"
+            icon="i-heroicons-pencil-square"
+            @click="openEdit(pet)"
+          />
+          <UButton
+            label="Excluir"
+            size="sm"
+            variant="ghost"
+            color="error"
+            icon="i-heroicons-trash"
+            :loading="deletingId === pet.id"
+            @click="deletePet(pet)"
+          />
+        </div>
       </div>
     </div>
 

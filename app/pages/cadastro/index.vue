@@ -4,7 +4,6 @@ import { vMaska } from "maska/vue";
 
 const router = useRouter();
 const { register } = useAuth();
-const { api } = useApi();
 
 const currentStep = ref(1);
 const loading = ref(false);
@@ -271,30 +270,10 @@ function validatePet() {
     valid = false;
   } else clearError("petBreed");
 
-  if (!petSize.value) {
-    setError("petSize", "Porte obrigatório");
-    valid = false;
-  } else clearError("petSize");
-
-  if (!petCoat.value.trim()) {
-    setError("petCoat", "Pelagem obrigatória");
-    valid = false;
-  } else clearError("petCoat");
-
   if (!petBirthDate.value) {
     setError("petBirthDate", "Data de nascimento obrigatória");
     valid = false;
   } else clearError("petBirthDate");
-
-  if (!petMicrochipped.value) {
-    setError("petMicrochipped", "Campo obrigatório");
-    valid = false;
-  } else clearError("petMicrochipped");
-
-  if (!petNeutered.value) {
-    setError("petNeutered", "Campo obrigatório");
-    valid = false;
-  } else clearError("petNeutered");
 
   return valid;
 }
@@ -307,7 +286,7 @@ function goToStep3() {
   if (validateStep2()) currentStep.value = 3;
 }
 
-async function registerTutor() {
+async function registerTutor(pet?: Record<string, unknown>) {
   await register({
     name: tutorName.value,
     cpf: tutorCpf.value,
@@ -323,6 +302,7 @@ async function registerTutor() {
     address_city: tutorCity.value,
     address_state: tutorState.value,
     password: tutorPassword.value,
+    ...(pet ? { pet } : {}),
   });
 }
 
@@ -350,29 +330,11 @@ async function submit() {
   apiError.value = "";
 
   try {
-    // 1. Criar apenas o usuário (tutor)
-    await registerTutor();
-
-    // 2. Criar o pet (com a foto, se houver) em uma única requisição multipart
-    const formData = new FormData();
-    formData.append("name", petName.value);
-    formData.append("species", petSpecies.value);
-    formData.append("breed", petBreed.value);
-    formData.append("size", petSize.value);
-    formData.append("coat", petCoat.value);
-    if (petCoatColor.value) formData.append("coat_color", petCoatColor.value);
-    if (petWeight.value) formData.append("weight", petWeight.value);
-    if (petSex.value) formData.append("sex", petSex.value);
-    formData.append("birth_date", petBirthDate.value);
-    formData.append("microchipped", String(petMicrochipped.value === "sim"));
-    formData.append("neutered", String(petNeutered.value === "sim"));
-    if (petBehavior.value) formData.append("behavior", petBehavior.value);
-    if (petConditions.value) formData.append("conditions", petConditions.value);
-    if (petAvatarFile.value) formData.append("avatar", petAvatarFile.value);
-
-    await api("/pets", {
-      method: "POST",
-      body: formData,
+    await registerTutor({
+      name: petName.value,
+      species: petSpecies.value,
+      breed: petBreed.value,
+      birth_date: petBirthDate.value,
     });
 
     await router.push("/painel/cliente/pets");
@@ -588,7 +550,7 @@ async function submit() {
 
         <template v-if="wantsPet">
         <!-- Upload de avatar do pet -->
-        <div class="flex flex-col items-center gap-2">
+        <div v-if="false" class="flex flex-col items-center gap-2">
           <input
             ref="fileInputRef"
             type="file"
@@ -676,6 +638,7 @@ async function submit() {
           />
         </UFormField>
 
+        <div v-if="false" class="contents">
         <UFormField :error="errors.petSize">
           <USelect
             v-model="petSize"
@@ -733,6 +696,7 @@ async function submit() {
             />
           </UFormField>
         </div>
+        </div>
 
         <UFormField :error="errors.petBirthDate" label="Data de nascimento *">
           <UInput
@@ -749,6 +713,7 @@ async function submit() {
           </template>
         </UFormField>
 
+        <div v-if="false" class="contents">
         <UFormField :error="errors.petMicrochipped">
           <USelect
             v-model="petMicrochipped"
@@ -784,6 +749,7 @@ async function submit() {
           size="lg"
           :rows="3"
         />
+        </div>
 
         </template>
 
