@@ -29,6 +29,7 @@ const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const cepLoading = ref(false);
 const wantsPet = ref(false);
+const privacyConsent = ref(false);
 
 // Pet
 const petName = ref("");
@@ -192,6 +193,11 @@ function validateStep1() {
     valid = false;
   } else clearError("tutorConfirmPassword");
 
+  if (!privacyConsent.value) {
+    setError("privacyConsent", "Você precisa aceitar o tratamento dos dados para continuar");
+    valid = false;
+  } else clearError("privacyConsent");
+
   return valid;
 }
 
@@ -302,6 +308,7 @@ async function registerTutor(pet?: Record<string, unknown>) {
     address_city: tutorCity.value,
     address_state: tutorState.value,
     password: tutorPassword.value,
+    privacy_consent: privacyConsent.value,
     ...(pet ? { pet } : {}),
   });
 }
@@ -487,6 +494,15 @@ async function submit() {
               />
             </template>
           </UInput>
+        </UFormField>
+
+        <UFormField :error="errors.privacyConsent">
+          <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-white/10">
+            <UCheckbox v-model="privacyConsent" class="mt-0.5" />
+            <span class="text-body-muted">
+              Autorizo o tratamento dos meus dados pessoais e dados sensíveis de saúde para prestação dos serviços da plataforma, conforme os Termos e a Política de Privacidade.
+            </span>
+          </label>
         </UFormField>
 
         <UButton

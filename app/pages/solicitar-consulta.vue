@@ -178,6 +178,7 @@ async function submitRequest() {
       method: 'POST',
       body: {
         pet_id: form.pet_id || null,
+        kind: consultaType.value === 'vet' ? 'veterinaria' : 'humana',
         date: form.date,
         time: form.time,
         notes: form.notes
