@@ -5,10 +5,11 @@ const route = useRoute()
 const router = useRouter()
 const { api } = useApi()
 const toast = useToast()
-const { pets, activeProfile, loadProfiles, selectProfile } = usePatientProfile()
+const { pets, dependents, activeProfile, loadProfiles, selectProfile } = usePatientProfile()
 
 const kind = ref<'humana' | 'veterinaria'>(route.query.tipo === 'veterinaria' ? 'veterinaria' : 'humana')
 const petId = ref(typeof route.query.pet === 'string' ? route.query.pet : '')
+const dependentId = ref(typeof route.query.dependente === 'string' ? route.query.dependente : '')
 const date = ref('')
 const time = ref('')
 const notes = ref('')
@@ -18,12 +19,22 @@ const petOptions = computed(() => pets.value.map(pet => ({
   label: `${pet.name} · ${pet.breed}`,
   value: pet.id,
 })))
+const humanOptions = computed(() => [
+  { label: 'Titular da conta', value: 'titular' },
+  ...dependents.value.map(dependent => ({
+    label: `${dependent.name} · ${dependent.relationship}`,
+    value: dependent.id,
+  })),
+])
 
 function selectKind(value: 'humana' | 'veterinaria') {
   kind.value = value
   if (value === 'humana') {
     petId.value = ''
-    selectProfile('human')
+    if (!dependentId.value && activeProfile.value.kind === 'humana' && activeProfile.value.dependentId) {
+      dependentId.value = activeProfile.value.dependentId
+    }
+    selectProfile(dependentId.value ? `dependent:${dependentId.value}` : 'human')
   } else if (!petId.value && activeProfile.value.kind === 'veterinaria') {
     petId.value = activeProfile.value.petId
   } else if (!petId.value && pets.value.length === 1) {
@@ -33,6 +44,9 @@ function selectKind(value: 'humana' | 'veterinaria') {
 
 watch(petId, value => {
   if (value) selectProfile(`pet:${value}`)
+})
+watch(dependentId, value => {
+  if (kind.value === 'humana') selectProfile(value ? `dependent:${value}` : 'human')
 })
 
 onMounted(async () => {
@@ -57,6 +71,7 @@ async function submit() {
       body: {
         kind: kind.value,
         pet_id: kind.value === 'veterinaria' ? petId.value : null,
+        dependent_id: kind.value === 'humana' ? dependentId.value || null : null,
         date: date.value,
         time: time.value,
         notes: notes.value,
@@ -121,10 +136,13 @@ async function submit() {
       <template #header>
         <div>
           <h2 class="font-semibold text-body-strong">{{ kind === 'humana' ? 'Consulta médica' : 'Consulta veterinária' }}</h2>
-          <p class="text-sm text-body-muted">{{ kind === 'humana' ? 'Paciente: Titular da conta' : 'Selecione qual pet será atendido' }}</p>
+          <p class="text-sm text-body-muted">{{ kind === 'humana' ? 'Selecione quem será atendido' : 'Selecione qual pet será atendido' }}</p>
         </div>
       </template>
       <form class="space-y-5" @submit.prevent="submit">
+        <UFormField v-if="kind === 'humana'" label="Paciente *">
+          <USelect :model-value="dependentId || 'titular'" :items="humanOptions" class="w-full" size="lg" @update:model-value="dependentId = $event === 'titular' ? '' : String($event)" />
+        </UFormField>
         <UFormField v-if="kind === 'veterinaria'" label="Animal *">
           <USelect v-model="petId" :items="petOptions" placeholder="Selecione o pet" class="w-full" size="lg" />
         </UFormField>

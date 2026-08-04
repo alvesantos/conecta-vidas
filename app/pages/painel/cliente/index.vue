@@ -18,6 +18,8 @@ interface Consultation {
   status: 'agendada' | 'confirmada' | 'realizada' | 'cancelada'
   kind?: 'humana' | 'veterinaria'
   pet_id?: string | null
+  dependent_id?: string | null
+  dependent_name?: string | null
   vet_name?: string | null
   pet_name?: string | null
 }
@@ -39,7 +41,9 @@ const firstName = computed(() => user.value?.name?.trim().split(/\s+/)[0] || 'Cl
 const uploadsBase = computed(() => config.public.apiBase.replace(/\/api\/?$/, ''))
 const visibleConsultations = computed(() => consultations.value.filter(item =>
   activeProfile.value.kind === 'humana'
-    ? item.kind === 'humana' && !item.pet_id
+    ? item.kind === 'humana' && !item.pet_id && (activeProfile.value.dependentId
+      ? item.dependent_id === activeProfile.value.dependentId
+      : !item.dependent_id)
     : item.kind === 'veterinaria' && item.pet_id === activeProfile.value.petId,
 ))
 
@@ -104,7 +108,15 @@ function statusLabel(status: Consultation['status']) {
 }
 
 function scheduleHuman() {
-  router.push({ path: '/painel/cliente/agendar', query: { tipo: 'humana' } })
+  router.push({
+    path: '/painel/cliente/agendar',
+    query: {
+      tipo: 'humana',
+      ...(activeProfile.value.kind === 'humana' && activeProfile.value.dependentId
+        ? { dependente: activeProfile.value.dependentId }
+        : {}),
+    },
+  })
 }
 
 function scheduleAnimal() {

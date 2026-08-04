@@ -5,6 +5,8 @@ interface Prescription {
   id: string
   kind: 'humana' | 'veterinaria'
   pet_id: string | null
+  dependent_id?: string | null
+  dependent_name?: string | null
   pet_name?: string | null
   content: string
   date: string
@@ -17,7 +19,9 @@ const prescriptions = ref<Prescription[]>([])
 const pending = ref(true)
 const visible = computed(() => prescriptions.value.filter(item =>
   activeProfile.value.kind === 'humana'
-    ? item.kind === 'humana' && !item.pet_id
+    ? item.kind === 'humana' && !item.pet_id && (activeProfile.value.dependentId
+      ? item.dependent_id === activeProfile.value.dependentId
+      : !item.dependent_id)
     : item.kind === 'veterinaria' && item.pet_id === activeProfile.value.petId,
 ))
 

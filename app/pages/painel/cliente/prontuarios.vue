@@ -5,6 +5,8 @@ interface ClinicalRecord {
   id: string
   kind: 'humano' | 'veterinario'
   pet_id: string | null
+  dependent_id?: string | null
+  dependent_name?: string | null
   pet_name?: string | null
   blood_type?: string | null
   allergies?: string | null
@@ -18,7 +20,9 @@ const records = ref<ClinicalRecord[]>([])
 const pending = ref(true)
 const record = computed(() => records.value.find(item =>
   activeProfile.value.kind === 'humana'
-    ? item.kind === 'humano' && !item.pet_id
+    ? item.kind === 'humano' && !item.pet_id && (activeProfile.value.dependentId
+      ? item.dependent_id === activeProfile.value.dependentId
+      : !item.dependent_id)
     : item.kind === 'veterinario' && item.pet_id === activeProfile.value.petId,
 ))
 

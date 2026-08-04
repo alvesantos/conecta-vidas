@@ -12,7 +12,7 @@ onMounted(async () => {
     <div><h1 class="text-2xl font-bold text-body-strong">Prontuários humanos</h1><p class="text-sm text-body-muted">Somente pacientes vinculados às suas consultas médicas.</p></div>
     <USkeleton v-if="pending" class="h-40 rounded-xl" />
     <div v-else-if="rows.length" class="grid gap-4 md:grid-cols-2">
-      <NuxtLink v-for="row in rows" :key="row.id" :to="`/painel/medico/prontuarios/${row.patient_id}`">
+      <NuxtLink v-for="row in rows" :key="row.id" :to="`/painel/medico/prontuarios/${row.id}`">
         <UCard class="transition hover:border-[var(--portal-accent)]">
           <p class="font-semibold text-body-strong">{{ row.patient_name }}</p>
           <p class="mt-1 text-sm text-body-muted">CPF {{ row.patient_cpf }} · Tipo sanguíneo {{ row.blood_type || 'não informado' }}</p>

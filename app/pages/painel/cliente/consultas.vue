@@ -8,6 +8,8 @@ interface Consultation {
   status: string
   kind: 'humana' | 'veterinaria'
   pet_id?: string | null
+  dependent_id?: string | null
+  dependent_name?: string | null
   pet_name?: string | null
   vet_name?: string | null
 }
@@ -19,7 +21,9 @@ const pending = ref(true)
 
 const visible = computed(() => consultations.value.filter(item =>
   activeProfile.value.kind === 'humana'
-    ? item.kind === 'humana' && !item.pet_id
+    ? item.kind === 'humana' && !item.pet_id && (activeProfile.value.dependentId
+      ? item.dependent_id === activeProfile.value.dependentId
+      : !item.dependent_id)
     : item.kind === 'veterinaria' && item.pet_id === activeProfile.value.petId,
 ))
 
@@ -44,7 +48,7 @@ onMounted(async () => {
       <UCard v-for="item in visible" :key="item.id">
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p class="font-semibold text-body-strong">{{ item.kind === 'humana' ? 'Consulta humana' : `Consulta veterinária · ${item.pet_name}` }}</p>
+            <p class="font-semibold text-body-strong">{{ item.kind === 'humana' ? `Consulta humana${item.dependent_name ? ` · ${item.dependent_name}` : ''}` : `Consulta veterinária · ${item.pet_name}` }}</p>
             <p class="mt-1 text-sm text-body-muted">{{ new Date(`${item.date.slice(0, 10)}T00:00:00`).toLocaleDateString('pt-BR') }} às {{ item.time.slice(0, 5) }} · {{ item.vet_name || 'Profissional a definir' }}</p>
           </div>
           <UBadge :label="item.status" variant="soft" />
