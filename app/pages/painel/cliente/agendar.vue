@@ -14,6 +14,7 @@ const date = ref('')
 const time = ref('')
 const notes = ref('')
 const pending = ref(false)
+const specialist = computed(() => route.query.atendimento === 'especialista')
 
 const petOptions = computed(() => pets.value.map(pet => ({
   label: `${pet.name} · ${pet.breed}`,
@@ -94,9 +95,9 @@ async function submit() {
 <template>
   <div class="mx-auto max-w-4xl space-y-6">
     <div>
-      <p class="text-sm font-medium text-[var(--portal-accent)]">Novo atendimento</p>
-      <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">Agendar consulta</h1>
-      <p class="mt-2 text-sm text-body-muted">Escolha o tipo de cuidado e informe o melhor horário.</p>
+      <p class="text-sm font-medium text-[var(--portal-accent)]">{{ specialist ? 'Atendimento especializado' : 'Novo atendimento' }}</p>
+      <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">{{ specialist ? 'Agendar especialista' : 'Agendar consulta' }}</h1>
+      <p class="mt-2 text-sm text-body-muted">{{ specialist ? 'Escolha o paciente e informe o melhor horário. O catálogo de especialidades será conectado nesta jornada.' : 'Escolha o tipo de cuidado e informe o melhor horário.' }}</p>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">

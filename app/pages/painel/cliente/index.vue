@@ -66,6 +66,18 @@ const quickActions = computed(() => {
   { label: veterinary ? 'Receitas veterinárias' : 'Receitas médicas', description: `Documentos de ${activeProfile.value.label}`, icon: 'i-heroicons-document-text', to: '/painel/cliente/receitas' },
   { label: veterinary ? 'Maffy Store' : 'Benefícios', description: veterinary ? 'Produtos e vantagens para pets' : 'Serviços e vantagens do seu plano', icon: veterinary ? 'i-heroicons-shopping-bag' : 'i-heroicons-gift', to: '/painel/cliente/marketplace' },
 ]})
+const contextResources = computed(() => activeProfile.value.kind === 'humana'
+  ? [
+      { label: 'Especialidades médicas', description: 'Agende atendimento humano especializado.', icon: 'i-mdi-stethoscope', to: `/painel/cliente/agendar?tipo=humana&atendimento=especialista${activeProfile.value.dependentId ? `&dependente=${activeProfile.value.dependentId}` : ''}` },
+      { label: 'Exames humanos', description: 'Solicitações e resultados deste perfil.', icon: 'i-heroicons-beaker', to: '/painel/cliente/exames' },
+      { label: 'Histórico clínico', description: 'Prontuário e evolução do paciente.', icon: 'i-heroicons-clock', to: '/painel/cliente/prontuarios' },
+    ]
+  : [
+      { label: 'Serviços veterinários', description: `Atendimentos disponíveis para ${activeProfile.value.label}.`, icon: 'i-mdi-stethoscope', to: `/painel/cliente/agendar?tipo=veterinaria&atendimento=especialista&pet=${activeProfile.value.petId}` },
+      { label: 'Exames veterinários', description: 'Solicitações e resultados do seu pet.', icon: 'i-heroicons-beaker', to: '/painel/cliente/exames' },
+      { label: 'Maffy Store', description: 'Produtos, cuidados e vantagens para pets.', icon: 'i-heroicons-shopping-bag', to: '/painel/cliente/marketplace' },
+    ],
+)
 
 async function loadDashboard() {
   pending.value = true
@@ -256,6 +268,26 @@ function scheduleAnimal() {
         <NuxtLink v-for="action in quickActions" :key="action.to" :to="action.to" class="group flex min-h-24 items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-[var(--portal-accent)] hover:shadow-sm dark:border-white/10 dark:bg-[#071b30]">
           <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-[var(--portal-accent)] group-hover:bg-[var(--portal-accent)] group-hover:text-white dark:bg-white/10"><UIcon :name="action.icon" class="size-6" /></span>
           <span><span class="block text-sm font-semibold text-body-strong">{{ action.label }}</span><span class="mt-1 block text-xs text-body-muted">{{ action.description }}</span></span>
+        </NuxtLink>
+      </div>
+    </section>
+
+    <section>
+      <div class="mb-4">
+        <p class="text-sm font-medium text-[var(--portal-accent)]">{{ activeProfile.kind === 'humana' ? 'Cuidado humano' : 'Cuidado veterinário' }}</p>
+        <h3 class="mt-1 text-lg font-semibold text-body-strong">Recursos para {{ activeProfile.label }}</h3>
+      </div>
+      <div class="grid gap-4 md:grid-cols-3">
+        <NuxtLink
+          v-for="resource in contextResources"
+          :key="resource.label"
+          :to="resource.to"
+          class="group rounded-2xl border border-gray-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-[var(--portal-accent)] hover:shadow-sm dark:border-white/10 dark:bg-[#071b30]"
+        >
+          <span class="flex size-11 items-center justify-center rounded-xl bg-gray-100 text-[var(--portal-accent)] transition group-hover:bg-[var(--portal-accent)] group-hover:text-white dark:bg-white/10"><UIcon :name="resource.icon" class="size-6" /></span>
+          <h4 class="mt-4 font-semibold text-body-strong">{{ resource.label }}</h4>
+          <p class="mt-1 text-sm text-body-muted">{{ resource.description }}</p>
+          <span class="mt-4 flex items-center gap-1 text-sm font-semibold text-[var(--portal-accent)]">Acessar <UIcon name="i-heroicons-arrow-right" /></span>
         </NuxtLink>
       </div>
     </section>
