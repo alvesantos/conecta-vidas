@@ -14,6 +14,7 @@ const currentItem = computed(() =>
 )
 const initials = computed(() => user.value?.name.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')
 const roleLabel = computed(() => user.value ? userTypeLabel(user.value.type) : '')
+const { activeProfile } = usePatientProfile()
 const topNavigation = computed(() =>
   props.portal === 'cliente'
     ? definition.value.nav.flatMap(group => group.items)
@@ -24,6 +25,14 @@ const topNavigation = computed(() =>
         '/painel/cliente/prontuarios',
         '/painel/cliente/pets',
       ].includes(item.to))
+      .map(item => {
+        const veterinary = activeProfile.value.kind === 'veterinaria'
+        const labels: Record<string, string> = {
+          '/painel/cliente/consultas': veterinary ? 'Consultas vet.' : 'Consultas',
+          '/painel/cliente/prontuarios': veterinary ? 'Prontuário pet' : 'Prontuário',
+        }
+        return { ...item, label: labels[item.to] ?? item.label }
+      })
     : [],
 )
 const accountItems = computed(() => [

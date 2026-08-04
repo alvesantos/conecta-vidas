@@ -28,7 +28,7 @@ const { user } = useAuth()
 const { api } = useApi()
 const { getMySubscription } = usePlans()
 const config = useRuntimeConfig()
-const { activeProfile, loadProfiles } = usePatientProfile()
+const { profiles, activeKey, activeProfile, loadProfiles, selectProfile } = usePatientProfile()
 const router = useRouter()
 
 const pets = ref<Pet[]>([])
@@ -58,12 +58,14 @@ const upcomingConsultations = computed(() => {
 
 const nextConsultation = computed(() => upcomingConsultations.value[0] ?? null)
 
-const quickActions = [
-  { label: 'Solicitar consulta', description: 'Humana ou veterinária', icon: 'i-heroicons-video-camera', to: '/painel/cliente/agendar' },
+const quickActions = computed(() => {
+  const veterinary = activeProfile.value.kind === 'veterinaria'
+  return [
+  { label: veterinary ? 'Consulta veterinária' : 'Consulta médica', description: `Atendimento para ${activeProfile.value.label}`, icon: 'i-heroicons-video-camera', to: veterinary ? `/painel/cliente/agendar?tipo=veterinaria&pet=${activeProfile.value.petId}` : `/painel/cliente/agendar?tipo=humana${activeProfile.value.dependentId ? `&dependente=${activeProfile.value.dependentId}` : ''}` },
   { label: 'Cadastrar animal', description: 'Adicione um pet à família', icon: 'i-mdi-paw-plus', to: '/painel/cliente/pets' },
-  { label: 'Ver receitas', description: 'Documentos emitidos', icon: 'i-heroicons-document-text', to: '/painel/cliente/receitas' },
-  { label: 'Minha assinatura', description: 'Plano e benefícios', icon: 'i-heroicons-credit-card', to: '/painel/cliente/assinatura' },
-]
+  { label: veterinary ? 'Receitas veterinárias' : 'Receitas médicas', description: `Documentos de ${activeProfile.value.label}`, icon: 'i-heroicons-document-text', to: '/painel/cliente/receitas' },
+  { label: veterinary ? 'Maffy Store' : 'Benefícios', description: veterinary ? 'Produtos e vantagens para pets' : 'Serviços e vantagens do seu plano', icon: veterinary ? 'i-heroicons-shopping-bag' : 'i-heroicons-gift', to: '/painel/cliente/marketplace' },
+]})
 
 async function loadDashboard() {
   pending.value = true
@@ -107,6 +109,12 @@ function statusLabel(status: Consultation['status']) {
   return { agendada: 'Agendada', confirmada: 'Confirmada', realizada: 'Realizada', cancelada: 'Cancelada' }[status]
 }
 
+function profileSubtitle(profile: (typeof profiles.value)[number]) {
+  if (profile.key === 'human') return 'Titular · Humano'
+  if (profile.kind === 'humana') return 'Dependente · Humano'
+  return 'Pet · Veterinário'
+}
+
 function scheduleHuman() {
   router.push({
     path: '/painel/cliente/agendar',
@@ -143,6 +151,32 @@ function scheduleAnimal() {
         <p class="mt-2 text-sm text-body-muted sm:text-base">Tudo sobre os cuidados da sua família em um só lugar.</p>
       </div>
       <UButton to="/painel/cliente/agendar" label="Solicitar consulta" icon="i-heroicons-plus" size="lg" class="justify-center text-white" :style="{ backgroundColor: 'var(--portal-accent)' }" />
+    </section>
+
+    <section>
+      <div class="mb-4 flex items-end justify-between gap-4">
+        <div><h3 class="text-lg font-semibold text-body-strong">Perfis de cuidado</h3><p class="text-sm text-body-muted">Selecione para adaptar todo o painel.</p></div>
+        <UButton to="/painel/cliente/dependentes" label="Adicionar familiar" variant="ghost" size="sm" class="hidden sm:flex" />
+      </div>
+      <div class="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-3">
+        <button
+          v-for="profile in profiles"
+          :key="profile.key"
+          type="button"
+          class="flex min-w-52 snap-start items-center gap-3 rounded-2xl border-2 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm dark:bg-[#071b30]"
+          :class="activeKey === profile.key ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200 dark:border-white/10'"
+          @click="selectProfile(profile.key)"
+        >
+          <span class="flex size-11 shrink-0 items-center justify-center rounded-full" :class="profile.kind === 'humana' ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300' : 'bg-sky-50 text-sky-700 dark:bg-sky-500/10 dark:text-sky-300'">
+            <UIcon :name="profile.kind === 'humana' ? 'i-heroicons-user' : 'i-mdi-paw'" class="size-6" />
+          </span>
+          <span class="min-w-0"><span class="block truncate font-semibold text-body-strong">{{ profile.label }}</span><span class="mt-0.5 block text-xs text-body-muted">{{ profileSubtitle(profile) }}</span></span>
+          <UIcon v-if="activeKey === profile.key" name="i-heroicons-check-circle-solid" class="ml-auto size-5 shrink-0 text-[var(--portal-accent)]" />
+        </button>
+        <NuxtLink to="/painel/cliente/pets" class="flex min-w-40 snap-start items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gray-300 p-4 text-sm font-medium text-body-muted transition hover:border-[var(--portal-accent)] hover:text-[var(--portal-accent)] dark:border-white/15">
+          <UIcon name="i-heroicons-plus" class="size-5" /> Adicionar perfil
+        </NuxtLink>
+      </div>
     </section>
 
     <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[#071b30] sm:p-6">

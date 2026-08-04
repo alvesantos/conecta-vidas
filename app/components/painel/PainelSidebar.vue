@@ -11,6 +11,24 @@ defineEmits<{ collapse: []; navigate: [] }>()
 const definition = computed(() => PORTALS[props.portal])
 const { user, logout } = useAuth()
 const availablePortals = computed(() => user.value ? portalsForUser(user.value.type) : [])
+const { activeProfile } = usePatientProfile()
+const navigationGroups = computed(() => definition.value.nav.map(group => ({
+  ...group,
+  items: group.items
+    .filter(item => !(props.portal === 'cliente' && activeProfile.value.kind === 'veterinaria' && item.to === '/painel/cliente/dependentes'))
+    .map(item => {
+      if (props.portal !== 'cliente') return item
+      const veterinary = activeProfile.value.kind === 'veterinaria'
+      const contextualLabels: Record<string, string> = {
+        '/painel/cliente/consultas': veterinary ? 'Consultas veterinárias' : 'Consultas humanas',
+        '/painel/cliente/prontuarios': veterinary ? 'Prontuário do pet' : 'Prontuário humano',
+        '/painel/cliente/receitas': veterinary ? 'Receitas veterinárias' : 'Receitas médicas',
+        '/painel/cliente/exames': veterinary ? 'Exames veterinários' : 'Exames humanos',
+        '/painel/cliente/marketplace': veterinary ? 'Maffy Store' : 'Benefícios',
+      }
+      return { ...item, label: contextualLabels[item.to] ?? item.label }
+    }),
+})))
 const portalItems = computed(() => [availablePortals.value.map(portal => ({
   label: portal.label,
   icon: portal.icon,
@@ -32,7 +50,7 @@ const portalItems = computed(() => [availablePortals.value.map(portal => ({
     </NuxtLink>
 
     <nav aria-label="Navegação do portal" class="flex-1 space-y-5 overflow-y-auto p-3">
-      <section v-for="(group, index) in definition.nav" :key="`${group.label}-${index}`">
+      <section v-for="(group, index) in navigationGroups" :key="`${group.label}-${index}`">
         <p v-if="group.label && !collapsed" class="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-body-muted">
           {{ group.label }}
         </p>

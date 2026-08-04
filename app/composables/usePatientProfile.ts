@@ -53,6 +53,14 @@ export function usePatientProfile() {
     profiles.value.find(profile => profile.key === activeKey.value) ?? profiles.value[0],
   )
 
+  // Um perfil pode desaparecer após exclusão lógica ou desativação em outra
+  // aba/dispositivo. Nunca mantemos uma chave órfã: o Titular é o fallback.
+  watch(profiles, currentProfiles => {
+    if (!currentProfiles.some(profile => profile.key === activeKey.value)) {
+      activeKey.value = 'human'
+    }
+  })
+
   async function loadProfiles(force = false) {
     if ((loaded.value && !force) || loading.value) return
     loading.value = true
