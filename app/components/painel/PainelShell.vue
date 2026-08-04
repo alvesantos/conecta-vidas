@@ -29,7 +29,7 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
     <div class="min-w-0 transition-[margin] duration-200" :class="collapsed ? 'lg:ml-16' : 'lg:ml-64'">
       <PainelPainelTopbar :portal="portal" @menu="mobileOpen = true" />
       <PainelPatientProfileSwitcher v-if="portal === 'cliente'" />
-      <main class="min-h-[calc(100vh-3.5rem)]" :class="route.meta.noPadding ? '' : 'p-4 md:p-6 lg:p-10'">
+      <main class="min-h-[calc(100vh-3.5rem)]" :class="route.meta.noPadding ? '' : 'px-5 py-6 md:px-8 md:py-8 lg:px-10 lg:py-10'">
         <slot />
       </main>
     </div>

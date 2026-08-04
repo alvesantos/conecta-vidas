@@ -9,7 +9,7 @@ const props = defineProps<{
 
 defineEmits<{ collapse: []; navigate: [] }>()
 const definition = computed(() => PORTALS[props.portal])
-const { user } = useAuth()
+const { user, logout } = useAuth()
 const availablePortals = computed(() => user.value ? portalsForUser(user.value.type) : [])
 const portalItems = computed(() => [availablePortals.value.map(portal => ({
   label: portal.label,
@@ -60,6 +60,10 @@ const portalItems = computed(() => [availablePortals.value.map(portal => ({
         <UIcon name="i-heroicons-arrow-left-circle" class="size-5 shrink-0" />
         <span v-if="!collapsed">Voltar ao site</span>
       </NuxtLink>
+      <button class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10" :class="{ 'justify-center': collapsed }" :aria-label="collapsed ? 'Sair' : undefined" @click="logout">
+        <UIcon name="i-heroicons-arrow-left-on-rectangle" class="size-5 shrink-0" />
+        <span v-if="!collapsed">Sair</span>
+      </button>
       <button
         class="hidden min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 dark:hover:bg-white/10 lg:flex"
         :class="{ 'justify-center': collapsed }"

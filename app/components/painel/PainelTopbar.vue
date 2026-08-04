@@ -14,6 +14,18 @@ const currentItem = computed(() =>
 )
 const initials = computed(() => user.value?.name.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')
 const roleLabel = computed(() => user.value ? userTypeLabel(user.value.type) : '')
+const topNavigation = computed(() =>
+  props.portal === 'cliente'
+    ? definition.value.nav.flatMap(group => group.items)
+      .filter(item => [
+        '/painel/cliente',
+        '/painel/cliente/agendar',
+        '/painel/cliente/consultas',
+        '/painel/cliente/prontuarios',
+        '/painel/cliente/pets',
+      ].includes(item.to))
+    : [],
+)
 const accountItems = computed(() => [
   user.value && portalsForUser(user.value.type).length > 1
     ? portalsForUser(user.value.type).map(portal => ({
@@ -23,6 +35,9 @@ const accountItems = computed(() => [
       }))
     : [],
   [
+    ...(props.portal === 'cliente'
+      ? [{ label: 'Meu perfil', icon: 'i-heroicons-identification', to: '/painel/cliente/perfil' }]
+      : []),
     { label: 'Voltar ao site', icon: 'i-heroicons-arrow-left-circle', to: '/' },
     { label: 'Sair', icon: 'i-heroicons-arrow-left-on-rectangle', onSelect: logout },
   ],
@@ -37,7 +52,22 @@ const accountItems = computed(() => [
       </button>
       <h1 class="truncate text-base font-semibold text-body-strong">{{ currentItem?.label ?? definition.label }}</h1>
     </div>
-    <UDropdownMenu :items="accountItems" :content="{ align: 'end' }">
+    <div class="ml-auto flex items-center gap-2">
+      <nav v-if="topNavigation.length" aria-label="Atalhos do Portal do Cliente" class="hidden items-center gap-1 xl:flex">
+        <NuxtLink
+          v-for="item in topNavigation"
+          :key="item.to"
+          :to="item.to"
+          class="flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium transition"
+          :class="route.path === item.to || (item.to !== '/painel/cliente' && route.path.startsWith(`${item.to}/`))
+            ? 'bg-[var(--portal-accent)] text-white'
+            : 'text-body-muted hover:bg-black/5 hover:text-body-strong dark:hover:bg-white/10'"
+        >
+          <UIcon :name="item.icon" class="size-4" />
+          {{ item.label }}
+        </NuxtLink>
+      </nav>
+      <UDropdownMenu :items="accountItems" :content="{ align: 'end' }">
       <button class="flex min-h-11 items-center gap-2 rounded-full px-1.5 pr-3 hover:bg-black/5 dark:hover:bg-white/10">
         <span class="flex size-8 items-center justify-center rounded-full bg-[var(--portal-accent)] text-xs font-semibold text-white">{{ initials }}</span>
         <span class="hidden min-w-0 sm:block">
@@ -46,6 +76,7 @@ const accountItems = computed(() => [
         </span>
         <UIcon name="i-heroicons-chevron-down" class="size-4 text-body-muted" />
       </button>
-    </UDropdownMenu>
+      </UDropdownMenu>
+    </div>
   </header>
 </template>

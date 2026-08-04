@@ -27,6 +27,7 @@ const { api } = useApi()
 const { getMySubscription } = usePlans()
 const config = useRuntimeConfig()
 const { activeProfile, loadProfiles } = usePatientProfile()
+const router = useRouter()
 
 const pets = ref<Pet[]>([])
 const consultations = ref<Consultation[]>([])
@@ -54,7 +55,7 @@ const upcomingConsultations = computed(() => {
 const nextConsultation = computed(() => upcomingConsultations.value[0] ?? null)
 
 const quickActions = [
-  { label: 'Solicitar consulta', description: 'Humana ou veterinária', icon: 'i-heroicons-video-camera', to: '/solicitar-consulta' },
+  { label: 'Solicitar consulta', description: 'Humana ou veterinária', icon: 'i-heroicons-video-camera', to: '/painel/cliente/agendar' },
   { label: 'Cadastrar animal', description: 'Adicione um pet à família', icon: 'i-mdi-paw-plus', to: '/painel/cliente/pets' },
   { label: 'Ver receitas', description: 'Documentos emitidos', icon: 'i-heroicons-document-text', to: '/painel/cliente/receitas' },
   { label: 'Minha assinatura', description: 'Plano e benefícios', icon: 'i-heroicons-credit-card', to: '/painel/cliente/assinatura' },
@@ -101,6 +102,24 @@ function consultationLabel(item: Consultation) {
 function statusLabel(status: Consultation['status']) {
   return { agendada: 'Agendada', confirmada: 'Confirmada', realizada: 'Realizada', cancelada: 'Cancelada' }[status]
 }
+
+function scheduleHuman() {
+  router.push({ path: '/painel/cliente/agendar', query: { tipo: 'humana' } })
+}
+
+function scheduleAnimal() {
+  if (!pets.value.length) {
+    router.push('/painel/cliente/pets')
+    return
+  }
+  const selectedPet = activeProfile.value.kind === 'veterinaria'
+    ? activeProfile.value.petId
+    : pets.value[0]!.id
+  router.push({
+    path: '/painel/cliente/agendar',
+    query: { tipo: 'veterinaria', pet: selectedPet },
+  })
+}
 </script>
 
 <template>
@@ -111,7 +130,25 @@ function statusLabel(status: Consultation['status']) {
         <h2 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">Olá, {{ firstName }}</h2>
         <p class="mt-2 text-sm text-body-muted sm:text-base">Tudo sobre os cuidados da sua família em um só lugar.</p>
       </div>
-      <UButton to="/solicitar-consulta" label="Solicitar consulta" icon="i-heroicons-plus" size="lg" class="justify-center text-white" :style="{ backgroundColor: 'var(--portal-accent)' }" />
+      <UButton to="/painel/cliente/agendar" label="Solicitar consulta" icon="i-heroicons-plus" size="lg" class="justify-center text-white" :style="{ backgroundColor: 'var(--portal-accent)' }" />
+    </section>
+
+    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[#071b30] sm:p-6">
+      <div class="mb-5">
+        <p class="text-sm font-medium text-[var(--portal-accent)]">Novo atendimento</p>
+        <h3 class="mt-1 text-xl font-bold text-body-strong sm:text-2xl">Quem vamos cuidar hoje?</h3>
+        <p class="mt-1 text-sm text-body-muted">Escolha o tipo de consulta para continuar.</p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <button type="button" class="group flex min-h-36 items-center gap-5 rounded-2xl border-2 border-gray-200 p-5 text-left transition hover:-translate-y-0.5 hover:border-[var(--portal-accent)] hover:shadow-md dark:border-white/10" @click="scheduleHuman">
+          <span class="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 transition group-hover:bg-[var(--portal-accent)] group-hover:text-white dark:bg-blue-500/10 dark:text-blue-300"><UIcon name="i-mdi-doctor" class="size-8" /></span>
+          <span><span class="block text-lg font-bold text-body-strong">Humano</span><span class="mt-1 block text-sm text-body-muted">Marcar consulta médica para você.</span><span class="mt-3 flex items-center gap-1 text-sm font-semibold text-[var(--portal-accent)]">Continuar <UIcon name="i-heroicons-arrow-right" /></span></span>
+        </button>
+        <button type="button" class="group flex min-h-36 items-center gap-5 rounded-2xl border-2 border-gray-200 p-5 text-left transition hover:-translate-y-0.5 hover:border-[var(--portal-accent)] hover:shadow-md dark:border-white/10" @click="scheduleAnimal">
+          <span class="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-sky-50 text-sky-700 transition group-hover:bg-[var(--portal-accent)] group-hover:text-white dark:bg-sky-500/10 dark:text-sky-300"><UIcon name="i-mdi-paw" class="size-8" /></span>
+          <span><span class="block text-lg font-bold text-body-strong">Animal</span><span class="mt-1 block text-sm text-body-muted">{{ pets.length ? 'Marcar consulta veterinária.' : 'Cadastre um pet para continuar.' }}</span><span class="mt-3 flex items-center gap-1 text-sm font-semibold text-[var(--portal-accent)]">Continuar <UIcon name="i-heroicons-arrow-right" /></span></span>
+        </button>
+      </div>
     </section>
 
     <UAlert v-if="errorMsg" color="warning" variant="soft" :description="errorMsg" />
@@ -147,7 +184,7 @@ function statusLabel(status: Consultation['status']) {
           </div>
           <span class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"><UIcon name="i-heroicons-calendar-days" class="size-6" /></span>
         </div>
-        <UButton :to="nextConsultation ? '/painel/cliente/consultas' : '/solicitar-consulta'" :label="nextConsultation ? 'Ver consultas' : 'Agendar agora'" variant="link" class="mt-3 px-0" />
+        <UButton :to="nextConsultation ? '/painel/cliente/consultas' : '/painel/cliente/agendar'" :label="nextConsultation ? 'Ver consultas' : 'Agendar agora'" variant="link" class="mt-3 px-0" />
       </UCard>
 
       <UCard>
@@ -187,7 +224,7 @@ function statusLabel(status: Consultation['status']) {
             <UBadge :label="statusLabel(item.status)" :color="item.status === 'confirmada' ? 'success' : 'info'" variant="soft" />
           </div>
         </div>
-        <div v-else class="flex flex-col items-center py-10 text-center"><UIcon name="i-heroicons-calendar-days" class="size-10 text-body-muted" /><p class="mt-3 font-medium text-body-strong">Nenhuma consulta agendada</p><p class="mt-1 text-sm text-body-muted">Quando precisar, solicite um atendimento.</p><UButton to="/solicitar-consulta" label="Solicitar consulta" class="mt-4" /></div>
+        <div v-else class="flex flex-col items-center py-10 text-center"><UIcon name="i-heroicons-calendar-days" class="size-10 text-body-muted" /><p class="mt-3 font-medium text-body-strong">Nenhuma consulta agendada</p><p class="mt-1 text-sm text-body-muted">Quando precisar, solicite um atendimento.</p><UButton to="/painel/cliente/agendar" label="Solicitar consulta" class="mt-4" /></div>
       </UCard>
 
       <UCard>

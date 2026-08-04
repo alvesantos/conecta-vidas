@@ -38,6 +38,7 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
     nav: [
       { label: null, items: [{ label: 'Dashboard', to: '/painel/cliente', icon: 'i-heroicons-squares-2x2' }] },
       { label: 'Cuidado', items: [
+        { label: 'Agendar', to: '/painel/cliente/agendar', icon: 'i-heroicons-plus-circle' },
         { label: 'Consultas', to: '/painel/cliente/consultas', icon: 'i-heroicons-calendar-days' },
         { label: 'Prontuários', to: '/painel/cliente/prontuarios', icon: 'i-heroicons-clipboard-document-list' },
         { label: 'Receitas', to: '/painel/cliente/receitas', icon: 'i-heroicons-document-text' },
