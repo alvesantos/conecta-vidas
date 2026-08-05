@@ -1,9 +1,17 @@
 <script setup lang="ts">
 const { open, hide } = usePatientConecta()
-const { activeProfile } = usePatientProfile()
+const { profiles, activeKey, activeProfile, selectProfile, loadProfiles } = usePatientProfile()
 const router = useRouter()
 
 const veterinary = computed(() => activeProfile.value.kind === 'veterinaria')
+const profileOptions = computed(() => profiles.value.map(profile => ({
+  label: `${profile.label} · ${profile.kind === 'humana' ? 'Humano' : 'Veterinário'}`,
+  value: profile.key,
+})))
+
+watch(open, value => {
+  if (value) loadProfiles()
+})
 
 function go(atendimento: 'pronto' | 'especialista') {
   const profile = activeProfile.value
@@ -29,6 +37,9 @@ function go(atendimento: 'pronto' | 'especialista') {
           <h2 class="mt-1 text-xl font-bold text-body-strong">Como podemos cuidar de {{ activeProfile.label }}?</h2>
           <p class="mt-1 text-sm text-body-muted">Contexto {{ veterinary ? 'veterinário' : 'humano' }} selecionado.</p>
         </div>
+        <UFormField label="Quem será atendido?">
+          <USelect :model-value="activeKey" :items="profileOptions" class="w-full" size="lg" @update:model-value="selectProfile(String($event))" />
+        </UFormField>
         <button type="button" class="flex w-full items-center gap-4 rounded-2xl border border-gray-200 p-4 text-left transition hover:border-[var(--portal-accent)] dark:border-white/10" @click="go('pronto')">
           <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-300"><UIcon name="i-heroicons-bolt" class="size-6" /></span>
           <span><strong class="block text-body-strong">Pronto atendimento {{ veterinary ? 'veterinário' : 'médico' }}</strong><span class="mt-1 block text-sm text-body-muted">Solicite atendimento com prioridade.</span></span>

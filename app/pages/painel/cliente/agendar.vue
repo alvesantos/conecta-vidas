@@ -15,6 +15,18 @@ const time = ref('')
 const notes = ref('')
 const pending = ref(false)
 const specialist = computed(() => route.query.atendimento === 'especialista')
+const urgent = computed(() => route.query.atendimento === 'pronto')
+const careMode = computed<'pronto' | 'especialista'>(() => urgent.value ? 'pronto' : 'especialista')
+interface Quote {
+  hasActivePlan: boolean
+  planTitle: string | null
+  remainingFree: number
+  coveredByPlan: boolean
+  price: number | null
+  priceConfigured: boolean
+}
+const quote = ref<Quote | null>(null)
+const quotePending = ref(false)
 
 const petOptions = computed(() => pets.value.map(pet => ({
   label: `${pet.name} · ${pet.breed}`,
@@ -43,20 +55,29 @@ function selectKind(value: 'humana' | 'veterinaria') {
   }
 }
 
+async function loadQuote() {
+  quotePending.value = true
+  try {
+    quote.value = await api<Quote>(`/consultations/quote?kind=${kind.value}&care_mode=${careMode.value}`)
+  } finally { quotePending.value = false }
+}
+
 watch(petId, value => {
   if (value) selectProfile(`pet:${value}`)
 })
 watch(dependentId, value => {
   if (kind.value === 'humana') selectProfile(value ? `dependent:${value}` : 'human')
 })
+watch([kind, careMode], loadQuote)
 
 onMounted(async () => {
   await loadProfiles()
   selectKind(kind.value)
+  await loadQuote()
 })
 
 async function submit() {
-  if (!date.value || !time.value) {
+  if (!urgent.value && (!date.value || !time.value)) {
     toast.add({ title: 'Preencha data e horário', color: 'warning' })
     return
   }
@@ -67,18 +88,26 @@ async function submit() {
 
   pending.value = true
   try {
+    const now = new Date()
+    const urgentDate = now.toLocaleDateString('en-CA', { timeZone: 'America/Fortaleza' })
+    const urgentTime = now.toLocaleTimeString('pt-BR', { timeZone: 'America/Fortaleza', hour: '2-digit', minute: '2-digit', hour12: false })
     await api('/consultations', {
       method: 'POST',
       body: {
         kind: kind.value,
         pet_id: kind.value === 'veterinaria' ? petId.value : null,
         dependent_id: kind.value === 'humana' ? dependentId.value || null : null,
-        date: date.value,
-        time: time.value,
+        date: urgent.value ? urgentDate : date.value,
+        time: urgent.value ? urgentTime : time.value,
         notes: notes.value,
+        care_mode: careMode.value,
       },
     })
-    toast.add({ title: 'Consulta agendada', description: 'Sua solicitação foi enviada.', color: 'success' })
+    toast.add({
+      title: urgent.value ? 'Pronto atendimento solicitado' : 'Consulta agendada',
+      description: urgent.value ? 'Sua solicitação entrou na etapa de atendimento.' : 'Sua solicitação foi enviada.',
+      color: 'success',
+    })
     await router.push('/painel/cliente/consultas')
   } catch (error: unknown) {
     toast.add({
@@ -95,9 +124,9 @@ async function submit() {
 <template>
   <div class="mx-auto max-w-4xl space-y-6">
     <div>
-      <p class="text-sm font-medium text-[var(--portal-accent)]">{{ specialist ? 'Atendimento especializado' : 'Novo atendimento' }}</p>
-      <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">{{ specialist ? 'Agendar especialista' : 'Agendar consulta' }}</h1>
-      <p class="mt-2 text-sm text-body-muted">{{ specialist ? 'Escolha o paciente e informe o melhor horário. O catálogo de especialidades será conectado nesta jornada.' : 'Escolha o tipo de cuidado e informe o melhor horário.' }}</p>
+      <p class="text-sm font-medium text-[var(--portal-accent)]">{{ urgent ? 'Atendimento prioritário' : 'Atendimento especializado' }}</p>
+      <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">{{ urgent ? 'Pronto atendimento 24h' : 'Agendar especialista' }}</h1>
+      <p class="mt-2 text-sm text-body-muted">{{ urgent ? 'Confirme o paciente e descreva o que está acontecendo.' : 'Escolha o paciente e informe o melhor horário. O catálogo de especialidades será conectado nesta jornada.' }}</p>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">
@@ -147,16 +176,34 @@ async function submit() {
         <UFormField v-if="kind === 'veterinaria'" label="Animal *">
           <USelect v-model="petId" :items="petOptions" placeholder="Selecione o pet" class="w-full" size="lg" />
         </UFormField>
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div v-if="!urgent" class="grid gap-4 sm:grid-cols-2">
           <UFormField label="Data *"><UInput v-model="date" type="date" required class="w-full" size="lg" /></UFormField>
           <UFormField label="Horário *"><UInput v-model="time" type="time" required class="w-full" size="lg" /></UFormField>
+        </div>
+        <div class="rounded-xl border border-gray-200 p-4 dark:border-white/10">
+          <div v-if="quotePending" class="flex items-center gap-2 text-sm text-body-muted"><UIcon name="i-heroicons-arrow-path" class="size-5 animate-spin" /> Verificando cobertura...</div>
+          <template v-else-if="quote">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p class="text-xs uppercase tracking-wide text-body-muted">Cobertura</p>
+                <p class="font-semibold text-body-strong">{{ quote.coveredByPlan ? `Incluído no plano ${quote.planTitle || ''}` : quote.hasActivePlan ? 'Cota mensal utilizada' : 'Atendimento avulso' }}</p>
+                <p v-if="quote.hasActivePlan" class="mt-1 text-xs text-body-muted">{{ quote.remainingFree }} atendimento(s) incluído(s) restante(s) neste mês.</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs uppercase tracking-wide text-body-muted">Valor</p>
+                <p v-if="quote.priceConfigured" class="text-xl font-bold text-body-strong">{{ quote.price === 0 ? 'Incluído' : Number(quote.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+                <p v-else class="font-semibold text-amber-700 dark:text-amber-300">A confirmar</p>
+              </div>
+            </div>
+            <UAlert v-if="!quote.priceConfigured" class="mt-3" color="warning" variant="soft" description="O valor avulso ainda depende da configuração comercial. A equipe confirmará antes de qualquer cobrança." />
+          </template>
         </div>
         <UFormField label="Motivo da consulta">
           <UTextarea v-model="notes" :rows="5" class="w-full" placeholder="Descreva brevemente o que está acontecendo." />
         </UFormField>
         <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <UButton to="/painel/cliente" label="Cancelar" variant="outline" size="lg" class="justify-center" />
-          <UButton type="submit" label="Confirmar agendamento" size="lg" class="justify-center" :loading="pending" />
+          <UButton type="submit" :label="urgent ? 'Solicitar pronto atendimento' : 'Confirmar agendamento'" size="lg" class="justify-center" :loading="pending" />
         </div>
       </form>
     </UCard>
