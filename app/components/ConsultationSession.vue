@@ -171,9 +171,13 @@ const {
               class="w-full flex-1"
               textarea-class="h-full resize-none"
             />
+            <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <UCheckbox v-model="active.notes_visible_to_patient" />
+              Compartilhar esta evolução com o paciente ou tutor
+            </label>
             <p class="text-xs text-gray-500 mt-1">
-              Ao finalizar, estas anotações serão salvas no prontuário do
-              responsável.
+              As anotações sempre integram o prontuário clínico, mas só aparecem
+              no portal quando o compartilhamento estiver marcado.
             </p>
           </div>
         </div>

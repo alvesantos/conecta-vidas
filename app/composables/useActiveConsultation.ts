@@ -5,6 +5,7 @@ export interface ActiveConsultation {
   status: string;
   meet_link: string;
   notes: string;
+  notes_visible_to_patient?: boolean;
 }
 
 /**
@@ -74,7 +75,7 @@ export function useActiveConsultation() {
     try {
       await api(`/vet/consultations/${active.value.id}/session`, {
         method: 'PATCH',
-        body: { notes: active.value.notes },
+        body: { notes: active.value.notes, notes_visible_to_patient: active.value.notes_visible_to_patient === true },
       });
       toast.add({ title: 'Anotações salvas', description: 'Seu rascunho foi salvo.', color: 'success' });
     } catch {
@@ -94,7 +95,7 @@ export function useActiveConsultation() {
     try {
       await api(`/vet/consultations/${active.value.id}/status`, {
         method: 'PATCH',
-        body: { status: 'realizada', notes: active.value.notes },
+        body: { status: 'realizada', notes: active.value.notes, notes_visible_to_patient: active.value.notes_visible_to_patient === true },
       });
       toast.add({ title: 'Consulta finalizada', description: 'As anotações foram salvas no prontuário do responsável.', color: 'success' });
       active.value = null;
