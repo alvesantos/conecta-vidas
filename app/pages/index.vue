@@ -35,9 +35,9 @@ const howItWorks = [
     desc: "Crie sua conta em poucos minutos. Cadastrar um animal é opcional e pode ser feito depois.",
   },
   {
-    icon: "i-heroicons-credit-card",
-    title: "Escolha um plano",
-    desc: "Assine o plano ideal e tenha consultas incluídas todos os meses, com descontos exclusivos.",
+    icon: "i-heroicons-squares-2x2",
+    title: "Escolha a especialidade do atendimento",
+    desc: "Selecione se a consulta é para você ou para o seu animal e encontre o profissional certo.",
   },
   {
     icon: "i-heroicons-video-camera",
