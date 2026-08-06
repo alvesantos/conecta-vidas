@@ -146,7 +146,7 @@ onMounted(initialize)
       <div v-if="result.guidance.length" class="space-y-2 rounded-xl bg-gray-50 p-4 dark:bg-white/5"><p v-for="guidance in result.guidance" :key="guidance" class="text-sm font-medium text-body-strong">{{ guidance }}</p></div>
       <div v-if="result.quote" class="mt-4 flex items-center justify-between rounded-xl border border-gray-200 p-4 dark:border-white/10"><span class="text-sm text-body-muted">Valor do atendimento</span><strong class="text-body-strong">{{ formatPrice(result.quote.price) }}</strong></div>
       <UAlert class="mt-4" color="neutral" variant="soft" :description="result.disclaimer" />
-      <div class="mt-5 flex justify-center"><UButton :to="result.emergency ? '/painel/cliente' : '/painel/cliente/consultas'" :label="result.emergency ? 'Voltar ao painel' : 'Acompanhar solicitação'" /></div>
+      <div class="mt-5 flex justify-center"><UButton :to="result.emergency ? '/painel/cliente' : `/painel/cliente/fila/${result.consultation?.id}`" :label="result.emergency ? 'Voltar ao painel' : 'Entrar na sala de espera'" /></div>
     </UCard>
   </div>
 </template>

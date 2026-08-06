@@ -12,6 +12,7 @@ interface Consultation {
   dependent_name?: string | null
   pet_name?: string | null
   vet_name?: string | null
+  care_mode?: 'pronto' | 'especialista'
 }
 
 const { api } = useApi()
@@ -52,6 +53,13 @@ onMounted(async () => {
             <p class="mt-1 text-sm text-body-muted">{{ new Date(`${item.date.slice(0, 10)}T00:00:00`).toLocaleDateString('pt-BR') }} às {{ item.time.slice(0, 5) }} · {{ item.vet_name || 'Profissional a definir' }}</p>
           </div>
           <UBadge :label="item.status" variant="soft" />
+          <UButton
+            v-if="item.care_mode === 'pronto' && !['cancelada', 'realizada'].includes(item.status)"
+            :to="`/painel/cliente/fila/${item.id}`"
+            :label="item.status === 'confirmada' ? 'Abrir atendimento' : 'Voltar à sala de espera'"
+            variant="outline"
+            size="sm"
+          />
         </div>
       </UCard>
     </div>

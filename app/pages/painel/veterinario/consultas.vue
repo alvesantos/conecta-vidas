@@ -23,6 +23,8 @@
 
     <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
 
+    <PainelCareQueue portal="vet" />
+
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
       <UTable :data="consultations" :columns="columns" :loading="pending" class="w-full">
         <template #date-cell="{ row }">

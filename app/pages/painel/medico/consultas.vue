@@ -57,6 +57,7 @@ function formatDate(value: string) {
       </UFormField>
       <UButton v-if="dateFilter" label="Limpar" color="neutral" variant="ghost" @click="dateFilter = ''" />
     </div>
+    <PainelCareQueue portal="medico" />
     <UAlert v-if="errorMsg" :description="errorMsg" color="error" variant="soft" class="mb-4" />
     <UCard :ui="{ body: 'p-0 sm:p-0' }">
       <UTable :data="consultations" :columns="columns" :loading="pending">
