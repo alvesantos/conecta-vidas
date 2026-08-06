@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
           <span class="mx-auto flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"><UIcon name="i-heroicons-bell-alert" class="size-10" /></span>
           <h2 class="mt-4 text-2xl font-bold text-body-strong">Sua vez chegou!</h2>
           <p class="mt-2 text-body-muted">{{ state.professional_name || 'O profissional' }} está disponível para o atendimento.</p>
-          <UButton to="/painel/cliente/consultas" label="Abrir atendimento" icon="i-heroicons-video-camera" size="lg" class="mt-6" />
+          <UButton :to="`/painel/cliente/atendimento/${consultationId}`" label="Abrir atendimento" icon="i-heroicons-video-camera" size="lg" class="mt-6" />
         </div>
       </UCard>
 

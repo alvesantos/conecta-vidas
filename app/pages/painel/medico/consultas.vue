@@ -20,6 +20,7 @@ const columns = [
   { accessorKey: 'time', header: 'Horário' },
   { accessorKey: 'patient_name', header: 'Paciente' },
   { accessorKey: 'status', header: 'Status' },
+  { id: 'actions', header: 'Ações' },
 ]
 
 async function loadConsultations() {
@@ -64,6 +65,15 @@ function formatDate(value: string) {
         <template #date-cell="{ row }">{{ formatDate(row.original.date) }}</template>
         <template #time-cell="{ row }">{{ row.original.time?.slice(0, 5) }}</template>
         <template #status-cell="{ row }"><UBadge :label="row.original.status" color="neutral" variant="soft" /></template>
+        <template #actions-cell="{ row }">
+          <UButton
+            v-if="row.original.status === 'agendada' || row.original.status === 'confirmada'"
+            :to="`/painel/medico/atendimento/${row.original.id}`"
+            label="Abrir atendimento"
+            icon="i-heroicons-video-camera"
+            size="xs"
+          />
+        </template>
         <template #empty><p class="py-10 text-center text-sm text-body-muted">Nenhuma consulta encontrada.</p></template>
       </UTable>
     </UCard>

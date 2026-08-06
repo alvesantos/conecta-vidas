@@ -60,6 +60,13 @@ onMounted(async () => {
             variant="outline"
             size="sm"
           />
+          <UButton
+            v-if="item.status === 'confirmada' && item.vet_name"
+            :to="`/painel/cliente/atendimento/${item.id}`"
+            label="Entrar na consulta"
+            icon="i-heroicons-video-camera"
+            size="sm"
+          />
         </div>
       </UCard>
     </div>

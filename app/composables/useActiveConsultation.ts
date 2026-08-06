@@ -26,11 +26,7 @@ export function useActiveConsultation() {
   const generatingLink = useState<boolean>('active-consultation-generating', () => false);
   const finalizing = useState<boolean>('active-consultation-finalizing', () => false);
 
-  function buildMeetLink(id: string) {
-    return `https://meet.jit.si/ConectaVet-${id}`;
-  }
-
-  /** Abre a sala de consulta. Gera o link automaticamente se solicitado. */
+  /** Abre a sala de consulta. A API cria a sala aleatória quando solicitado. */
   async function start(consultation: ActiveConsultation, autoGenerateLink = false) {
     active.value = { ...consultation };
     isOpen.value = true;
@@ -54,13 +50,9 @@ export function useActiveConsultation() {
     if (!active.value) return;
     generatingLink.value = true;
     try {
-      const link = buildMeetLink(active.value.id);
-      const updated = await api<{ meet_link: string }>(`/vet/consultations/${active.value.id}/session`, {
-        method: 'PATCH',
-        body: { meet_link: link },
-      });
-      active.value.meet_link = updated.meet_link ?? link;
-      toast.add({ title: 'Link gerado!', description: 'A sala de videoconferência foi criada e salva.', color: 'success' });
+      const room = await api<{ meet_link: string }>(`/consultations/${active.value.id}/room`);
+      active.value.meet_link = room.meet_link;
+      toast.add({ title: 'Sala preparada!', description: 'A videoconferência segura do atendimento está pronta.', color: 'success' });
     } catch {
       toast.add({ title: 'Erro', description: 'Falha ao gerar o link do Meet.', color: 'error' });
     } finally {

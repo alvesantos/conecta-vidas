@@ -109,8 +109,9 @@ const {
             </div>
           </div>
 
-          <!-- Meet Link -->
+          <!-- Sala protegida pelo acesso do portal -->
           <div
+            v-if="!active.meet_link"
             class="bg-primary/5 border border-primary/20 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
             <div class="min-w-0">
@@ -118,36 +119,18 @@ const {
                 Videoconferência
               </p>
               <p class="text-sm text-gray-600 dark:text-gray-300">
-                <span v-if="active.meet_link"
-                  >Link gerado:
-                  <a
-                    :href="active.meet_link"
-                    target="_blank"
-                    class="underline font-medium break-all"
-                    >{{ active.meet_link }}</a
-                  ></span
-                >
-                <span v-else>Link da sala não gerado ainda.</span>
+                Prepare uma sala exclusiva e aleatória para este atendimento.
               </p>
             </div>
             <UButton
-              v-if="!active.meet_link"
               color="primary"
-              label="Gerar Link"
-              icon="i-heroicons-link"
+              label="Preparar sala"
+              icon="i-heroicons-video-camera"
               :loading="generatingLink"
               @click="generateLink"
             />
-            <UButton
-              v-else
-              color="primary"
-              variant="solid"
-              label="Entrar na Sala"
-              icon="i-heroicons-arrow-right-circle"
-              :to="active.meet_link"
-              target="_blank"
-            />
           </div>
+          <ConsultationVideoRoom v-else :consultation-id="active.id" />
 
           <!-- Bloco de Notas / Prontuário Ao Vivo -->
           <div class="flex flex-col gap-2 h-64">
