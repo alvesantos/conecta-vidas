@@ -36,8 +36,8 @@ const howItWorks = [
   },
   {
     icon: "i-heroicons-squares-2x2",
-    title: "Escolha a especialidade do atendimento",
-    desc: "Selecione se a consulta é para você ou para o seu animal e encontre o profissional certo.",
+    title: "Escolha entre medicina humana e veterinária",
+    desc: "Selecione o tipo de atendimento que você precisa e encontre o profissional certo.",
   },
   {
     icon: "i-heroicons-video-camera",

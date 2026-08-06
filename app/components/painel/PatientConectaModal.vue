@@ -17,7 +17,7 @@ function go(atendimento: 'pronto' | 'especialista') {
   const profile = activeProfile.value
   hide()
   router.push({
-    path: '/painel/cliente/agendar',
+    path: atendimento === 'pronto' ? '/painel/cliente/triagem' : '/painel/cliente/agendar',
     query: {
       tipo: profile.kind,
       atendimento,
