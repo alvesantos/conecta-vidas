@@ -11,6 +11,9 @@ export interface PrescriptionAnimal {
 }
 
 export interface PrescriptionDocData {
+  kind?: 'humana' | 'veterinaria'
+  professionalName?: string | null
+  professionalRegistration?: string | null
   vetName?: string | null
   vetCrmv?: string | null
   /** Data da prescrição (yyyy-mm-dd ou ISO). */
@@ -20,6 +23,10 @@ export interface PrescriptionDocData {
   responsibleCpf?: string | null
   responsibleEmail?: string | null
   responsibleAddress?: string | null
+  patientName?: string | null
+  patientCpf?: string | null
+  patientEmail?: string | null
+  patientAddress?: string | null
   animal?: PrescriptionAnimal | null
 }
 
@@ -55,6 +62,9 @@ function field(label: string, value: string): string {
 /** Monta o HTML interno do documento da prescrição (folha A4). Layout amigável ao html2canvas (flex). */
 export function buildPrescriptionHtml(data: PrescriptionDocData): string {
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
+  const human = data.kind === 'humana'
+  const professionalName = data.professionalName || data.vetName
+  const registration = data.professionalRegistration || data.vetCrmv
   const a = data.animal
 
   const animalBlock = a
@@ -71,25 +81,25 @@ export function buildPrescriptionHtml(data: PrescriptionDocData): string {
     : '<div style="font-size: 13px; color: #374151;">Nenhum animal selecionado.</div>'
 
   const responsibleBlock = [
-    field('Nome', escapeHtml(data.responsibleName)),
-    field('CPF', escapeHtml(data.responsibleCpf) || '—'),
-    field('E-mail', escapeHtml(data.responsibleEmail) || '—'),
-    field('Endereço', escapeHtml(data.responsibleAddress) || '—'),
+    field('Nome', escapeHtml(human ? data.patientName : data.responsibleName)),
+    field('CPF', escapeHtml(human ? data.patientCpf : data.responsibleCpf) || '—'),
+    field('E-mail', escapeHtml(human ? data.patientEmail : data.responsibleEmail) || '—'),
+    field('Endereço', escapeHtml(human ? data.patientAddress : data.responsibleAddress) || '—'),
   ].join('')
 
   return `
     <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0d9488; padding-bottom: 16px; margin-bottom: 24px;">
       <div>
-        <h1 style="font-size: 22px; font-weight: 700; color: #0d9488; margin: 0;">Prescrição Veterinária</h1>
+        <h1 style="font-size: 22px; font-weight: 700; color: #0d9488; margin: 0;">${human ? 'Receita Médica' : 'Prescrição Veterinária'}</h1>
         <p style="font-size: 13px; color: #6b7280; margin: 4px 0 0;">ConectaVidas</p>
       </div>
       <img src="${origin}/conecta-icon.png" alt="ConectaVidas" crossorigin="anonymous" style="height: 80px; width: auto; object-fit: contain;" />
     </div>
 
-    <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Animal</h2>
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 20px;">${animalBlock}</div>
+    ${human ? '' : `<h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Animal</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 20px;">${animalBlock}</div>`}
 
-    <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Responsável</h2>
+    <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">${human ? 'Dados do Paciente' : 'Dados do Responsável'}</h2>
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 20px;">${responsibleBlock}</div>
 
     <h6 style="font-size: 15px; font-weight: 700; color: #0d9488; margin: 24px 0 8px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px;">
@@ -99,9 +109,9 @@ export function buildPrescriptionHtml(data: PrescriptionDocData): string {
 
     <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: flex-end;">
       <div style="font-size: 13px; color: #374151; line-height: 1.5;">
-        <strong>${escapeHtml(data.vetName)}</strong><br />
-        ${data.vetCrmv ? `CRMV: ${escapeHtml(data.vetCrmv)}<br />` : ''}
-        <span style="font-size: 11px; color: #6b7280;">Médico(a) Veterinário(a)</span>
+        <strong>${escapeHtml(professionalName)}</strong><br />
+        ${registration ? `${human ? 'CRM' : 'CRMV'}: ${escapeHtml(registration)}<br />` : ''}
+        <span style="font-size: 11px; color: #6b7280;">${human ? 'Médico(a)' : 'Médico(a) Veterinário(a)'}</span>
       </div>
       <div style="font-size: 13px; color: #374151;">
         ${formatDate(data.date)}
@@ -110,7 +120,7 @@ export function buildPrescriptionHtml(data: PrescriptionDocData): string {
 }
 
 function fileName(data: PrescriptionDocData): string {
-  const base = (data.animal?.name || data.responsibleName || 'prescricao')
+  const base = (data.animal?.name || data.patientName || data.responsibleName || 'prescricao')
     .toString()
     .toLowerCase()
     .normalize('NFD')
