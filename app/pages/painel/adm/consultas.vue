@@ -54,6 +54,10 @@
           </div>
         </template>
 
+        <template #actions-cell="{ row }">
+          <UButton v-if="!['cancelada', 'realizada'].includes(row.original.status)" label="Cancelar" color="error" variant="ghost" size="xs" @click="cancelConsultation(row.original)" />
+        </template>
+
         <template #empty>
           <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
             <UIcon name="i-heroicons-calendar-days" class="size-10 mb-2" />
@@ -210,6 +214,15 @@ async function assignVet(consultationId: string, vetId: string) {
   }
 }
 
+async function cancelConsultation(row: ConsultationRow) {
+  if (!confirm(`Cancelar a consulta de ${row.tutor_name}?`)) return;
+  try {
+    await api(`/admin/consultations/${row.id}/cancel`, { method: 'PATCH' });
+    toast.add({ title: 'Consulta cancelada', color: 'success' });
+    await loadData();
+  } catch { toast.add({ title: 'Não foi possível cancelar', color: 'error' }); }
+}
+
 function formatDate(dateStr: string) {
   const [year, month, day] = dateStr.slice(0, 10).split('-');
   return `${day}/${month}/${year}`;
@@ -235,6 +248,7 @@ const columns = [
   { accessorKey: 'tutor_name', header: 'Responsável' },
   { accessorKey: 'pet_name', header: 'Animal' },
   { accessorKey: 'status', header: 'Status' },
-  { id: 'assignment', header: 'Veterinário' }
+  { id: 'assignment', header: 'Profissional' },
+  { id: 'actions', header: 'Ações' }
 ];
 </script>

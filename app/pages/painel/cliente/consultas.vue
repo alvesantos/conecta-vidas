@@ -13,6 +13,8 @@ interface Consultation {
   pet_name?: string | null
   vet_name?: string | null
   care_mode?: 'pronto' | 'especialista'
+  specialty_id?: string | null
+  specialty_name?: string | null
 }
 
 const { api } = useApi()
@@ -50,6 +52,7 @@ onMounted(async () => {
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p class="font-semibold text-body-strong">{{ item.kind === 'humana' ? `Consulta humana${item.dependent_name ? ` · ${item.dependent_name}` : ''}` : `Consulta veterinária · ${item.pet_name}` }}</p>
+            <p v-if="item.specialty_name" class="mt-1 text-sm font-medium text-body-strong">{{ item.specialty_name }}</p>
             <p class="mt-1 text-sm text-body-muted">{{ new Date(`${item.date.slice(0, 10)}T00:00:00`).toLocaleDateString('pt-BR') }} às {{ item.time.slice(0, 5) }} · {{ item.vet_name || 'Profissional a definir' }}</p>
           </div>
           <UBadge :label="item.status" variant="soft" />
@@ -57,6 +60,13 @@ onMounted(async () => {
             v-if="item.care_mode === 'pronto' && !['cancelada', 'realizada'].includes(item.status)"
             :to="`/painel/cliente/fila/${item.id}`"
             :label="item.status === 'confirmada' ? 'Abrir atendimento' : 'Voltar à sala de espera'"
+            variant="outline"
+            size="sm"
+          />
+          <UButton
+            v-if="item.care_mode === 'especialista' && item.specialty_id && !['cancelada', 'realizada'].includes(item.status)"
+            :to="`/painel/cliente/consultas/${item.id}/reagendar`"
+            label="Reagendar"
             variant="outline"
             size="sm"
           />

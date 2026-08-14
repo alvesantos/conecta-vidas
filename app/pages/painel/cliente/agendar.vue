@@ -11,7 +11,10 @@ const kind = ref<'humana' | 'veterinaria'>(route.query.tipo === 'veterinaria' ? 
 const petId = ref(typeof route.query.pet === 'string' ? route.query.pet : '')
 const dependentId = ref(typeof route.query.dependente === 'string' ? route.query.dependente : '')
 const date = ref('')
+const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Fortaleza' })
 const time = ref('')
+const specialtyId = ref('')
+const slotKey = ref('')
 const notes = ref('')
 const pending = ref(false)
 const specialist = computed(() => route.query.atendimento === 'especialista')
@@ -27,6 +30,13 @@ interface Quote {
 }
 const quote = ref<Quote | null>(null)
 const quotePending = ref(false)
+interface Specialty { id: string; name: string }
+interface Slot { professional_id: string; professional_name: string; time: string }
+const specialties = ref<Specialty[]>([])
+const slots = ref<Slot[]>([])
+const slotsPending = ref(false)
+const specialtyOptions = computed(() => specialties.value.map(item => ({ label: item.name, value: item.id })))
+const slotOptions = computed(() => slots.value.map(item => ({ label: `${item.time} · ${item.professional_name}`, value: `${item.professional_id}|${item.time}` })))
 
 const petOptions = computed(() => pets.value.map(pet => ({
   label: `${pet.name} · ${pet.breed}`,
@@ -53,6 +63,21 @@ function selectKind(value: 'humana' | 'veterinaria') {
   } else if (!petId.value && pets.value.length === 1) {
     petId.value = pets.value[0]!.id
   }
+  specialtyId.value = ''
+  slotKey.value = ''
+  void loadSpecialties()
+}
+
+async function loadSpecialties() {
+  if (!specialist.value) return
+  specialties.value = await api<Specialty[]>(`/scheduling/specialties?kind=${kind.value}`)
+}
+async function loadSlots() {
+  slots.value = []
+  slotKey.value = ''
+  if (!specialtyId.value || !date.value) return
+  slotsPending.value = true
+  try { slots.value = await api<Slot[]>(`/scheduling/slots?specialty_id=${specialtyId.value}&date=${date.value}`) } finally { slotsPending.value = false }
 }
 
 async function loadQuote() {
@@ -69,16 +94,22 @@ watch(dependentId, value => {
   if (kind.value === 'humana') selectProfile(value ? `dependent:${value}` : 'human')
 })
 watch([kind, careMode], loadQuote)
+watch([specialtyId, date], loadSlots)
 
 onMounted(async () => {
   await loadProfiles()
   selectKind(kind.value)
   await loadQuote()
+  await loadSpecialties()
 })
 
 async function submit() {
-  if (!urgent.value && (!date.value || !time.value)) {
-    toast.add({ title: 'Preencha data e horário', color: 'warning' })
+  if (!urgent.value && !date.value) {
+    toast.add({ title: 'Preencha a data', color: 'warning' })
+    return
+  }
+  if (specialist.value && (!specialtyId.value || !slotKey.value)) {
+    toast.add({ title: 'Selecione especialidade e horário disponível', color: 'warning' })
     return
   }
   if (kind.value === 'veterinaria' && !petId.value) {
@@ -91,6 +122,7 @@ async function submit() {
     const now = new Date()
     const urgentDate = now.toLocaleDateString('en-CA', { timeZone: 'America/Fortaleza' })
     const urgentTime = now.toLocaleTimeString('pt-BR', { timeZone: 'America/Fortaleza', hour: '2-digit', minute: '2-digit', hour12: false })
+    const [professionalId, selectedTime] = slotKey.value.split('|')
     await api('/consultations', {
       method: 'POST',
       body: {
@@ -98,7 +130,9 @@ async function submit() {
         pet_id: kind.value === 'veterinaria' ? petId.value : null,
         dependent_id: kind.value === 'humana' ? dependentId.value || null : null,
         date: urgent.value ? urgentDate : date.value,
-        time: urgent.value ? urgentTime : time.value,
+        time: urgent.value ? urgentTime : selectedTime || time.value,
+        specialty_id: specialist.value ? specialtyId.value : null,
+        professional_id: specialist.value ? professionalId : null,
         notes: notes.value,
         care_mode: careMode.value,
       },
@@ -126,7 +160,7 @@ async function submit() {
     <div>
       <p class="text-sm font-medium text-[var(--portal-accent)]">{{ urgent ? 'Atendimento prioritário' : 'Atendimento especializado' }}</p>
       <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">{{ urgent ? 'Pronto atendimento 24h' : 'Agendar especialista' }}</h1>
-      <p class="mt-2 text-sm text-body-muted">{{ urgent ? 'Confirme o paciente e descreva o que está acontecendo.' : 'Escolha o paciente e informe o melhor horário. O catálogo de especialidades será conectado nesta jornada.' }}</p>
+      <p class="mt-2 text-sm text-body-muted">{{ urgent ? 'Confirme o paciente e descreva o que está acontecendo.' : 'Escolha a especialidade, a data e um horário disponível do profissional.' }}</p>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">
@@ -176,9 +210,12 @@ async function submit() {
         <UFormField v-if="kind === 'veterinaria'" label="Animal *">
           <USelect v-model="petId" :items="petOptions" placeholder="Selecione o pet" class="w-full" size="lg" />
         </UFormField>
-        <div v-if="!urgent" class="grid gap-4 sm:grid-cols-2">
-          <UFormField label="Data *"><UInput v-model="date" type="date" required class="w-full" size="lg" /></UFormField>
-          <UFormField label="Horário *"><UInput v-model="time" type="time" required class="w-full" size="lg" /></UFormField>
+        <div v-if="!urgent" class="space-y-4">
+          <UFormField label="Especialidade *"><USelect v-model="specialtyId" :items="specialtyOptions" placeholder="Selecione a especialidade" class="w-full" size="lg" /></UFormField>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <UFormField label="Data *"><UInput v-model="date" type="date" :min="today" required class="w-full" size="lg" /></UFormField>
+            <UFormField label="Horário e profissional *"><USelect v-model="slotKey" :items="slotOptions" :loading="slotsPending" :disabled="!specialtyId || !date" :placeholder="slots.length ? 'Selecione um horário' : 'Nenhum horário disponível'" class="w-full" size="lg" /></UFormField>
+          </div>
         </div>
         <div class="rounded-xl border border-gray-200 p-4 dark:border-white/10">
           <div v-if="quotePending" class="flex items-center gap-2 text-sm text-body-muted"><UIcon name="i-heroicons-arrow-path" class="size-5 animate-spin" /> Verificando cobertura...</div>
