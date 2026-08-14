@@ -51,7 +51,7 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       ] },
       { label: 'Conta', items: [
         { label: 'Assinatura', to: '/painel/cliente/assinatura', icon: 'i-heroicons-credit-card' },
-        { label: 'Marketplace', to: '/painel/cliente/marketplace', icon: 'i-heroicons-shopping-bag' },
+        { label: 'Maffy Store', to: '/maffy-store', icon: 'i-heroicons-shopping-bag' },
       ] },
     ],
   },
@@ -128,7 +128,6 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       { label: 'Gestão', items: [
         { label: 'Planos', to: '/painel/adm/planos', icon: 'i-heroicons-credit-card' },
         { label: 'Financeiro', to: '/painel/adm/financeiro', icon: 'i-heroicons-banknotes' },
-        { label: 'Marketplace', to: '/painel/adm/marketplace', icon: 'i-heroicons-shopping-bag' },
         { label: 'Relatórios', to: '/painel/adm/relatorios', icon: 'i-heroicons-chart-bar' },
         { label: 'Configurações', to: '/painel/adm/configuracoes', icon: 'i-heroicons-cog-6-tooth' },
       ] },

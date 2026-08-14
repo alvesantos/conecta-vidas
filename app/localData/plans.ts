@@ -15,7 +15,6 @@ export const plans: Plan[] = [
       { icon: "i-ph-stethoscope", label: "Consulta Virtual Agendada: 1 por mês" },
       { icon: "i-ph-play-circle", label: "Plataforma de Conteúdo: Acesso completo incluso (Vídeos educativos, culinária e mais!)" },
       { icon: "i-ph-users-three", label: "Clube ConectaVet (Grupo VIP no WhatsApp)" },
-      { icon: "i-ph-gift", label: "Clube de Benefícios: Descontos Exclusivos na Boutique MAFFY" },
       { icon: "i-ph-gift", label: "Benefício Aniversário ConectaVet: Surpresa especial para o seu animal, com cupom, parabéns personalizado e mais!" },
       { icon: "i-ph-gift", label: "Envio de 1 Mini Kit Emergência Animal (Anual)" },
       { icon: "i-ph-seal-percent", label: "Consultas Virtuais Extras: Coparticipação inteligente (50% de desconto sobre o valor avulso)" }

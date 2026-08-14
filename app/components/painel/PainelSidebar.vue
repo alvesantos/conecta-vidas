@@ -24,7 +24,6 @@ const navigationGroups = computed(() => definition.value.nav.map(group => ({
         '/painel/cliente/prontuarios': veterinary ? 'Prontuário do pet' : 'Prontuário humano',
         '/painel/cliente/receitas': veterinary ? 'Receitas veterinárias' : 'Receitas médicas',
         '/painel/cliente/exames': veterinary ? 'Exames veterinários' : 'Exames humanos',
-        '/painel/cliente/marketplace': veterinary ? 'Maffy Store' : 'Benefícios',
       }
       return { ...item, label: contextualLabels[item.to] ?? item.label }
     }),

@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? "http://localhost:3001/api",
+      maffyStoreUrl: process.env.NUXT_PUBLIC_MAFFY_STORE_URL ?? "https://maffy.com.br",
     },
   },
   devtools: { enabled: true },
@@ -59,6 +60,9 @@ export default defineNuxtConfig({
     },
     "/meu-pet": {
       redirect: { to: "/painel/cliente/pets", statusCode: 301 },
+    },
+    "/painel/cliente/marketplace": {
+      redirect: { to: "/maffy-store", statusCode: 301 },
     },
   },
   vite: {
