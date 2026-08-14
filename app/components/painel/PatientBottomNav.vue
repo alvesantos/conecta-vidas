@@ -7,7 +7,7 @@ const veterinary = computed(() => activeProfile.value.kind === 'veterinaria')
 const items = computed(() => [
   { label: 'Início', icon: 'i-heroicons-home', to: '/painel/cliente' },
   { label: 'Histórico', icon: 'i-heroicons-clock', to: '/painel/cliente/prontuarios' },
-  { label: veterinary.value ? 'Loja' : 'Benefícios', icon: veterinary.value ? 'i-heroicons-shopping-bag' : 'i-heroicons-gift', to: '/painel/cliente/marketplace' },
+  { label: 'Assinatura', icon: 'i-heroicons-credit-card', to: '/painel/cliente/assinatura' },
 ])
 
 function active(to: string) {
