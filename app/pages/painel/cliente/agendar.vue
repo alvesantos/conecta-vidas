@@ -113,7 +113,7 @@ async function submit() {
     return
   }
   if (kind.value === 'veterinaria' && !petId.value) {
-    toast.add({ title: 'Selecione o animal que será atendido', color: 'warning' })
+    toast.add({ title: 'Selecione o pet que será atendido', color: 'warning' })
     return
   }
 
@@ -181,7 +181,7 @@ async function submit() {
         @click="selectKind('veterinaria')"
       >
         <span class="flex size-12 items-center justify-center rounded-xl bg-sky-50 text-sky-700"><UIcon name="i-mdi-paw" class="size-7" /></span>
-        <span class="mt-4 block text-lg font-semibold text-body-strong">Animal</span>
+        <span class="mt-4 block text-lg font-semibold text-body-strong">Pet</span>
         <span class="mt-1 block text-sm text-body-muted">Consulta veterinária para seu pet.</span>
       </button>
     </div>
@@ -189,7 +189,7 @@ async function submit() {
     <UAlert
       v-if="kind === 'veterinaria' && pets.length === 0"
       title="Cadastre um pet para continuar"
-      description="O atendimento veterinário precisa ser vinculado ao animal."
+      description="O atendimento veterinário precisa ser vinculado ao pet."
       color="info"
       variant="soft"
       icon="i-mdi-paw-plus"
@@ -207,7 +207,7 @@ async function submit() {
         <UFormField v-if="kind === 'humana'" label="Paciente *">
           <USelect :model-value="dependentId || 'titular'" :items="humanOptions" class="w-full" size="lg" @update:model-value="dependentId = $event === 'titular' ? '' : String($event)" />
         </UFormField>
-        <UFormField v-if="kind === 'veterinaria'" label="Animal *">
+        <UFormField v-if="kind === 'veterinaria'" label="Pet *">
           <USelect v-model="petId" :items="petOptions" placeholder="Selecione o pet" class="w-full" size="lg" />
         </UFormField>
         <div v-if="!urgent" class="space-y-4">

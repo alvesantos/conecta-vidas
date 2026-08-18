@@ -75,7 +75,7 @@ async function loadAnimals(responsibleId: string) {
   try {
     animals.value = await api<Animal[]>(`/vet/responsibles/${responsibleId}/pets`);
   } catch {
-    errorMsg.value = 'Erro ao carregar animais.';
+    errorMsg.value = 'Erro ao carregar os pets.';
   } finally {
     loadingAnimals.value = false;
   }
@@ -214,12 +214,12 @@ async function downloadPdf() {
 
       <!-- Animal -->
       <div v-if="selectedResponsibleId">
-        <div v-if="loadingAnimals" class="text-sm text-gray-400">Carregando animais...</div>
-        <UFormField v-else-if="animals.length > 0" label="Animal">
+        <div v-if="loadingAnimals" class="text-sm text-gray-400">Carregando pets...</div>
+        <UFormField v-else-if="animals.length > 0" label="Pet">
           <USelect
             v-model="selectedAnimalId"
             :items="animalItems"
-            placeholder="Selecione o animal"
+            placeholder="Selecione o pet"
             icon="i-heroicons-heart"
             class="w-full"
           />
@@ -306,8 +306,8 @@ async function downloadPdf() {
             />
           </div>
 
-          <!-- Dados do Animal -->
-          <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Animal</h2>
+          <!-- Dados do Pet -->
+          <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Pet</h2>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; font-size: 13px; color: #374151; margin-bottom: 20px;">
             <template v-if="selectedAnimal">
               <div><strong>Nome:</strong> {{ selectedAnimal.name }}</div>

@@ -32,7 +32,7 @@ const howItWorks = [
   {
     icon: "i-heroicons-user-plus",
     title: "Cadastre-se",
-    desc: "Crie sua conta em poucos minutos. Cadastrar um animal é opcional e pode ser feito depois.",
+    desc: "Crie sua conta em poucos minutos. Cadastrar um pet é opcional e pode ser feito depois.",
   },
   {
     icon: "i-heroicons-squares-2x2",
@@ -105,15 +105,15 @@ const faqItems = [
   },
   {
     q: "Existe algum risco de misturar a telemedicina humana com a veterinária dentro da plataforma?",
-    a: "Não. O ConectaVidas não mistura a telemedicina humana com a veterinária. Trata-se de dois ecossistemas completamente independentes e distintos. Separamos rigorosamente os prontuários, os bancos de dados e as equipes médicas de cada segmento, cumprindo à risca todas as exigências estabelecidas pelos respectivos conselhos de classe profissionais. Além disso, contamos com servidores dedicados e políticas de LGPD (Lei Geral de Proteção de Dados) personalizadas para garantir total privacidade e segurança jurídica entre o atendimento de humanos e animais. Cada uma das áreas possui, ainda, seu próprio Diretor Técnico responsável, devidamente habilitado e capacitado para a sua respectiva profissão.",
+    a: "Não. O ConectaVidas não mistura a telemedicina humana com a veterinária. Trata-se de dois ecossistemas completamente independentes e distintos. Separamos rigorosamente os prontuários, os bancos de dados e as equipes médicas de cada segmento, cumprindo à risca todas as exigências estabelecidas pelos respectivos conselhos de classe profissionais. Além disso, contamos com servidores dedicados e políticas de LGPD (Lei Geral de Proteção de Dados) personalizadas para garantir total privacidade e segurança jurídica entre o atendimento de humanos e pets. Cada uma das áreas possui, ainda, seu próprio Diretor Técnico responsável, devidamente habilitado e capacitado para a sua respectiva profissão.",
   },
   {
     q: "A telemedicina atende pessoas de todas as idades?",
     a: "Sim. O ConectaVidas oferece atendimento para pessoas de todas as idades, desde crianças até idosos, sempre respeitando as necessidades individuais de cada paciente e os critérios de avaliação médica.",
   },
   {
-    q: "Preciso ter um animal para realizar uma consulta médica para mim?",
-    a: "Não. O ConectaVidas oferece telemedicina humana e veterinária de forma independente. Você pode utilizar os serviços médicos mesmo que não possua um animal.",
+    q: "Preciso ter um pet para realizar uma consulta médica para mim?",
+    a: "Não. O ConectaVidas oferece telemedicina humana e veterinária de forma independente. Você pode utilizar os serviços médicos mesmo que não possua um pet.",
   },
   {
     q: "Os profissionais do ConectaVidas são de confiança?",
@@ -121,15 +121,15 @@ const faqItems = [
   },
   {
     q: "Quais casos podem ser atendidos por telemedicina?",
-    a: "A telemedicina é indicada para situações de baixa complexidade ou acompanhamentos, incluindo sintomas leves, renovação de receitas recorrentes, pedidos de exames complementares, acompanhamento de tratamento de condições crônicas, esclarecimento de dúvidas sobre condutas anteriores, orientações gerais de saúde para pacientes humanos e cuidados preventivos para animais, sempre conforme avaliação profissional.",
+    a: "A telemedicina é indicada para situações de baixa complexidade ou acompanhamentos, incluindo sintomas leves, renovação de receitas recorrentes, pedidos de exames complementares, acompanhamento de tratamento de condições crônicas, esclarecimento de dúvidas sobre condutas anteriores, orientações gerais de saúde para pacientes humanos e cuidados preventivos para pets, sempre conforme avaliação profissional.",
   },
   {
-    q: "O que acontece se o meu caso ou o do meu animal for uma urgência?",
+    q: "O que acontece se o meu caso ou o do meu pet for uma urgência?",
     a: "Casos de urgência e emergência não devem ser atendidos por telemedicina. ⚠️ Atenção: situações como acidentes graves, dificuldade respiratória intensa, dor torácica severa ou desmaios exigem atendimento presencial imediato. Nessas situações, a orientação é procurar o pronto-socorro, hospital ou serviço veterinário presencial mais próximo.",
   },
   {
     q: "Como faço para agendar uma consulta?",
-    a: "O agendamento é simples e rápido. Basta escolher a modalidade desejada e clicar no botão “Agendar Consulta”. Você será direcionado imediatamente para o WhatsApp do ConectaVidas, onde nossa equipe de suporte concluirá o agendamento de forma personalizada e humanizada, encontrando o melhor dia e horário para você ou seu animal.",
+    a: "O agendamento é simples e rápido. Basta escolher a modalidade desejada e clicar no botão “Agendar Consulta”. Você será direcionado imediatamente para o WhatsApp do ConectaVidas, onde nossa equipe de suporte concluirá o agendamento de forma personalizada e humanizada, encontrando o melhor dia e horário para você ou seu pet.",
   },
   {
     q: "Como recebo receitas, atestados e relatórios após a consulta?",
@@ -175,7 +175,7 @@ onMounted(() => {
         <p class="text-sm sm:text-base text-primary/80">
           Uma plataforma de telemedicina que conecta a saúde de toda a família,
           <span class="font-semibold text-primary"
-            >incluindo seus animais.</span
+            >incluindo seus pets.</span
           >
         </p>
       </div>
@@ -227,7 +227,7 @@ onMounted(() => {
             <!-- SUBTITLE -->
             <p class="mt-4 sm:mt-5 max-w-xl text-sm sm:text-lg text-white/80">
               Telemedicina integrada para toda a família, com médicos para você e
-              médicos veterinários para o seu animal.
+              médicos veterinários para o seu pet.
             </p>
 
             <!-- BUTTONS -->
@@ -239,7 +239,7 @@ onMounted(() => {
                 trailing-icon="i-mdi-paw"
                 class="justify-center font-semibold px-6 bg-white! text-primary! hover:bg-white/90!"
               >
-                Acessar cuidado animal
+                Acessar cuidado pet
               </UButton>
               <UButton
                 :to="clientPortalTarget"
@@ -283,7 +283,7 @@ onMounted(() => {
             <p
               class="text-xs sm:text-sm text-primary/80 leading-snug"
             >
-              Você e seu animal merecem cuidados onde estiverem.
+              Você e seu pet merecem cuidados onde estiverem.
             </p>
           </div>
         </div>
@@ -296,7 +296,7 @@ onMounted(() => {
         class="reveal flex flex-col items-center sm:flex-row sm:justify-center gap-x-3 gap-y-3 text-center"
       >
         <p class="text-base sm:text-lg text-primary/80">
-          Segurança para você e seu animal por
+          Segurança para você e seu pet por
           <span class="font-semibold text-primary"
             >menos de R$ 2 por dia.</span
           >
@@ -329,7 +329,7 @@ onMounted(() => {
               <UIcon name="i-mdi-paw" class="size-7 sm:size-8" />
             </span>
             <h3 class="hero-title text-xl sm:text-3xl text-accent">
-              Para seu Animal
+              Para seu Pet
             </h3>
           </div>
           <p class="mt-4 text-sm sm:text-base text-primary/70 leading-relaxed">
@@ -429,7 +429,7 @@ onMounted(() => {
           Como funciona
         </h2>
         <p class="mt-3 text-body-muted text-sm sm:text-lg">
-          Do cadastro à consulta, em poucos minutos, para o seu animal e para você.
+          Do cadastro à consulta, em poucos minutos, para o seu pet e para você.
         </p>
       </div>
 

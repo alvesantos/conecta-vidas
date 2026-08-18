@@ -56,7 +56,7 @@ async function loadPets() {
   try {
     pets.value = await api<Pet[]>('/pets/me');
   } catch {
-    fetchError.value = 'Não foi possível carregar seus animais. Tente novamente.';
+    fetchError.value = 'Não foi possível carregar seus pets. Tente novamente.';
   } finally {
     pending.value = false;
   }
@@ -204,7 +204,7 @@ async function savePet() {
     await loadProfiles(true);
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
-    formError.value = fetchErr?.data?.error ?? 'Erro ao salvar animal.';
+    formError.value = fetchErr?.data?.error ?? 'Erro ao salvar pet.';
   } finally {
     saving.value = false;
   }
@@ -221,7 +221,7 @@ async function deletePet(pet: Pet) {
     await loadProfiles(true);
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
-    fetchError.value = fetchErr?.data?.error ?? 'Não foi possível excluir o animal.';
+    fetchError.value = fetchErr?.data?.error ?? 'Não foi possível excluir o pet.';
   } finally {
     deletingId.value = null;
   }
@@ -234,19 +234,19 @@ onMounted(loadPets);
   <div class="max-w-4xl mx-auto">
     <div class="mb-8 flex items-start justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Meus Animais</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Meus Pets</h1>
         <p class="text-gray-500 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
       </div>
       <div v-if="!pending && !fetchError && pets.length > 0" class="flex flex-col items-end gap-1">
         <UButton
-          label="Adicionar animal"
+          label="Adicionar pet"
           icon="i-heroicons-plus"
           class="bg-accent text-white"
           :disabled="!canAddPet"
           @click="openCreate"
         />
         <span v-if="!canAddPet" class="text-xs text-gray-400">
-          Limite de {{ PET_LIMIT }} animais atingido
+          Limite de {{ PET_LIMIT }} pets atingido
         </span>
       </div>
     </div>
@@ -279,11 +279,11 @@ onMounted(loadPets);
         <UIcon name="i-mdi-paw" class="text-accent text-4xl" />
       </div>
       <div>
-        <p class="text-gray-700 font-medium text-lg">Nenhum animal cadastrado ainda</p>
-        <p class="text-gray-400 text-sm mt-1">Cadastre seu animal para acessar o perfil aqui.</p>
+        <p class="text-gray-700 font-medium text-lg">Nenhum pet cadastrado ainda</p>
+        <p class="text-gray-400 text-sm mt-1">Cadastre seu pet para acessar o perfil aqui.</p>
       </div>
       <UButton
-        label="Cadastrar animal"
+        label="Cadastrar pet"
         size="lg"
         class="bg-accent text-white mt-2"
         leading-icon="i-heroicons-plus"
@@ -358,7 +358,7 @@ onMounted(loadPets);
           <!-- Header fixo com título e botão X -->
           <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 shrink-0">
             <h3 class="text-xl font-semibold text-gray-800">
-              {{ modalMode === 'create' ? 'Adicionar animal' : `Editar ${editTarget?.name}` }}
+              {{ modalMode === 'create' ? 'Adicionar pet' : `Editar ${editTarget?.name}` }}
             </h3>
             <UButton
               icon="i-heroicons-x-mark"
@@ -386,7 +386,7 @@ onMounted(loadPets);
                 v-if="avatarPreview"
                 class="w-24 h-24 rounded-full overflow-hidden border-4 border-accent/30 shadow"
               >
-                <img :src="avatarPreview" alt="Foto do animal" class="w-full h-full object-cover" />
+                <img :src="avatarPreview" alt="Foto do pet" class="w-full h-full object-cover" />
               </div>
               <div
                 v-else

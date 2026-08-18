@@ -15,7 +15,7 @@ const items = ref<Array<{
 const pending = ref(true)
 const calling = ref('')
 let interval: ReturnType<typeof setInterval> | null = null
-const label = computed(() => props.portal === 'medico' ? 'Paciente' : 'Animal')
+const label = computed(() => props.portal === 'medico' ? 'Paciente' : 'Pet')
 
 async function load() {
   try {

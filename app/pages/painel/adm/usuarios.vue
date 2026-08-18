@@ -302,7 +302,7 @@ const columns = [
         <div class="p-6 flex flex-col gap-4">
           <h3 class="text-lg font-semibold text-gray-800">Excluir usuário</h3>
           <p class="text-sm text-gray-600">
-            Esta ação é <strong>permanente</strong> e excluirá também todos os animais e assinaturas
+            Esta ação é <strong>permanente</strong> e excluirá também todos os pets e assinaturas
             de <strong>{{ deleteTarget?.name }}</strong>. Deseja continuar?
           </p>
           <div class="flex justify-end gap-2 mt-2">

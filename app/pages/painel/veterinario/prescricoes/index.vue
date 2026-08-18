@@ -118,7 +118,7 @@ function excerpt(text: string) {
 const columns = [
   { accessorKey: 'date', header: 'Data' },
   { accessorKey: 'responsible_name', header: 'Responsável' },
-  { accessorKey: 'pet_name', header: 'Animal' },
+  { accessorKey: 'pet_name', header: 'Pet' },
   { accessorKey: 'content', header: 'Prescrição' },
   { id: 'actions', header: '' },
 ];

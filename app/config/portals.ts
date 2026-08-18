@@ -123,7 +123,7 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       ] },
       { label: 'Operação', items: [
         { label: 'Consultas', to: '/painel/adm/consultas', icon: 'i-heroicons-calendar-days' },
-        { label: 'Animais', to: '/painel/adm/pets', icon: 'i-mdi-paw' },
+        { label: 'Pets', to: '/painel/adm/pets', icon: 'i-mdi-paw' },
       ] },
       { label: 'Gestão', items: [
         { label: 'Planos', to: '/painel/adm/planos', icon: 'i-heroicons-credit-card' },

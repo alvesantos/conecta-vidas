@@ -176,7 +176,7 @@ onMounted(loadDashboard)
       <h2 class="mt-1 text-xl font-bold sm:text-2xl">Quem vamos cuidar hoje?</h2>
       <div class="mt-5 grid gap-3 sm:grid-cols-2">
         <button type="button" class="flex items-center gap-4 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('humana')"><UIcon name="i-mdi-doctor" class="size-7" /><span><strong class="block">Humano</strong><span class="text-xs text-gray-600">Consulta médica</span></span><UIcon name="i-heroicons-arrow-right" class="ml-auto size-5" /></button>
-        <button type="button" class="flex items-center gap-4 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('veterinaria')"><UIcon name="i-mdi-paw" class="size-7" /><span><strong class="block">Animal</strong><span class="text-xs text-gray-600">{{ pets.length ? 'Consulta veterinária' : 'Cadastre um pet' }}</span></span><UIcon name="i-heroicons-arrow-right" class="ml-auto size-5" /></button>
+        <button type="button" class="flex items-center gap-4 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('veterinaria')"><UIcon name="i-mdi-paw" class="size-7" /><span><strong class="block">Pet</strong><span class="text-xs text-gray-600">{{ pets.length ? 'Consulta veterinária' : 'Cadastre um pet' }}</span></span><UIcon name="i-heroicons-arrow-right" class="ml-auto size-5" /></button>
       </div>
     </section>
 

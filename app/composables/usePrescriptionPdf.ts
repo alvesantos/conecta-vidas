@@ -78,7 +78,7 @@ export function buildPrescriptionHtml(data: PrescriptionDocData): string {
         field('Pelagem', `${escapeHtml(a.coat)}${a.coatColor ? ` (${escapeHtml(a.coatColor)})` : ''}`),
         field('Idade', escapeHtml(petAge(a.birthDate))),
       ].join('')
-    : '<div style="font-size: 13px; color: #374151;">Nenhum animal selecionado.</div>'
+    : '<div style="font-size: 13px; color: #374151;">Nenhum pet selecionado.</div>'
 
   const responsibleBlock = [
     field('Nome', escapeHtml(human ? data.patientName : data.responsibleName)),
@@ -96,7 +96,7 @@ export function buildPrescriptionHtml(data: PrescriptionDocData): string {
       <img src="${origin}/conecta-icon.png" alt="ConectaVidas" crossorigin="anonymous" style="height: 80px; width: auto; object-fit: contain;" />
     </div>
 
-    ${human ? '' : `<h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Animal</h2>
+    ${human ? '' : `<h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">Dados do Pet</h2>
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 20px;">${animalBlock}</div>`}
 
     <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px;">${human ? 'Dados do Paciente' : 'Dados do Responsável'}</h2>

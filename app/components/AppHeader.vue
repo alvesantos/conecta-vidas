@@ -55,7 +55,7 @@ const accountItems = computed<NavItem[]>(() => {
   return [
     { label: portal.label, to: portal.home, icon: portal.icon },
     ...(user.value.type === "tutor"
-      ? [{ label: "Meus Animais", to: "/painel/cliente/pets", icon: "i-mdi-paw" }]
+      ? [{ label: "Meus Pets", to: "/painel/cliente/pets", icon: "i-mdi-paw" }]
       : []),
   ];
 });

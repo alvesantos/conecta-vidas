@@ -246,7 +246,7 @@ const columns = [
   { accessorKey: 'date', header: 'Data' },
   { accessorKey: 'time', header: 'Horário' },
   { accessorKey: 'tutor_name', header: 'Responsável' },
-  { accessorKey: 'pet_name', header: 'Animal' },
+  { accessorKey: 'pet_name', header: 'Pet' },
   { accessorKey: 'status', header: 'Status' },
   { id: 'assignment', header: 'Profissional' },
   { id: 'actions', header: 'Ações' }

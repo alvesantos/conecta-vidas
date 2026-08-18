@@ -30,7 +30,7 @@ function avatarSrc(avatarUrl?: string | null) {
 // speciesIcon e speciesLabel vêm do composable useSpecies (auto-import)
 
 const columns = [
-  { accessorKey: 'name', header: 'Animal' },
+  { accessorKey: 'name', header: 'Pet' },
   { accessorKey: 'species', header: 'Espécie' },
   { accessorKey: 'breed', header: 'Raça' },
   { accessorKey: 'size', header: 'Porte' },
@@ -49,8 +49,8 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-800">Animais</h1>
-    <p class="text-gray-500 text-sm mt-1">Todos os animais cadastrados no sistema</p>
+    <h1 class="text-2xl font-bold text-gray-800">Pets</h1>
+    <p class="text-gray-500 text-sm mt-1">Todos os pets cadastrados no sistema</p>
 
     <div class="bg-white rounded-xl shadow mt-6">
       <UTable
@@ -95,7 +95,7 @@ onMounted(async () => {
         <template #empty>
           <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-mdi-paw" class="size-10 mb-2" />
-            <p class="text-sm">Nenhum animal encontrado.</p>
+            <p class="text-sm">Nenhum pet encontrado.</p>
           </div>
         </template>
       </UTable>

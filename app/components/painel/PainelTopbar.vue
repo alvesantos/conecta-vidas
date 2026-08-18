@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PORTALS, portalsForUser, userTypeLabel, type PortalKey } from '~/config/portals'
+import { PORTALS, portalsForUser, type PortalKey } from '~/config/portals'
 
 const props = defineProps<{ portal: PortalKey }>()
 defineEmits<{ menu: [] }>()
@@ -13,13 +13,11 @@ const currentItem = computed(() =>
     .find(item => route.path === item.to || route.path.startsWith(`${item.to}/`)),
 )
 const initials = computed(() => user.value?.name.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')
-const roleLabel = computed(() => user.value ? userTypeLabel(user.value.type) : '')
 const topNavigation = computed(() =>
   props.portal === 'cliente'
     ? [
-        { label: 'Voltar ao site', to: '/', icon: 'i-heroicons-arrow-left' },
         { label: 'Solicitar consulta', to: '/painel/cliente/agendar', icon: 'i-heroicons-plus-circle' },
-        { label: 'Cadastrar pets', to: '/painel/cliente/pets', icon: 'i-mdi-paw' },
+        { label: 'Pet', to: '/painel/cliente/pets', icon: 'i-mdi-paw' },
         { label: 'Agendamentos', to: '/painel/cliente/consultas', icon: 'i-heroicons-calendar-days' },
       ]
     : [],
@@ -34,7 +32,10 @@ const accountItems = computed(() => [
     : [],
   [
     ...(props.portal === 'cliente'
-      ? [{ label: 'Meu perfil', icon: 'i-heroicons-identification', to: '/painel/cliente/perfil' }]
+      ? [
+          { label: 'Meu perfil', icon: 'i-heroicons-identification', to: '/painel/cliente/perfil' },
+          { label: 'Histórico', icon: 'i-heroicons-clock', to: '/painel/cliente/prontuarios' },
+        ]
       : []),
     { label: 'Voltar ao site', icon: 'i-heroicons-arrow-left-circle', to: '/' },
     { label: 'Sair', icon: 'i-heroicons-arrow-left-on-rectangle', onSelect: logout },
@@ -44,7 +45,7 @@ const accountItems = computed(() => [
 
 <template>
   <header class="sticky top-0 z-30 border-b border-gray-200 bg-white/90 backdrop-blur-xl">
-    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-18 lg:px-8">
+    <div class="relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-18 lg:px-8">
     <div class="flex min-w-0 items-center gap-3">
       <button class="flex size-11 items-center justify-center rounded-lg hover:bg-black/5 lg:hidden" aria-label="Abrir navegação" @click="$emit('menu')">
         <UIcon name="i-heroicons-bars-3" class="size-6" />
@@ -54,8 +55,7 @@ const accountItems = computed(() => [
       </NuxtLink>
       <h1 v-else class="truncate text-base font-semibold text-body-strong">{{ currentItem?.label ?? definition.label }}</h1>
     </div>
-    <div class="ml-auto flex items-center gap-2">
-      <nav v-if="topNavigation.length" aria-label="Menu do Portal do Cliente" class="hidden items-center gap-1 lg:flex">
+      <nav v-if="topNavigation.length" aria-label="Menu do Portal do Cliente" class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
         <NuxtLink
           v-for="item in topNavigation"
           :key="item.to"
@@ -69,12 +69,12 @@ const accountItems = computed(() => [
           {{ item.label }}
         </NuxtLink>
       </nav>
+    <div class="ml-auto flex items-center gap-2">
       <UDropdownMenu :items="accountItems" :content="{ align: 'end' }">
       <button class="flex min-h-11 items-center gap-2 rounded-full px-1.5 pr-3 hover:bg-black/5">
         <span class="flex size-8 items-center justify-center rounded-full bg-[var(--portal-accent)] text-xs font-semibold text-white">{{ initials }}</span>
         <span class="hidden min-w-0 sm:block">
-          <span class="block max-w-36 truncate text-sm font-medium leading-4 text-body-strong">{{ user?.name }}</span>
-          <span class="block text-[11px] leading-4 text-body-muted">{{ roleLabel }} · {{ definition.loginLabel }}</span>
+          <span class="block max-w-36 truncate text-sm font-medium text-body-strong">{{ user?.name }}</span>
         </span>
         <UIcon name="i-heroicons-chevron-down" class="size-4 text-body-muted" />
       </button>

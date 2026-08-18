@@ -262,7 +262,7 @@ function validatePet() {
   let valid = true;
 
   if (!petName.value.trim()) {
-    setError("petName", "Nome do animal obrigatório");
+    setError("petName", "Nome do pet obrigatório");
     valid = false;
   } else clearError("petName");
 
@@ -368,7 +368,7 @@ async function submit() {
 
       <!-- Steps indicator -->
       <div class="flex items-center gap-0">
-        <template v-for="(step, index) in ['Dados pessoais', 'Endereço', 'Animal']" :key="step">
+        <template v-for="(step, index) in ['Dados pessoais', 'Endereço', 'Pet']" :key="step">
           <div v-if="index > 0" class="mb-5 h-px flex-1 transition-colors" :class="currentStep >= index + 1 ? 'bg-accent' : 'bg-gray-200'" />
           <div class="flex min-w-20 flex-col items-center gap-1">
             <div class="flex size-9 items-center justify-center rounded-full text-sm font-semibold transition-colors" :class="currentStep >= index + 1 ? 'bg-accent text-white' : 'bg-gray-100 text-gray-400'">
@@ -586,7 +586,7 @@ async function submit() {
             >
               <img
                 :src="petAvatarPreview"
-                alt="Foto do animal"
+                alt="Foto do pet"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -595,7 +595,7 @@ async function submit() {
               class="w-28 h-28 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
             >
               <UIcon name="i-heroicons-camera" class="text-gray-400 text-2xl group-hover:text-accent" />
-              <span class="text-xs text-gray-400 group-hover:text-accent">Foto do animal</span>
+              <span class="text-xs text-gray-400 group-hover:text-accent">Foto do pet</span>
             </div>
 
             <!-- Botão de overlay ao passar o mouse (quando já tem preview) -->
@@ -625,7 +625,7 @@ async function submit() {
           <UInput
             v-model="petName"
             type="text"
-            placeholder="Nome do animal *"
+            placeholder="Nome do pet *"
             size="lg"
             icon="i-heroicons-heart"
             class="w-full"

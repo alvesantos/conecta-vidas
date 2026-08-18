@@ -178,7 +178,7 @@ const columns = [
   { accessorKey: 'date', header: 'Data' },
   { accessorKey: 'time', header: 'Horário' },
   { accessorKey: 'tutor_name', header: 'Responsável' },
-  { accessorKey: 'pet_name', header: 'Animal' },
+  { accessorKey: 'pet_name', header: 'Pet' },
   { id: 'status', header: 'Status' },
   { id: 'actions', header: 'Ações' },
 ];
