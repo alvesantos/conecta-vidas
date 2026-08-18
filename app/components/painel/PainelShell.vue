@@ -16,7 +16,7 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
 
 <template>
   <div class="min-h-screen bg-gray-50 text-body dark:bg-[#011428]" :style="{ '--portal-accent': portalAccent }">
-    <div class="fixed inset-y-0 left-0 z-40 hidden border-r border-gray-200 transition-[width] duration-200 dark:border-white/10 lg:block" :class="collapsed ? 'w-16' : 'w-64'">
+    <div v-if="portal !== 'cliente'" class="fixed inset-y-0 left-0 z-40 hidden border-r border-gray-200 transition-[width] duration-200 dark:border-white/10 lg:block" :class="collapsed ? 'w-16' : 'w-64'">
       <PainelPainelSidebar :portal="portal" :collapsed="collapsed" @collapse="collapsed = !collapsed" />
     </div>
 
@@ -26,10 +26,10 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
       </template>
     </USlideover>
 
-    <div class="min-w-0 transition-[margin] duration-200" :class="collapsed ? 'lg:ml-16' : 'lg:ml-64'">
+    <div class="min-w-0 transition-[margin] duration-200" :class="portal === 'cliente' ? '' : (collapsed ? 'lg:ml-16' : 'lg:ml-64')">
       <PainelPainelTopbar :portal="portal" @menu="mobileOpen = true" />
       <PainelPatientProfileSwitcher v-if="portal === 'cliente'" />
-      <main class="min-h-[calc(100vh-3.5rem)]" :class="route.meta.noPadding ? '' : 'px-5 pb-28 pt-6 md:px-8 md:pb-28 md:pt-8 lg:px-10 lg:py-10'">
+      <main class="min-h-[calc(100vh-4.5rem)]" :class="route.meta.noPadding ? '' : 'px-5 pb-28 pt-8 sm:px-6 md:px-8 md:pb-28 md:pt-10 lg:px-10 lg:pb-12 lg:pt-10'">
         <slot />
       </main>
     </div>

@@ -14,25 +14,14 @@ const currentItem = computed(() =>
 )
 const initials = computed(() => user.value?.name.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')
 const roleLabel = computed(() => user.value ? userTypeLabel(user.value.type) : '')
-const { activeProfile } = usePatientProfile()
 const topNavigation = computed(() =>
   props.portal === 'cliente'
-    ? definition.value.nav.flatMap(group => group.items)
-      .filter(item => [
-        '/painel/cliente',
-        '/painel/cliente/agendar',
-        '/painel/cliente/consultas',
-        '/painel/cliente/prontuarios',
-        '/painel/cliente/pets',
-      ].includes(item.to))
-      .map(item => {
-        const veterinary = activeProfile.value.kind === 'veterinaria'
-        const labels: Record<string, string> = {
-          '/painel/cliente/consultas': veterinary ? 'Consultas vet.' : 'Consultas',
-          '/painel/cliente/prontuarios': veterinary ? 'Prontuário pet' : 'Prontuário',
-        }
-        return { ...item, label: labels[item.to] ?? item.label }
-      })
+    ? [
+        { label: 'Voltar ao site', to: '/', icon: 'i-heroicons-arrow-left' },
+        { label: 'Solicitar consulta', to: '/painel/cliente/agendar', icon: 'i-heroicons-plus-circle' },
+        { label: 'Cadastrar pets', to: '/painel/cliente/pets', icon: 'i-mdi-paw' },
+        { label: 'Agendamentos', to: '/painel/cliente/consultas', icon: 'i-heroicons-calendar-days' },
+      ]
     : [],
 )
 const accountItems = computed(() => [
@@ -54,20 +43,25 @@ const accountItems = computed(() => [
 </script>
 
 <template>
-  <header class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-gray-200 bg-white/90 px-4 backdrop-blur-xl dark:border-white/10 dark:bg-[#071b30]/90 lg:px-6">
+  <header class="sticky top-0 z-30 border-b border-gray-200 bg-white/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#071b30]/90">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-18 lg:px-8">
     <div class="flex min-w-0 items-center gap-3">
       <button class="flex size-11 items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/10 lg:hidden" aria-label="Abrir navegação" @click="$emit('menu')">
         <UIcon name="i-heroicons-bars-3" class="size-6" />
       </button>
-      <h1 class="truncate text-base font-semibold text-body-strong">{{ currentItem?.label ?? definition.label }}</h1>
+      <NuxtLink v-if="portal === 'cliente'" to="/painel/cliente" class="flex shrink-0 items-center" aria-label="Portal do Cliente">
+        <img src="/icons/logo-claro.png" alt="ConectaVidas" class="h-16 w-auto dark:hidden lg:h-18" />
+        <img src="/icons/logo-escuro.png" alt="ConectaVidas" class="hidden h-16 w-auto dark:block lg:h-18" />
+      </NuxtLink>
+      <h1 v-else class="truncate text-base font-semibold text-body-strong">{{ currentItem?.label ?? definition.label }}</h1>
     </div>
     <div class="ml-auto flex items-center gap-2">
-      <nav v-if="topNavigation.length" aria-label="Atalhos do Portal do Cliente" class="hidden items-center gap-1 xl:flex">
+      <nav v-if="topNavigation.length" aria-label="Menu do Portal do Cliente" class="hidden items-center gap-1 lg:flex">
         <NuxtLink
           v-for="item in topNavigation"
           :key="item.to"
           :to="item.to"
-          class="flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium transition"
+          class="flex min-h-10 items-center gap-2 rounded-full px-3 text-sm font-medium transition lg:px-4"
           :class="route.path === item.to || (item.to !== '/painel/cliente' && route.path.startsWith(`${item.to}/`))
             ? 'bg-[var(--portal-accent)] text-white'
             : 'text-body-muted hover:bg-black/5 hover:text-body-strong dark:hover:bg-white/10'"
@@ -86,6 +80,7 @@ const accountItems = computed(() => [
         <UIcon name="i-heroicons-chevron-down" class="size-4 text-body-muted" />
       </button>
       </UDropdownMenu>
+    </div>
     </div>
   </header>
 </template>

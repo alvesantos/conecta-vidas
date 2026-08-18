@@ -22,11 +22,6 @@ function toggleColorMode() {
 const navItems: NavItem[] = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
   {
-    label: "Solicitar consulta",
-    to: "/solicitar-consulta",
-    icon: "i-mdi-whatsapp",
-  },
-  {
     label: "Coletas a Domicílio",
     to: "https://wa.me/5511978654921?text=Oi%2C%20cliquei%20em%20Coleta%20a%20Domicilio",
     target: "_blank",
