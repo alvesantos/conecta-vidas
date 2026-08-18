@@ -2,8 +2,8 @@
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Prontuários</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+        <h1 class="text-2xl font-bold text-gray-800">Prontuários</h1>
+        <p class="text-gray-500 text-sm mt-1">
           Acompanhe o histórico de consultas de cada cliente
         </p>
       </div>
@@ -11,14 +11,14 @@
 
     <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+    <div class="bg-white rounded-xl shadow">
       <UTable :data="tutors" :columns="columns" :loading="pending" class="w-full">
         <template #tutor_name-cell="{ row }">
-          <span class="text-gray-800 dark:text-gray-100 font-medium">{{ row.original.tutor_name }}</span>
+          <span class="text-gray-800 font-medium">{{ row.original.tutor_name }}</span>
         </template>
-        
+
         <template #last_consultation_date-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">
+          <span class="text-gray-600">
             {{ formatDate(row.original.last_consultation_date) }}
           </span>
         </template>
@@ -36,7 +36,7 @@
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-heroicons-users" class="size-10 mb-2" />
             <p class="text-sm">Nenhum responsável encontrado.</p>
           </div>

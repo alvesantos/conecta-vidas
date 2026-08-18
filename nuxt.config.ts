@@ -13,11 +13,8 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   modules: ["@nuxt/ui", "@nuxt/icon"],
-  colorMode: {
-    preference: 'dark',
-  },
   ui: {
-    colorMode: true,
+    colorMode: false,
   },
   icon: {
     collections: ["heroicons", "mdi", "ph"],

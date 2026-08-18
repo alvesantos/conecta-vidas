@@ -75,20 +75,20 @@ async function handleLogin() {
 
 <template>
   <div class="min-h-screen flex items-center justify-center px-4 py-8">
-    <div class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-6 sm:p-10 lg:p-14 flex flex-col gap-7">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-10 lg:p-14 flex flex-col gap-7">
       <div class="flex flex-col items-center gap-3">
         <img src="/conecta-icon.png" alt="ConectaVidas" class="h-36 sm:h-44" />
-        <p class="text-sm text-gray-500 dark:text-gray-400">
+        <p class="text-sm text-gray-500">
           Entrar como {{ portal.loginLabel }}
         </p>
       </div>
 
-      <div class="grid grid-cols-2 gap-1 rounded-xl bg-gray-100 p-1 dark:bg-white/5 sm:grid-cols-4" aria-label="Escolha o portal">
+      <div class="grid grid-cols-2 gap-1 rounded-xl bg-gray-100 p-1 sm:grid-cols-4" aria-label="Escolha o portal">
         <button
           v-for="key in PORTAL_KEYS"
           :key="key"
           class="flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-medium transition-colors"
-          :class="activePortal === key ? 'bg-white text-body-strong shadow-sm dark:bg-white/10' : 'text-body-muted hover:text-body-strong'"
+          :class="activePortal === key ? 'bg-white text-body-strong shadow-sm' : 'text-body-muted hover:text-body-strong'"
           :aria-pressed="activePortal === key"
           type="button"
           @click="activePortal = key"
@@ -100,7 +100,7 @@ async function handleLogin() {
 
       <div
         v-if="sessionExpired"
-        class="flex items-center gap-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 px-4 py-3 text-sm text-amber-700 dark:text-amber-400"
+        class="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-700"
       >
         <UIcon name="i-heroicons-clock" class="size-5 shrink-0" />
         Sua sessão expirou. Faça login novamente para continuar.
@@ -109,7 +109,7 @@ async function handleLogin() {
       <div class="flex flex-col gap-4">
         <div
           v-if="accountStatus"
-          class="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+          class="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900"
         >
           <p class="font-semibold">
             {{ accountStatus === 'pending' ? 'Cadastro em análise' : accountStatus === 'rejected' ? 'Cadastro não aprovado' : 'Conta suspensa' }}
@@ -158,7 +158,7 @@ async function handleLogin() {
         @click="handleLogin"
       />
 
-      <p v-if="activePortal !== 'adm'" class="text-center text-sm text-gray-500 dark:text-gray-400">
+      <p v-if="activePortal !== 'adm'" class="text-center text-sm text-gray-500">
         <NuxtLink :to="registerLink" class="font-medium hover:underline" :style="{ color: portal.accent }">
           {{ registerLabel }}
         </NuxtLink>

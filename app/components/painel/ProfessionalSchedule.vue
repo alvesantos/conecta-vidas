@@ -49,7 +49,7 @@ onMounted(load)
       <UCard>
         <template #header><h2 class="font-semibold text-body-strong">Especialidades atendidas</h2></template>
         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <label v-for="item in specialties" :key="item.id" class="flex cursor-pointer items-center gap-3 rounded-xl border p-3" :class="selected.includes(item.id) ? 'border-[var(--portal-accent)] bg-blue-50/50 dark:bg-blue-500/5' : 'border-gray-200 dark:border-white/10'">
+          <label v-for="item in specialties" :key="item.id" class="flex cursor-pointer items-center gap-3 rounded-xl border p-3" :class="selected.includes(item.id) ? 'border-[var(--portal-accent)] bg-blue-50/50' : 'border-gray-200'">
             <input type="checkbox" :checked="selected.includes(item.id)" class="size-4" @change="toggle(item.id)" /><span class="text-sm font-medium text-body-strong">{{ item.name }}</span>
           </label>
         </div>
@@ -57,7 +57,7 @@ onMounted(load)
       <UCard>
         <template #header><div class="flex items-center justify-between gap-3"><div><h2 class="font-semibold text-body-strong">Disponibilidade semanal</h2><p class="text-sm text-body-muted">Os horários ocupados deixam de aparecer automaticamente.</p></div><UButton label="Adicionar período" icon="i-heroicons-plus" variant="outline" size="sm" @click="addPeriod" /></div></template>
         <div v-if="availability.length" class="space-y-3">
-          <div v-for="(row, index) in availability" :key="index" class="grid items-end gap-3 rounded-xl bg-gray-50 p-3 dark:bg-white/5 sm:grid-cols-[1fr_1fr_1fr_1fr_auto]">
+          <div v-for="(row, index) in availability" :key="index" class="grid items-end gap-3 rounded-xl bg-gray-50 p-3 sm:grid-cols-[1fr_1fr_1fr_1fr_auto]">
             <UFormField label="Dia"><USelect v-model="row.weekday" :items="weekdays.map((label, value) => ({ label, value }))" class="w-full" /></UFormField>
             <UFormField label="Início"><UInput v-model="row.start_time" type="time" class="w-full" /></UFormField>
             <UFormField label="Fim"><UInput v-model="row.end_time" type="time" class="w-full" /></UFormField>

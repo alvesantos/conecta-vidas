@@ -358,20 +358,20 @@ async function submit() {
 <template>
   <div class="min-h-screen flex items-center justify-center py-10">
     <div
-      class="w-full max-w-xl bg-white dark:bg-[#012347] rounded-2xl shadow-lg p-6 sm:p-10 lg:p-14 flex flex-col gap-8"
+      class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-10 lg:p-14 flex flex-col gap-8"
     >
       <!-- Logo -->
       <div class="flex flex-col items-center gap-2">
         <img src="/conecta-icon.png" alt="ConectaVidas" class="h-40" />
-        <p class="text-sm text-gray-500 dark:text-gray-400">Crie sua conta de responsável</p>
+        <p class="text-sm text-gray-500">Crie sua conta de responsável</p>
       </div>
 
       <!-- Steps indicator -->
       <div class="flex items-center gap-0">
         <template v-for="(step, index) in ['Dados pessoais', 'Endereço', 'Animal']" :key="step">
-          <div v-if="index > 0" class="mb-5 h-px flex-1 transition-colors" :class="currentStep >= index + 1 ? 'bg-accent' : 'bg-gray-200 dark:bg-white/10'" />
+          <div v-if="index > 0" class="mb-5 h-px flex-1 transition-colors" :class="currentStep >= index + 1 ? 'bg-accent' : 'bg-gray-200'" />
           <div class="flex min-w-20 flex-col items-center gap-1">
-            <div class="flex size-9 items-center justify-center rounded-full text-sm font-semibold transition-colors" :class="currentStep >= index + 1 ? 'bg-accent text-white' : 'bg-gray-100 text-gray-400 dark:bg-white/10'">
+            <div class="flex size-9 items-center justify-center rounded-full text-sm font-semibold transition-colors" :class="currentStep >= index + 1 ? 'bg-accent text-white' : 'bg-gray-100 text-gray-400'">
               {{ index + 1 }}
             </div>
             <span class="text-center text-[11px] font-medium sm:text-xs" :class="currentStep >= index + 1 ? 'text-accent' : 'text-gray-400'">
@@ -497,7 +497,7 @@ async function submit() {
         </UFormField>
 
         <UFormField :error="errors.privacyConsent">
-          <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-white/10">
+          <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm">
             <UCheckbox v-model="privacyConsent" class="mt-0.5" />
             <span class="text-body-muted">
               Autorizo o tratamento dos meus dados pessoais e dados sensíveis de saúde para prestação dos serviços da plataforma, conforme os Termos e a Política de Privacidade.
@@ -516,7 +516,7 @@ async function submit() {
 
       <!-- Step 2: required structured address -->
       <div v-if="currentStep === 2" class="flex flex-col gap-4">
-        <div class="rounded-lg border border-accent/20 bg-accent/8 px-4 py-3 text-sm text-body-muted dark:border-white/10 dark:bg-white/5">
+        <div class="rounded-lg border border-accent/20 bg-accent/8 px-4 py-3 text-sm text-body-muted">
           Informe seu endereço completo. Ao preencher o CEP, buscaremos os dados automaticamente.
         </div>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -555,7 +555,7 @@ async function submit() {
 
         <!-- Escolha explícita: cadastro de pet é opcional -->
         <div
-          class="flex items-center justify-between gap-4 rounded-lg bg-accent/8 dark:bg-white/5 border border-accent/20 dark:border-white/10 px-4 py-4 text-sm text-primary/80 dark:text-gray-300"
+          class="flex items-center justify-between gap-4 rounded-lg bg-accent/8 border border-accent/20 px-4 py-4 text-sm text-primary/80"
         >
           <div class="flex items-center gap-2.5">
             <UIcon name="i-mdi-paw" class="size-5 shrink-0 text-accent" />
@@ -782,7 +782,7 @@ async function submit() {
             label="Voltar"
             size="lg"
             variant="outline"
-            class="flex-1 justify-center dark:text-white dark:border-white dark:hover:bg-white/10"
+            class="flex-1 justify-center"
             leading-icon="i-heroicons-arrow-left"
             :disabled="loading"
             @click="currentStep = 2"
@@ -800,7 +800,7 @@ async function submit() {
             label="Pular e concluir"
             size="lg"
             variant="outline"
-            class="flex-1 justify-center dark:text-white dark:border-white/40 dark:hover:bg-white/10"
+            class="flex-1 justify-center"
             leading-icon="i-heroicons-user-check"
             :loading="loading"
             @click="finishWithoutPet"
@@ -808,7 +808,7 @@ async function submit() {
         </div>
       </div>
 
-      <p class="text-center text-sm text-gray-500 dark:text-gray-400 -mt-2">
+      <p class="text-center text-sm text-gray-500 -mt-2">
         Já tem uma conta?
         <NuxtLink to="/login" class="text-accent font-medium hover:underline">
           Entrar

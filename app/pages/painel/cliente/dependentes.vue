@@ -100,7 +100,7 @@ onMounted(load)
     <div v-else-if="rows.length" class="grid gap-4 sm:grid-cols-2">
       <UCard v-for="item in rows" :key="item.id">
         <div class="flex items-start justify-between gap-4">
-          <div><span class="flex size-11 items-center justify-center rounded-full bg-blue-50 text-blue-700 dark:bg-blue-500/10"><UIcon name="i-heroicons-user" class="size-6" /></span><h2 class="mt-3 font-semibold text-body-strong">{{ item.name }}</h2><p class="text-sm text-body-muted">{{ item.relationship }} · {{ new Date(`${item.birth_date.slice(0, 10)}T12:00:00`).toLocaleDateString('pt-BR') }}</p></div>
+          <div><span class="flex size-11 items-center justify-center rounded-full bg-blue-50 text-blue-700"><UIcon name="i-heroicons-user" class="size-6" /></span><h2 class="mt-3 font-semibold text-body-strong">{{ item.name }}</h2><p class="text-sm text-body-muted">{{ item.relationship }} · {{ new Date(`${item.birth_date.slice(0, 10)}T12:00:00`).toLocaleDateString('pt-BR') }}</p></div>
           <div class="flex gap-1"><UButton icon="i-heroicons-pencil-square" variant="ghost" aria-label="Editar" @click="openEdit(item)" /><UButton icon="i-heroicons-trash" color="error" variant="ghost" aria-label="Remover" :loading="deletingId === item.id" @click="remove(item)" /></div>
         </div>
       </UCard>
@@ -119,7 +119,7 @@ onMounted(load)
             <UFormField label="Vínculo *"><USelect v-model="form.relationship" :items="relationshipOptions" class="w-full" /></UFormField>
           </div>
           <UFormField label="Telefone"><UInput v-model="form.phone" class="w-full" /></UFormField>
-          <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-white/10"><UCheckbox v-model="form.legal_guardian_confirmed" class="mt-0.5" /><span class="text-body-muted">Confirmo que possuo autorização ou responsabilidade legal para gerenciar os atendimentos deste dependente.</span></label>
+          <label class="flex items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm"><UCheckbox v-model="form.legal_guardian_confirmed" class="mt-0.5" /><span class="text-body-muted">Confirmo que possuo autorização ou responsabilidade legal para gerenciar os atendimentos deste dependente.</span></label>
           <UAlert v-if="error" color="error" variant="soft" :description="error" />
           <div class="flex justify-end gap-3"><UButton label="Cancelar" variant="outline" @click="modalOpen = false" /><UButton label="Salvar dependente" :loading="saving" @click="save" /></div>
         </div>

@@ -3,7 +3,7 @@ const route = useRoute()
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen bg-foreground dark:bg-[#011428]">
+  <div class="flex flex-col min-h-screen bg-foreground">
     <!-- Header superior (estilo Apple) -->
     <AppHeader />
 

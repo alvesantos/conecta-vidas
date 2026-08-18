@@ -102,8 +102,8 @@ const pixTypeLabels: Record<string, string> = {
 <template>
   <div>
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Configurações</h1>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Seus dados cadastrais e senha</p>
+      <h1 class="text-2xl font-bold text-gray-800">Configurações</h1>
+      <p class="text-gray-500 text-sm mt-1">Seus dados cadastrais e senha</p>
     </div>
 
     <UAlert
@@ -118,36 +118,36 @@ const pixTypeLabels: Record<string, string> = {
 
     <template v-else-if="profile">
       <!-- Dados cadastrais -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Dados Cadastrais</h2>
+      <div class="bg-white rounded-xl shadow p-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Dados Cadastrais</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Nome / Razão Social</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">{{ profile.name }}</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide">Nome / Razão Social</p>
+            <p class="text-gray-800 font-medium">{{ profile.name }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">CNPJ</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">{{ formatCnpj(profile.cnpj) }}</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide">CNPJ</p>
+            <p class="text-gray-800 font-medium">{{ formatCnpj(profile.cnpj) }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">E-mail</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">{{ profile.email }}</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide">E-mail</p>
+            <p class="text-gray-800 font-medium">{{ profile.email }}</p>
           </div>
           <div v-if="profile.pix_key">
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Chave Pix ({{ pixTypeLabels[profile.pix_type ?? ''] ?? profile.pix_type }})</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">{{ profile.pix_key }}</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide">Chave Pix ({{ pixTypeLabels[profile.pix_type ?? ''] ?? profile.pix_type }})</p>
+            <p class="text-gray-800 font-medium">{{ profile.pix_key }}</p>
           </div>
           <div v-if="profile.bank_name">
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Banco</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">{{ profile.bank_name }}</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide">Banco</p>
+            <p class="text-gray-800 font-medium">{{ profile.bank_name }}</p>
           </div>
           <div v-if="profile.bank_agency">
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Agência / Conta</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">{{ profile.bank_agency }} / {{ profile.bank_account_number }}</p>
+            <p class="text-xs text-gray-400 uppercase tracking-wide">Agência / Conta</p>
+            <p class="text-gray-800 font-medium">{{ profile.bank_agency }} / {{ profile.bank_account_number }}</p>
           </div>
           <div v-if="profile.billing_city" class="md:col-span-2">
-            <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Endereço</p>
-            <p class="text-gray-800 dark:text-gray-100 font-medium">
+            <p class="text-xs text-gray-400 uppercase tracking-wide">Endereço</p>
+            <p class="text-gray-800 font-medium">
               {{ profile.billing_street }}, {{ profile.billing_number }}
               <template v-if="profile.billing_city"> - {{ profile.billing_city }}/{{ profile.billing_state }}</template>
               <template v-if="profile.billing_cep"> - CEP {{ profile.billing_cep }}</template>
@@ -157,8 +157,8 @@ const pixTypeLabels: Record<string, string> = {
       </div>
 
       <!-- Alterar senha -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Alterar Senha</h2>
+      <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Alterar Senha</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <UFormField label="Senha atual">
             <UInput v-model="passwordForm.current_password" type="password" />

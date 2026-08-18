@@ -260,14 +260,14 @@ const columns = [
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Veterinários</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Gerencie os veterinários cadastrados no sistema</p>
+        <h1 class="text-2xl font-bold text-gray-800">Veterinários</h1>
+        <p class="text-gray-500 text-sm mt-1">Gerencie os veterinários cadastrados no sistema</p>
       </div>
       <UButton
         label="Adicionar Veterinário"
         icon="i-heroicons-plus"
         color="primary"
-        class="dark:text-white"
+
         @click="openCreate"
       />
     </div>
@@ -280,7 +280,7 @@ const columns = [
       class="mb-4"
     />
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+    <div class="bg-white rounded-xl shadow">
       <UTable
         :data="vets"
         :columns="columns"
@@ -288,7 +288,7 @@ const columns = [
         class="w-full"
       >
         <template #name-cell="{ row }">
-          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.name }}</span>
+          <span class="font-medium text-gray-800">{{ row.original.name }}</span>
         </template>
 
         <template #cnpj-cell="{ row }">
@@ -323,7 +323,7 @@ const columns = [
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-mdi-stethoscope" class="size-10 mb-2" />
             <p class="text-sm">Nenhum veterinário cadastrado.</p>
           </div>
@@ -334,8 +334,8 @@ const columns = [
     <!-- Modal Editar Veterinário -->
     <UModal v-model:open="editVetOpen">
       <template #content>
-        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Editar veterinário</h3>
+        <div class="p-6 flex flex-col gap-4">
+          <h3 class="text-lg font-semibold text-gray-800">Editar veterinário</h3>
 
           <UFormField label="Nome">
             <UInput v-model="editVetForm.name" class="w-full" />
@@ -351,7 +351,7 @@ const columns = [
 
           <div class="flex justify-end gap-2 mt-2">
             <UButton variant="outline" label="Cancelar" @click="editVetOpen = false" />
-            <UButton color="primary" label="Salvar" :loading="editVetSaving" class="dark:text-white" @click="saveEditVet" />
+            <UButton color="primary" label="Salvar" :loading="editVetSaving" @click="saveEditVet" />
           </div>
         </div>
       </template>
@@ -360,9 +360,9 @@ const columns = [
     <!-- Modal Excluir Veterinário -->
     <UModal v-model:open="deleteVetOpen">
       <template #content>
-        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Excluir veterinário</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
+        <div class="p-6 flex flex-col gap-4">
+          <h3 class="text-lg font-semibold text-gray-800">Excluir veterinário</h3>
+          <p class="text-sm text-gray-600">
             Esta ação é <strong>permanente</strong> e excluirá o cadastro de
             <strong>{{ deleteVetTarget?.name }}</strong>. Deseja continuar?
           </p>
@@ -377,16 +377,16 @@ const columns = [
     <!-- Modal Criar Veterinário -->
     <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">
       <template #content>
-        <div class="flex flex-col max-h-[90vh] dark:bg-gray-800">
-          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Adicionar Veterinário</h3>
+        <div class="flex flex-col max-h-[90vh]">
+          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800">Adicionar Veterinário</h3>
             <UButton icon="i-heroicons-x-mark" variant="ghost" color="neutral" size="md" @click="modalOpen = false" />
           </div>
           <div class="px-8 py-6 flex flex-col gap-5 overflow-y-auto flex-1">
 
           <!-- Dados Básicos -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Dados Básicos</h4>
+            <h4 class="text-sm font-semibold text-gray-600">Dados Básicos</h4>
             <UFormField label="Nome / Razão Social *">
               <UInput v-model="form.name" placeholder="Nome completo ou razão social" class="w-full" />
             </UFormField>
@@ -433,7 +433,7 @@ const columns = [
 
           <!-- Chave Pix -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Chave Pix</h4>
+            <h4 class="text-sm font-semibold text-gray-600">Chave Pix</h4>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="Tipo de chave">
                 <USelect v-model="form.pix_type" :items="pixTypeOptions" class="w-full" />
@@ -446,7 +446,7 @@ const columns = [
 
           <!-- Dados Bancários -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Dados Bancários</h4>
+            <h4 class="text-sm font-semibold text-gray-600">Dados Bancários</h4>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="Código do banco">
                 <UInput v-model="form.bank_code" placeholder="001" class="w-full" />
@@ -478,7 +478,7 @@ const columns = [
 
           <!-- Endereço de Faturamento -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Endereço de Faturamento</h4>
+            <h4 class="text-sm font-semibold text-gray-600">Endereço de Faturamento</h4>
             <div class="grid grid-cols-2 gap-3">
               <UFormField label="CEP">
                 <UInput
@@ -518,8 +518,8 @@ const columns = [
           <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
-            <UButton color="primary" label="Criar Veterinário" :loading="saving" class="dark:text-white" @click="save" />
+            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
+            <UButton color="primary" label="Criar Veterinário" :loading="saving" @click="save" />
           </div>
           </div>
         </div>

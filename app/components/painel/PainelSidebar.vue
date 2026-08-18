@@ -36,10 +36,10 @@ const portalItems = computed(() => [availablePortals.value.map(portal => ({
 </script>
 
 <template>
-  <aside class="flex h-full flex-col bg-white dark:bg-[#071b30]">
+  <aside class="flex h-full flex-col bg-white">
     <NuxtLink
       :to="definition.home"
-      class="flex h-18 items-center gap-3 border-b border-gray-200 px-4 dark:border-white/10"
+      class="flex h-18 items-center gap-3 border-b border-gray-200 px-4"
       :class="{ 'justify-center px-2': collapsed }"
     >
       <img src="/conecta-icon.png" alt="ConectaVidas" class="size-10 shrink-0 object-contain" />
@@ -66,23 +66,23 @@ const portalItems = computed(() => [availablePortals.value.map(portal => ({
       </section>
     </nav>
 
-    <div class="space-y-1 border-t border-gray-200 p-3 dark:border-white/10">
+    <div class="space-y-1 border-t border-gray-200 p-3">
       <UDropdownMenu v-if="availablePortals.length > 1" :items="portalItems" :content="{ side: 'right', align: 'end' }">
-        <button class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 dark:hover:bg-white/10" :class="{ 'justify-center': collapsed }" :aria-label="collapsed ? 'Trocar de portal' : undefined">
+        <button class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5" :class="{ 'justify-center': collapsed }" :aria-label="collapsed ? 'Trocar de portal' : undefined">
           <UIcon name="i-heroicons-arrows-right-left" class="size-5 shrink-0" />
           <span v-if="!collapsed">Trocar de portal</span>
         </button>
       </UDropdownMenu>
-      <NuxtLink to="/" class="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 dark:hover:bg-white/10" :class="{ 'justify-center': collapsed }">
+      <NuxtLink to="/" class="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5" :class="{ 'justify-center': collapsed }">
         <UIcon name="i-heroicons-arrow-left-circle" class="size-5 shrink-0" />
         <span v-if="!collapsed">Voltar ao site</span>
       </NuxtLink>
-      <button class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10" :class="{ 'justify-center': collapsed }" :aria-label="collapsed ? 'Sair' : undefined" @click="logout">
+      <button class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-red-600 hover:bg-red-50" :class="{ 'justify-center': collapsed }" :aria-label="collapsed ? 'Sair' : undefined" @click="logout">
         <UIcon name="i-heroicons-arrow-left-on-rectangle" class="size-5 shrink-0" />
         <span v-if="!collapsed">Sair</span>
       </button>
       <button
-        class="hidden min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 dark:hover:bg-white/10 lg:flex"
+        class="hidden min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-body-muted hover:bg-black/5 lg:flex"
         :class="{ 'justify-center': collapsed }"
         :aria-label="collapsed ? 'Expandir menu' : 'Recolher menu'"
         @click="$emit('collapse')"

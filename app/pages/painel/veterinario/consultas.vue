@@ -2,8 +2,8 @@
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Consultas</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Acompanhe suas consultas agendadas</p>
+        <h1 class="text-2xl font-bold text-gray-800">Consultas</h1>
+        <p class="text-gray-500 text-sm mt-1">Acompanhe suas consultas agendadas</p>
       </div>
     </div>
 
@@ -25,22 +25,22 @@
 
     <PainelCareQueue portal="vet" />
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+    <div class="bg-white rounded-xl shadow">
       <UTable :data="consultations" :columns="columns" :loading="pending" class="w-full">
         <template #date-cell="{ row }">
-          <span class="text-gray-800 dark:text-gray-100">{{ formatDate(row.original.date) }}</span>
+          <span class="text-gray-800">{{ formatDate(row.original.date) }}</span>
         </template>
 
         <template #time-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">{{ formatTime(row.original.time) }}</span>
+          <span class="text-gray-600">{{ formatTime(row.original.time) }}</span>
         </template>
 
         <template #tutor_name-cell="{ row }">
-          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.tutor_name }}</span>
+          <span class="font-medium text-gray-800">{{ row.original.tutor_name }}</span>
         </template>
 
         <template #pet_name-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">{{ row.original.pet_name || '—' }}</span>
+          <span class="text-gray-600">{{ row.original.pet_name || '—' }}</span>
         </template>
 
         <template #status-cell="{ row }">
@@ -77,7 +77,7 @@
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-heroicons-calendar-days" class="size-10 mb-2" />
             <p class="text-sm">Nenhuma consulta encontrada.</p>
           </div>

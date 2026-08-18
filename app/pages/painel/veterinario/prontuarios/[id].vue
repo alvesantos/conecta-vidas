@@ -8,17 +8,17 @@
         to="/painel/veterinario/prontuarios"
       />
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+        <h1 class="text-2xl font-bold text-gray-800">
           {{ records.length > 0 ? records[0]?.tutor_name : 'Prontuários' }}
         </h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+        <p class="text-gray-500 text-sm mt-1">
           Histórico de Consultas
         </p>
       </div>
     </div>
 
     <div v-if="pending" class="flex justify-center py-12">
-      <UIcon name="i-heroicons-arrow-path" class="animate-spin size-8 text-primary dark:text-white" />
+      <UIcon name="i-heroicons-arrow-path" class="animate-spin size-8 text-primary" />
     </div>
     <UAlert v-else-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
     <div v-else-if="records.length === 0" class="text-center py-12 text-gray-500">
@@ -30,11 +30,11 @@
         <template #header>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-100">
+              <h3 class="font-semibold text-lg text-gray-800">
                 Consulta em {{ formatDate(record.consultation_date) }} às {{ record.consultation_time.slice(0, 5) }}
               </h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400">
-                Paciente: <span class="font-medium text-gray-700 dark:text-gray-300">{{ record.pet_name || 'Não informado' }}</span>
+              <p class="text-sm text-gray-500">
+                Paciente: <span class="font-medium text-gray-700">{{ record.pet_name || 'Não informado' }}</span>
                 <span v-if="record.pet_species"> ({{ record.pet_species }} - {{ record.pet_breed || 'Sem raça definida' }})</span>
               </p>
             </div>
@@ -51,11 +51,11 @@
         </template>
 
         <div class="flex flex-col gap-4">
-          <div v-if="record.consultation_notes" class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg text-sm text-gray-600 dark:text-gray-300">
+          <div v-if="record.consultation_notes" class="bg-gray-50 p-4 rounded-lg text-sm text-gray-600">
             <span class="font-semibold block mb-1">Motivo / Notas da Consulta:</span>
             {{ record.consultation_notes }}
           </div>
-          
+
           <UFormField label="Prontuário (Observações e Exames)">
             <UTextarea
               v-model="record.content"
@@ -65,7 +65,7 @@
               placeholder="Digite aqui as anotações do prontuário durante a consulta..."
             />
           </UFormField>
-          
+
           <div class="flex items-center gap-3">
              <UButton color="neutral" variant="soft" icon="i-heroicons-paper-clip" disabled>
                Anexar Arquivo (Em breve)

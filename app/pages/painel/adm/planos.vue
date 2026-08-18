@@ -5,7 +5,7 @@ definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 const { listAdmin, createPlan, updatePlan, deletePlan } = usePlans();
 
-const plans = ref<Plan[]>([]); 
+const plans = ref<Plan[]>([]);
 const pending = ref(true);
 
 async function loadPlans() {
@@ -149,19 +149,19 @@ async function save() {
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Planos</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Crie e edite os planos disponíveis no sistema</p>
+        <h1 class="text-2xl font-bold text-gray-800">Planos</h1>
+        <p class="text-gray-500 text-sm mt-1">Crie e edite os planos disponíveis no sistema</p>
       </div>
       <UButton
         label="Novo plano"
         icon="i-heroicons-plus"
         color="primary"
-        class="dark:text-white"
+
         @click="openCreate"
       />
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+    <div class="bg-white rounded-xl shadow">
       <UTable
         :data="plans"
         :columns="columns"
@@ -173,7 +173,7 @@ async function save() {
         </template>
 
         <template #title-cell="{ row }">
-          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.title }}</span>
+          <span class="font-medium text-gray-800">{{ row.original.title }}</span>
         </template>
 
         <template #price-cell="{ row }">
@@ -212,7 +212,7 @@ async function save() {
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-heroicons-credit-card" class="size-10 mb-2" />
             <p class="text-sm">Nenhum plano cadastrado.</p>
           </div>
@@ -222,9 +222,9 @@ async function save() {
 
     <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">
       <template #content>
-        <div class="flex flex-col max-h-[90vh] dark:bg-gray-800">
-          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+        <div class="flex flex-col max-h-[90vh]">
+          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800">
               {{ editingId ? 'Editar plano' : 'Novo plano' }}
             </h3>
             <UButton icon="i-heroicons-x-mark" variant="ghost" color="neutral" size="md" @click="modalOpen = false" />
@@ -260,7 +260,7 @@ async function save() {
 
           <div>
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Benefícios</span>
+              <span class="text-sm font-medium text-gray-700">Benefícios</span>
               <UButton size="xs" variant="ghost" icon="i-heroicons-plus" label="Adicionar" @click="addPerk" />
             </div>
             <div class="flex flex-col gap-2">
@@ -285,8 +285,8 @@ async function save() {
           <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
-            <UButton color="primary" :label="editingId ? 'Salvar' : 'Criar'" :loading="saving" class="dark:text-white" @click="save" />
+            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
+            <UButton color="primary" :label="editingId ? 'Salvar' : 'Criar'" :loading="saving" @click="save" />
           </div>
           </div>
         </div>
@@ -295,9 +295,9 @@ async function save() {
     <!-- Modal Excluir Plano -->
     <UModal v-model:open="deleteOpen">
       <template #content>
-        <div class="p-6 flex flex-col gap-4 dark:bg-gray-800">
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Excluir plano</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
+        <div class="p-6 flex flex-col gap-4">
+          <h3 class="text-lg font-semibold text-gray-800">Excluir plano</h3>
+          <p class="text-sm text-gray-600">
             Tem certeza que deseja excluir o plano <strong>{{ deleteTarget?.title }}</strong>?
             Esta ação é permanente.
           </p>

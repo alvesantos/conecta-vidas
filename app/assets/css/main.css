@@ -8,23 +8,12 @@
   --color-foreground: #FAF9F6;
 }
 
-/*
-  TOKENS SEMÂNTICOS DE TEXTO (theme-aware)
-  Respondem ao tema automaticamente, evitando espalhar `dark:` por toda parte.
-  Use as classes .text-body / .text-body-muted / .text-body-strong no lugar de
-  `text-primary dark:text-white` e similares. Adoção incremental.
-  (O Nuxt UI também expõe text-default/text-muted/text-highlighted, que podem
-  ser usados nos componentes UI.)
-*/
+/* Tokens semânticos de texto do tema claro. */
 :root {
-  --color-text: #01193A;                    /* primary (claro) */
+  color-scheme: light;
+  --color-text: #01193A;
   --color-text-muted: rgba(1, 25, 58, 0.7);
   --color-text-strong: #01193A;
-}
-.dark {
-  --color-text: #ffffff;
-  --color-text-muted: #cbd5e1;              /* slate-300 */
-  --color-text-strong: #ffffff;
 }
 
 @layer utilities {
@@ -39,11 +28,6 @@
     font-family: 'Inter', sans-serif;
     background-color: var(--color-foreground);
     color: var(--color-primary);
-  }
-
-  .dark body {
-    background-color: #011428;
-    color: #e2e8f0;
   }
 
   button, [role="button"], a {

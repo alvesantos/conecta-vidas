@@ -109,7 +109,7 @@ onMounted(load)
 
       <UCard>
         <template #header><div><h2 class="font-semibold text-body-strong">Consentimentos</h2><p class="text-sm text-body-muted">Histórico versionado das autorizações fornecidas.</p></div></template>
-        <div class="divide-y divide-gray-200 dark:divide-white/10">
+        <div class="divide-y divide-gray-200">
           <div v-for="consent in consents" :key="consent.id" class="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0 last:pb-0">
             <div><p class="font-medium text-body-strong">{{ consent.consent_type === 'platform_terms' ? 'Termos da plataforma' : 'Privacidade e dados de saúde' }}</p><p class="text-xs text-body-muted">Versão {{ consent.policy_version }} · {{ new Date(consent.granted_at).toLocaleString('pt-BR') }}</p></div>
             <UBadge v-if="consent.revoked_at" label="Revogado" color="neutral" variant="soft" />

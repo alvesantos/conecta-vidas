@@ -6,7 +6,7 @@ definePageMeta({
 
 <template>
   <div class="flex flex-col items-center px-4 py-6 lg:py-10">
-    <h1 class="text-2xl lg:text-4xl font-semibold text-primary dark:text-white text-center mb-6">
+    <h1 class="text-2xl lg:text-4xl font-semibold text-primary text-center mb-6">
       Nossa história
     </h1>
 

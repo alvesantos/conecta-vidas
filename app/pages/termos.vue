@@ -5,12 +5,7 @@
       <img
         src="/icons/logo-claro.png"
         alt="ConectaVidas"
-        class="h-20 w-auto dark:hidden"
-      />
-      <img
-        src="/icons/logo-escuro.png"
-        alt="ConectaVidas"
-        class="h-20 w-auto hidden dark:block"
+        class="h-20 w-auto"
       />
       <h1 class="text-xl sm:text-2xl font-bold text-body-strong mt-2">Termos e Políticas</h1>
       <p class="text-body-muted text-sm mt-1">
@@ -19,13 +14,13 @@
     </div>
 
     <!-- Seletor de documento -->
-    <div class="flex items-center justify-center gap-2 mb-6 p-1 bg-gray-100 dark:bg-white/5 rounded-lg shadow-inner w-full sm:w-fit sm:mx-auto">
+    <div class="flex items-center justify-center gap-2 mb-6 p-1 bg-gray-100 rounded-lg shadow-inner w-full sm:w-fit sm:mx-auto">
       <button
         type="button"
         class="flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-md text-sm font-medium transition-colors"
         :class="activeDoc === 'humana'
-          ? 'bg-white dark:bg-white/10 text-primary dark:text-white shadow'
-          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+          ? 'bg-white text-primary shadow'
+          : 'text-gray-500 hover:text-gray-700'"
         @click="activeDoc = 'humana'"
       >
         Telemedicina Humana
@@ -34,8 +29,8 @@
         type="button"
         class="flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-md text-sm font-medium transition-colors"
         :class="activeDoc === 'vet'
-          ? 'bg-white dark:bg-white/10 text-primary dark:text-white shadow'
-          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+          ? 'bg-white text-primary shadow'
+          : 'text-gray-500 hover:text-gray-700'"
         @click="activeDoc = 'vet'"
       >
         Telemedicina Veterinária
@@ -43,14 +38,14 @@
     </div>
 
     <!-- Documento -->
-    <div class="rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm bg-white dark:bg-white/3">
-      <div class="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10 px-4 sm:px-5 py-3 flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm font-medium">
-        <UIcon name="i-heroicons-document-text" class="size-5 text-primary dark:text-accent shrink-0" />
+    <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-white">
+      <div class="bg-gray-50 border-b border-gray-200 px-4 sm:px-5 py-3 flex items-center gap-2 text-gray-600 text-sm font-medium">
+        <UIcon name="i-heroicons-document-text" class="size-5 text-primary shrink-0" />
         <span class="truncate">{{ activeDocData.heading }}</span>
       </div>
 
       <div class="terms-doc max-h-[70vh] overflow-y-auto px-5 sm:px-8 py-6">
-        <p class="text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-6">
+        <p class="text-xs uppercase tracking-wide text-gray-400 mb-6">
           {{ activeDocData.updatedAt }}
         </p>
 
@@ -75,7 +70,7 @@
     <!-- Área de confirmação -->
     <div
       class="mt-6 rounded-2xl border p-4 sm:p-5 transition-colors"
-      :class="agreed ? 'border-green-300 bg-green-50 dark:border-green-500/40 dark:bg-green-500/10' : 'border-gray-200 dark:border-white/10 bg-white dark:bg-white/3'"
+      :class="agreed ? 'border-green-300 bg-green-50' : 'border-gray-200 bg-white'"
     >
       <label class="flex items-start gap-3 cursor-pointer select-none group">
         <div class="mt-0.5 shrink-0">
@@ -88,7 +83,7 @@
             class="size-5 rounded border-2 flex items-center justify-center transition-all"
             :class="agreed
               ? 'bg-green-500 border-green-500'
-              : 'border-gray-300 dark:border-white/30 bg-white dark:bg-transparent group-hover:border-primary'"
+              : 'border-gray-300 bg-white group-hover:border-primary'"
           >
             <UIcon
               v-if="agreed"
@@ -99,7 +94,7 @@
         </div>
         <span class="text-body text-sm leading-relaxed">
           Li e estou de acordo com os
-          <strong class="text-primary dark:text-accent">Termos e Políticas</strong>
+          <strong class="text-primary">Termos e Políticas</strong>
           da ConectaVidas, incluindo as condições de uso dos serviços de telemedicina humana e veterinária.
         </span>
       </label>
@@ -126,7 +121,7 @@
 
         <span
           v-if="confirmed"
-          class="text-green-600 dark:text-green-400 text-sm font-medium flex items-center gap-1.5"
+          class="text-green-600 text-sm font-medium flex items-center gap-1.5"
         >
           <UIcon name="i-heroicons-check-circle" class="size-4" />
           Concordância registrada
@@ -136,7 +131,7 @@
       <!-- Mensagem de aviso se não aceitou -->
       <p
         v-if="!agreed && showWarning"
-        class="mt-3 text-amber-600 dark:text-amber-400 text-xs flex items-center gap-1.5"
+        class="mt-3 text-amber-600 text-xs flex items-center gap-1.5"
       >
         <UIcon name="i-heroicons-exclamation-triangle" class="size-4 shrink-0" />
         Marque a caixa acima para confirmar que leu e concordou com os termos.
@@ -710,9 +705,6 @@ watch(agreed, (val) => {
   color: var(--color-primary);
   margin-bottom: 0.5rem;
 }
-:global(.dark) .terms-clause-title {
-  color: #ffffff;
-}
 .terms-item {
   font-size: 0.875rem;
   line-height: 1.65;
@@ -725,9 +717,6 @@ watch(agreed, (val) => {
   margin: 0 0 0.75rem 0;
   padding-left: 1rem;
   border-left: 2px solid rgba(1, 68, 150, 0.15);
-}
-:global(.dark) .terms-sublist {
-  border-left-color: rgba(255, 255, 255, 0.12);
 }
 .terms-sublist li {
   font-size: 0.83rem;
@@ -746,8 +735,5 @@ watch(agreed, (val) => {
   line-height: 1.6;
   color: var(--color-text-muted);
   text-align: center;
-}
-:global(.dark) .terms-closing {
-  border-top-color: rgba(255, 255, 255, 0.12);
 }
 </style>

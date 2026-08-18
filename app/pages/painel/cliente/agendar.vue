@@ -166,21 +166,21 @@ async function submit() {
     <div class="grid gap-4 sm:grid-cols-2">
       <button
         type="button"
-        class="group rounded-2xl border-2 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:bg-[#071b30]"
-        :class="kind === 'humana' ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200 dark:border-white/10'"
+        class="group rounded-2xl border-2 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:shadow-md"
+        :class="kind === 'humana' ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200'"
         @click="selectKind('humana')"
       >
-        <span class="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"><UIcon name="i-mdi-doctor" class="size-7" /></span>
+        <span class="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><UIcon name="i-mdi-doctor" class="size-7" /></span>
         <span class="mt-4 block text-lg font-semibold text-body-strong">Humano</span>
         <span class="mt-1 block text-sm text-body-muted">Consulta médica para você.</span>
       </button>
       <button
         type="button"
-        class="group rounded-2xl border-2 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:bg-[#071b30]"
-        :class="kind === 'veterinaria' ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200 dark:border-white/10'"
+        class="group rounded-2xl border-2 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:shadow-md"
+        :class="kind === 'veterinaria' ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200'"
         @click="selectKind('veterinaria')"
       >
-        <span class="flex size-12 items-center justify-center rounded-xl bg-sky-50 text-sky-700 dark:bg-sky-500/10 dark:text-sky-300"><UIcon name="i-mdi-paw" class="size-7" /></span>
+        <span class="flex size-12 items-center justify-center rounded-xl bg-sky-50 text-sky-700"><UIcon name="i-mdi-paw" class="size-7" /></span>
         <span class="mt-4 block text-lg font-semibold text-body-strong">Animal</span>
         <span class="mt-1 block text-sm text-body-muted">Consulta veterinária para seu pet.</span>
       </button>
@@ -217,7 +217,7 @@ async function submit() {
             <UFormField label="Horário e profissional *"><USelect v-model="slotKey" :items="slotOptions" :loading="slotsPending" :disabled="!specialtyId || !date" :placeholder="slots.length ? 'Selecione um horário' : 'Nenhum horário disponível'" class="w-full" size="lg" /></UFormField>
           </div>
         </div>
-        <div class="rounded-xl border border-gray-200 p-4 dark:border-white/10">
+        <div class="rounded-xl border border-gray-200 p-4">
           <div v-if="quotePending" class="flex items-center gap-2 text-sm text-body-muted"><UIcon name="i-heroicons-arrow-path" class="size-5 animate-spin" /> Verificando cobertura...</div>
           <template v-else-if="quote">
             <div class="flex flex-wrap items-center justify-between gap-3">
@@ -229,7 +229,7 @@ async function submit() {
               <div class="text-right">
                 <p class="text-xs uppercase tracking-wide text-body-muted">Valor</p>
                 <p v-if="quote.priceConfigured" class="text-xl font-bold text-body-strong">{{ quote.price === 0 ? 'Incluído' : Number(quote.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
-                <p v-else class="font-semibold text-amber-700 dark:text-amber-300">A confirmar</p>
+                <p v-else class="font-semibold text-amber-700">A confirmar</p>
               </div>
             </div>
             <UAlert v-if="!quote.priceConfigured" class="mt-3" color="warning" variant="soft" description="O valor avulso ainda depende da configuração comercial. A equipe confirmará antes de qualquer cobrança." />

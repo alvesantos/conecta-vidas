@@ -138,11 +138,11 @@ onBeforeUnmount(() => {
 
       <UCard v-if="waiting" class="overflow-hidden">
         <div class="py-5 text-center">
-          <span class="mx-auto flex size-20 items-center justify-center rounded-full bg-blue-50 text-3xl font-bold text-[var(--portal-accent)] dark:bg-blue-500/10">{{ state.position || '—' }}</span>
+          <span class="mx-auto flex size-20 items-center justify-center rounded-full bg-blue-50 text-3xl font-bold text-[var(--portal-accent)]">{{ state.position || '—' }}</span>
           <p class="mt-3 text-sm text-body-muted">Sua posição aproximada</p>
           <h2 class="mt-1 text-xl font-bold text-body-strong">{{ state.estimate }}</h2>
           <p class="mt-2 text-xs text-body-muted">A estimativa pode mudar conforme a complexidade dos atendimentos e a prioridade clínica.</p>
-          <div class="mx-auto mt-6 max-w-xs rounded-xl bg-gray-50 p-4 dark:bg-white/5"><p class="text-xs uppercase tracking-wide text-body-muted">Tempo na sala</p><p class="mt-1 font-mono text-2xl font-bold text-body-strong">{{ elapsed }}</p></div>
+          <div class="mx-auto mt-6 max-w-xs rounded-xl bg-gray-50 p-4"><p class="text-xs uppercase tracking-wide text-body-muted">Tempo na sala</p><p class="mt-1 font-mono text-2xl font-bold text-body-strong">{{ elapsed }}</p></div>
         </div>
       </UCard>
 

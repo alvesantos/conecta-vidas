@@ -49,10 +49,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Animais</h1>
-    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Todos os animais cadastrados no sistema</p>
+    <h1 class="text-2xl font-bold text-gray-800">Animais</h1>
+    <p class="text-gray-500 text-sm mt-1">Todos os animais cadastrados no sistema</p>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow mt-6">
+    <div class="bg-white rounded-xl shadow mt-6">
       <UTable
         :data="pets"
         :columns="columns"
@@ -67,7 +67,7 @@ onMounted(async () => {
               <img v-if="avatarSrc(row.original.avatar_url)" :src="avatarSrc(row.original.avatar_url)!" class="w-full h-full object-cover" />
               <UIcon v-else :name="speciesIcon(row.original.species)" class="text-accent size-6" />
             </div>
-            <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.name }}</span>
+            <span class="font-medium text-gray-800">{{ row.original.name }}</span>
           </div>
         </template>
 
@@ -82,18 +82,18 @@ onMounted(async () => {
         <template #owner_name-cell="{ row }">
           <div class="flex flex-col">
             <span>{{ row.original.owner_name || '—' }}</span>
-            <span class="text-xs text-gray-400 dark:text-gray-500">{{ row.original.owner_email || '' }}</span>
+            <span class="text-xs text-gray-400">{{ row.original.owner_email || '' }}</span>
           </div>
         </template>
 
         <template #chevron-cell>
           <div class="flex justify-end">
-            <UIcon name="i-heroicons-chevron-right" class="size-5 text-gray-400 dark:text-gray-500" />
+            <UIcon name="i-heroicons-chevron-right" class="size-5 text-gray-400" />
           </div>
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-mdi-paw" class="size-10 mb-2" />
             <p class="text-sm">Nenhum animal encontrado.</p>
           </div>

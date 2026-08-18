@@ -44,7 +44,7 @@ const handleScrollToPricing = () => {
       <!-- CHIP -->
       <div class="text-white max-w-75 min-[900px]:max-w-[48%]">
         <UCard class="p-0"
-          :ui="{body: 'bg-foreground dark:bg-primary'}"
+          :ui="{body: 'bg-foreground'}"
           >
           <div class="flex items-center gap-x-2">
             <!-- ICON -->
@@ -54,7 +54,7 @@ const handleScrollToPricing = () => {
 
             <!-- CONTENT -->
             <div class="min-w-0">
-              <p class="font-semibold leading-tight text-primary dark:text-white text-center min-[900px]:text-sm">
+              <p class="font-semibold leading-tight text-primary text-center min-[900px]:text-sm">
                 Atendimento com médicos veterinários <span class="text-accent">qualificados</span>
               </p>
             </div>
@@ -99,7 +99,7 @@ const handleScrollToPricing = () => {
 
       <div class="pt-4">
         <UCard
-          :ui="{body: 'bg-foreground dark:bg-primary'}"
+          :ui="{body: 'bg-foreground'}"
           >
           <div class="flex items-center gap-x-2">
             <!-- ICON -->
@@ -109,7 +109,7 @@ const handleScrollToPricing = () => {
 
             <!-- CONTENT -->
             <div class="min-w-0">
-              <p class=" font-semibold leading-tight text-primary dark:text-white">
+              <p class=" font-semibold leading-tight text-primary">
                 Atendimento com médicos veterinários <span class="text-accent">qualificados</span>
               </p>
             </div>

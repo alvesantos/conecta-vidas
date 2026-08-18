@@ -169,12 +169,12 @@ onMounted(() => {
     <!-- TOP BANNER -->
     <div class="pt-5">
       <div
-        class="flex items-center justify-center gap-2.5 rounded-full bg-accent/8 dark:bg-white/5 px-5 py-2.5 text-center"
+        class="flex items-center justify-center gap-2.5 rounded-full bg-accent/8 px-5 py-2.5 text-center"
       >
         <UIcon name="i-heroicons-heart" class="size-5 text-accent shrink-0" />
-        <p class="text-sm sm:text-base text-primary/80 dark:text-gray-300">
+        <p class="text-sm sm:text-base text-primary/80">
           Uma plataforma de telemedicina que conecta a saúde de toda a família,
-          <span class="font-semibold text-primary dark:text-white"
+          <span class="font-semibold text-primary"
             >incluindo seus animais.</span
           >
         </p>
@@ -295,9 +295,9 @@ onMounted(() => {
       <div
         class="reveal flex flex-col items-center sm:flex-row sm:justify-center gap-x-3 gap-y-3 text-center"
       >
-        <p class="text-base sm:text-lg text-primary/80 dark:text-gray-300">
+        <p class="text-base sm:text-lg text-primary/80">
           Segurança para você e seu animal por
-          <span class="font-semibold text-primary dark:text-white"
+          <span class="font-semibold text-primary"
             >menos de R$ 2 por dia.</span
           >
         </p>
@@ -306,7 +306,7 @@ onMounted(() => {
           variant="link"
           color="primary"
           trailing-icon="i-heroicons-arrow-right"
-          class="font-semibold text-base sm:text-lg dark:text-sky-400!"
+          class="font-semibold text-base sm:text-lg"
           @click="scrollToId('pricingSection')"
         >
           Ver planos
@@ -320,7 +320,7 @@ onMounted(() => {
         <!-- PARA SEU PET -->
         <div
           id="card-pet"
-          class="reveal rounded-3xl border border-accent/20 bg-white dark:bg-gray-800 p-5 sm:p-8 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+          class="reveal rounded-3xl border border-accent/20 bg-white p-5 sm:p-8 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
         >
           <div class="flex items-center gap-3 sm:gap-4">
             <span
@@ -332,7 +332,7 @@ onMounted(() => {
               Para seu Animal
             </h3>
           </div>
-          <p class="mt-4 text-sm sm:text-base text-primary/70 dark:text-gray-300 leading-relaxed">
+          <p class="mt-4 text-sm sm:text-base text-primary/70 leading-relaxed">
             Teleconsulta veterinária, orientação, acompanhamento e muito mais
             para todas as fases da vida do seu melhor amigo.
           </p>
@@ -340,7 +340,7 @@ onMounted(() => {
             :to="clientPortalTarget"
             size="lg"
             color="primary"
-            class="mt-6 self-start font-semibold px-6 dark:bg-accent! dark:text-white! dark:hover:bg-accent/85!"
+            class="mt-6 self-start font-semibold px-6"
             trailing-icon="i-heroicons-arrow-right"
           >
             Ir para o Portal do Cliente
@@ -350,7 +350,7 @@ onMounted(() => {
         <!-- PARA VOCÊ -->
         <div
           id="card-voce"
-          class="reveal rounded-3xl border border-green-600/20 bg-white dark:bg-gray-800 p-5 sm:p-8 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+          class="reveal rounded-3xl border border-green-600/20 bg-white p-5 sm:p-8 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
           style="animation-delay: 90ms"
         >
           <div class="flex items-center gap-3 sm:gap-4">
@@ -360,12 +360,12 @@ onMounted(() => {
               <UIcon name="i-heroicons-user" class="size-7 sm:size-8" />
             </span>
             <h3
-              class="hero-title text-xl sm:text-3xl text-green-700 dark:text-green-500"
+              class="hero-title text-xl sm:text-3xl text-green-700"
             >
               Para Você
             </h3>
           </div>
-          <p class="mt-4 text-sm sm:text-base text-primary/70 dark:text-gray-300 leading-relaxed">
+          <p class="mt-4 text-sm sm:text-base text-primary/70 leading-relaxed">
             Consultas médicas online, especialistas, exames, saúde mental e
             programas de prevenção para você e sua família.
           </p>
@@ -386,7 +386,7 @@ onMounted(() => {
     <section class="pt-12 sm:pt-20">
       <div class="reveal text-center max-w-2xl mx-auto">
         <h2
-          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary"
         >
           O que você encontra
         </h2>
@@ -400,7 +400,7 @@ onMounted(() => {
         <div
           v-for="(service, i) in services"
           :key="service.title"
-          class="reveal group flex items-start gap-4 rounded-3xl border border-accent/15 dark:border-white/10 bg-white dark:bg-gray-800 p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+          class="reveal group flex items-start gap-4 rounded-3xl border border-accent/15 bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
           :style="{ animationDelay: `${(i % 3) * 80}ms` }"
         >
           <span
@@ -409,7 +409,7 @@ onMounted(() => {
             <UIcon :name="service.icon" class="size-6" />
           </span>
           <div>
-            <h3 class="text-base sm:text-lg font-semibold text-primary dark:text-white leading-tight">
+            <h3 class="text-base sm:text-lg font-semibold text-primary leading-tight">
               {{ service.title }}
             </h3>
             <p class="mt-1.5 text-body-muted text-sm leading-relaxed">
@@ -424,7 +424,7 @@ onMounted(() => {
     <section class="pt-12 sm:pt-20">
       <div class="reveal text-center max-w-2xl mx-auto">
         <h2
-          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary"
         >
           Como funciona
         </h2>
@@ -437,7 +437,7 @@ onMounted(() => {
         <div
           v-for="(step, i) in howItWorks"
           :key="step.title"
-          class="reveal relative rounded-3xl border border-accent/15 dark:border-white/10 bg-white dark:bg-gray-800 p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+          class="reveal relative rounded-3xl border border-accent/15 bg-white p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
           :style="{ animationDelay: `${i * 100}ms` }"
         >
           <span
@@ -450,7 +450,7 @@ onMounted(() => {
           >
             <UIcon :name="step.icon" class="size-6" />
           </span>
-          <h3 class="mt-5 text-lg font-semibold text-primary dark:text-white">
+          <h3 class="mt-5 text-lg font-semibold text-primary">
             {{ step.title }}
           </h3>
           <p class="mt-2 text-body-muted text-sm leading-relaxed">
@@ -481,7 +481,7 @@ onMounted(() => {
     <section class="pt-12 sm:pt-20">
       <div class="reveal text-center max-w-2xl mx-auto">
         <h2
-          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary dark:text-white"
+          class="hero-title text-2xl sm:text-4xl lg:text-5xl text-primary"
         >
           Perguntas frequentes
         </h2>
@@ -491,16 +491,16 @@ onMounted(() => {
         <details
           v-for="(item, i) in faqItems"
           :key="item.q"
-          class="reveal group rounded-2xl border border-accent/15 dark:border-white/10 bg-white dark:bg-gray-800 px-5 sm:px-6 shadow-sm"
+          class="reveal group rounded-2xl border border-accent/15 bg-white px-5 sm:px-6 shadow-sm"
           :style="{ animationDelay: `${i * 60}ms` }"
         >
           <summary
-            class="flex items-center justify-between gap-4 py-4 cursor-pointer list-none font-semibold text-primary dark:text-white"
+            class="flex items-center justify-between gap-4 py-4 cursor-pointer list-none font-semibold text-primary"
           >
             {{ item.q }}
             <UIcon
               name="i-heroicons-chevron-down"
-              class="size-5 shrink-0 text-accent dark:text-white transition-transform duration-200 group-open:rotate-180"
+              class="size-5 shrink-0 text-accent transition-transform duration-200 group-open:rotate-180"
             />
           </summary>
           <p class="pb-5 -mt-1 text-body-muted text-sm sm:text-base leading-relaxed">

@@ -234,8 +234,8 @@ onMounted(loadPets);
   <div class="max-w-4xl mx-auto">
     <div class="mb-8 flex items-start justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Meus Animais</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
+        <h1 class="text-2xl font-bold text-gray-800">Meus Animais</h1>
+        <p class="text-gray-500 text-sm mt-1">Veja e edite as informações dos seus companheiros</p>
       </div>
       <div v-if="!pending && !fetchError && pets.length > 0" class="flex flex-col items-end gap-1">
         <UButton
@@ -245,7 +245,7 @@ onMounted(loadPets);
           :disabled="!canAddPet"
           @click="openCreate"
         />
-        <span v-if="!canAddPet" class="text-xs text-gray-400 dark:text-gray-500">
+        <span v-if="!canAddPet" class="text-xs text-gray-400">
           Limite de {{ PET_LIMIT }} animais atingido
         </span>
       </div>
@@ -255,11 +255,11 @@ onMounted(loadPets);
       <div
         v-for="i in 2"
         :key="i"
-        class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 flex flex-col items-center gap-4 animate-pulse"
+        class="bg-white rounded-2xl shadow p-8 flex flex-col items-center gap-4 animate-pulse"
       >
-        <div class="w-28 h-28 rounded-full bg-gray-200 dark:bg-gray-700" />
-        <div class="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
-        <div class="h-4 w-20 bg-gray-100 dark:bg-gray-700 rounded" />
+        <div class="w-28 h-28 rounded-full bg-gray-200" />
+        <div class="h-5 w-32 bg-gray-200 rounded" />
+        <div class="h-4 w-20 bg-gray-100 rounded" />
       </div>
     </div>
 
@@ -279,8 +279,8 @@ onMounted(loadPets);
         <UIcon name="i-mdi-paw" class="text-accent text-4xl" />
       </div>
       <div>
-        <p class="text-gray-700 dark:text-gray-200 font-medium text-lg">Nenhum animal cadastrado ainda</p>
-        <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Cadastre seu animal para acessar o perfil aqui.</p>
+        <p class="text-gray-700 font-medium text-lg">Nenhum animal cadastrado ainda</p>
+        <p class="text-gray-400 text-sm mt-1">Cadastre seu animal para acessar o perfil aqui.</p>
       </div>
       <UButton
         label="Cadastrar animal"
@@ -295,7 +295,7 @@ onMounted(loadPets);
       <div
         v-for="pet in pets"
         :key="pet.id"
-        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-shadow p-8 flex flex-col items-center gap-4"
+        class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow p-8 flex flex-col items-center gap-4"
       >
         <div class="relative">
           <div
@@ -312,14 +312,14 @@ onMounted(loadPets);
           </div>
         </div>
 
-        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 text-center leading-tight">{{ pet.name }}</h2>
+        <h2 class="text-xl font-bold text-gray-800 text-center leading-tight">{{ pet.name }}</h2>
 
         <div class="flex flex-col items-center gap-1">
-          <div class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm">
+          <div class="flex items-center gap-1.5 text-gray-500 text-sm">
             <UIcon :name="speciesIcon(pet.species)" class="text-accent text-base shrink-0" />
             <span>{{ speciesLabel(pet.species) }}</span>
           </div>
-          <div class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm">
+          <div class="flex items-center gap-1.5 text-gray-500 text-sm">
             <UIcon name="i-heroicons-cake" class="text-accent text-base shrink-0" />
             <span>{{ petAge(pet.birth_date) }}</span>
           </div>
@@ -356,8 +356,8 @@ onMounted(loadPets);
       <template #content>
         <div class="flex flex-col max-h-[90vh]">
           <!-- Header fixo com título e botão X -->
-          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800">
               {{ modalMode === 'create' ? 'Adicionar animal' : `Editar ${editTarget?.name}` }}
             </h3>
             <UButton
@@ -390,9 +390,9 @@ onMounted(loadPets);
               </div>
               <div
                 v-else
-                class="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
+                class="w-24 h-24 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 group-hover:border-accent group-hover:bg-accent/5 transition-colors"
               >
-                <UIcon name="i-heroicons-camera" class="text-gray-400 dark:text-gray-500 text-2xl group-hover:text-accent" />
+                <UIcon name="i-heroicons-camera" class="text-gray-400 text-2xl group-hover:text-accent" />
               </div>
               <div
                 class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
@@ -400,7 +400,7 @@ onMounted(loadPets);
                 <UIcon name="i-heroicons-camera" class="text-white text-2xl" />
               </div>
             </div>
-            <span class="text-xs text-gray-400 dark:text-gray-500">Clique para {{ modalMode === 'create' ? 'adicionar' : 'alterar' }} a foto</span>
+            <span class="text-xs text-gray-400">Clique para {{ modalMode === 'create' ? 'adicionar' : 'alterar' }} a foto</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -454,11 +454,11 @@ onMounted(loadPets);
           <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
 
           <div class="flex justify-end gap-3 pt-2">
-            <UButton size="lg" variant="outline" label="Cancelar" class="dark:text-white" @click="modalOpen = false" />
+            <UButton size="lg" variant="outline" label="Cancelar" @click="modalOpen = false" />
             <UButton
               size="lg"
               color="primary"
-              class="dark:text-white"
+
               :label="modalMode === 'create' ? 'Adicionar' : 'Salvar'"
               :loading="saving"
               @click="savePet"

@@ -15,8 +15,8 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 text-body dark:bg-[#011428]" :style="{ '--portal-accent': portalAccent }">
-    <div v-if="portal !== 'cliente'" class="fixed inset-y-0 left-0 z-40 hidden border-r border-gray-200 transition-[width] duration-200 dark:border-white/10 lg:block" :class="collapsed ? 'w-16' : 'w-64'">
+  <div class="min-h-screen bg-gray-50 text-body" :style="{ '--portal-accent': portalAccent }">
+    <div v-if="portal !== 'cliente'" class="fixed inset-y-0 left-0 z-40 hidden border-r border-gray-200 transition-[width] duration-200 lg:block" :class="collapsed ? 'w-16' : 'w-64'">
       <PainelSidebar :portal="portal" :collapsed="collapsed" @collapse="collapsed = !collapsed" />
     </div>
 

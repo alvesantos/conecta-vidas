@@ -163,15 +163,15 @@ onMounted(loadDashboard)
 
     <section>
       <div class="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
-        <button v-for="profile in profiles" :key="profile.key" type="button" class="flex min-w-48 snap-start items-center gap-3 rounded-2xl border bg-white p-3 text-left transition dark:bg-[#071b30]" :class="activeKey === profile.key ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200 dark:border-white/10'" @click="selectProfile(profile.key)">
-          <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[var(--portal-accent)] dark:bg-blue-500/10"><UIcon :name="profile.kind === 'humana' ? 'i-heroicons-user' : 'i-mdi-paw'" class="size-5" /></span>
+        <button v-for="profile in profiles" :key="profile.key" type="button" class="flex min-w-48 snap-start items-center gap-3 rounded-2xl border bg-white p-3 text-left transition" :class="activeKey === profile.key ? 'border-[var(--portal-accent)] shadow-sm' : 'border-gray-200'" @click="selectProfile(profile.key)">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[var(--portal-accent)]"><UIcon :name="profile.kind === 'humana' ? 'i-heroicons-user' : 'i-mdi-paw'" class="size-5" /></span>
           <span class="min-w-0"><strong class="block truncate text-sm text-body-strong">{{ profile.label }}</strong><span class="block text-xs text-body-muted">{{ profileSubtitle(profile) }}</span></span>
           <UIcon v-if="activeKey === profile.key" name="i-heroicons-check-circle-solid" class="ml-auto size-5 text-[var(--portal-accent)]" />
         </button>
       </div>
     </section>
 
-    <section class="rounded-2xl bg-[#01193A] p-5 text-white shadow-sm dark:bg-[#014496] sm:p-6">
+    <section class="rounded-2xl bg-[#01193A] p-5 text-white shadow-sm sm:p-6">
       <p class="text-sm font-medium text-white/70">Novo atendimento</p>
       <h2 class="mt-1 text-xl font-bold sm:text-2xl">Quem vamos cuidar hoje?</h2>
       <div class="mt-5 grid gap-3 sm:grid-cols-2">
@@ -185,20 +185,20 @@ onMounted(loadDashboard)
       <UCard class="lg:col-span-2">
         <template #header><div><p class="text-sm font-semibold text-[var(--portal-accent)]">Resumo do dia</p><h2 class="text-lg font-bold text-body-strong">O essencial para {{ activeProfile.label }}</h2></div></template>
         <div class="grid gap-3 sm:grid-cols-2">
-          <NuxtLink to="/painel/cliente/consultas" class="flex items-center gap-4 rounded-xl bg-gray-50 p-4 dark:bg-white/5">
-            <span class="flex size-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"><UIcon name="i-heroicons-calendar-days" class="size-6" /></span>
+          <NuxtLink to="/painel/cliente/consultas" class="flex items-center gap-4 rounded-xl bg-gray-50 p-4">
+            <span class="flex size-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700"><UIcon name="i-heroicons-calendar-days" class="size-6" /></span>
             <span v-if="nextConsultation"><span class="block text-xs text-body-muted">Próxima consulta</span><strong class="block text-body-strong">{{ formatDate(nextConsultation.date) }} · {{ nextConsultation.time.slice(0, 5) }}</strong></span>
             <span v-else><span class="block text-xs text-body-muted">Próxima consulta</span><strong class="block text-body-strong">Nenhuma agendada</strong></span>
           </NuxtLink>
-          <button type="button" class="flex items-center gap-4 rounded-xl bg-gray-50 p-4 text-left dark:bg-white/5" @click="openReminder">
-            <span class="flex size-11 items-center justify-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"><UIcon name="i-heroicons-bell-alert" class="size-6" /></span>
+          <button type="button" class="flex items-center gap-4 rounded-xl bg-gray-50 p-4 text-left" @click="openReminder">
+            <span class="flex size-11 items-center justify-center rounded-xl bg-amber-100 text-amber-700"><UIcon name="i-heroicons-bell-alert" class="size-6" /></span>
             <span><span class="block text-xs text-body-muted">Medicamentos hoje</span><strong class="block text-body-strong">{{ visibleReminders.length }} lembrete{{ visibleReminders.length === 1 ? '' : 's' }}</strong></span>
             <UIcon name="i-heroicons-plus" class="ml-auto size-5 text-body-muted" />
           </button>
         </div>
-        <div v-if="visibleReminders.length" class="mt-4 divide-y divide-gray-200 dark:divide-white/10">
+        <div v-if="visibleReminders.length" class="mt-4 divide-y divide-gray-200">
           <div v-for="item in visibleReminders" :key="item.id" class="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-            <strong class="w-12 text-sm text-[var(--portal-accent)] dark:text-blue-300">{{ item.time.slice(0, 5) }}</strong>
+            <strong class="w-12 text-sm text-[var(--portal-accent)]">{{ item.time.slice(0, 5) }}</strong>
             <span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-body-strong">{{ item.name }}</span><span v-if="item.dosage" class="block truncate text-xs text-body-muted">{{ item.dosage }}</span></span>
             <UButton icon="i-heroicons-trash" color="error" variant="ghost" size="sm" aria-label="Excluir lembrete" :loading="deletingReminder === item.id" @click="removeReminder(item)" />
           </div>

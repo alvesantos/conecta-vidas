@@ -13,12 +13,6 @@ import { portalForUser } from "~/config/portals";
 
 const { user, isLoggedIn, logout } = useAuth();
 
-const colorMode = useColorMode();
-const isDark = computed(() => colorMode.value === "dark");
-function toggleColorMode() {
-  colorMode.preference = isDark.value ? "light" : "dark";
-}
-
 const navItems: NavItem[] = [
   { label: "Início", to: "/", icon: "i-heroicons-home" },
   {
@@ -75,11 +69,6 @@ const userMenuItems = computed(() => [
   })),
   [
     {
-      label: isDark.value ? "Modo claro" : "Modo escuro",
-      icon: isDark.value ? "i-heroicons-sun" : "i-heroicons-moon",
-      onSelect: () => toggleColorMode(),
-    },
-    {
       label: "Sair",
       icon: "i-heroicons-arrow-left-on-rectangle",
       onSelect: () => logout(),
@@ -113,7 +102,7 @@ watch(
 
 <template>
   <header
-    class="sticky top-0 z-50 bg-white/90 dark:bg-primary/90 backdrop-blur-xl border-b border-gray-200 dark:border-white/10"
+    class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200"
   >
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between gap-6">
@@ -122,12 +111,7 @@ watch(
           <img
             src="/icons/logo-claro.png"
             alt="ConectaVidas"
-            class="h-20 w-auto dark:hidden"
-          />
-          <img
-            src="/icons/logo-escuro.png"
-            alt="ConectaVidas"
-            class="h-20 w-auto hidden dark:block"
+            class="h-20 w-auto"
           />
         </NuxtLink>
 
@@ -138,7 +122,7 @@ watch(
             :key="item.to"
             :to="item.to"
             :target="item.target"
-            class="px-3.5 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap text-primary/70 hover:text-primary hover:bg-primary/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10 aria-[current=page]:text-primary aria-[current=page]:bg-primary/8 dark:aria-[current=page]:text-white dark:aria-[current=page]:bg-white/10"
+            class="px-3.5 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap text-primary/70 hover:text-primary hover:bg-primary/5 aria-[current=page]:text-primary aria-[current=page]:bg-primary/8"
           >
             {{ item.label }}
           </NuxtLink>
@@ -152,7 +136,7 @@ watch(
               :content="{ align: 'end' }"
             >
               <button
-                class="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-primary/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                class="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-primary/5 transition-colors cursor-pointer"
               >
                 <span
                   class="flex items-center justify-center size-8 rounded-full bg-accent text-white text-sm font-semibold"
@@ -160,12 +144,12 @@ watch(
                   {{ userInitials }}
                 </span>
                 <span
-                  class="text-primary dark:text-white text-sm font-medium max-w-32 truncate"
+                  class="text-primary text-sm font-medium max-w-32 truncate"
                   >{{ user?.name }}</span
                 >
                 <UIcon
                   name="i-heroicons-chevron-down"
-                  class="size-4 text-primary/50 dark:text-white/60"
+                  class="size-4 text-primary/50"
                 />
               </button>
             </UDropdownMenu>
@@ -177,28 +161,17 @@ watch(
               color="primary"
               variant="ghost"
               size="sm"
-              class="!text-primary/80 hover:!bg-primary/5 dark:!text-white dark:hover:!bg-white/10"
+              class="!text-primary/80 hover:!bg-primary/5"
             >
               Acesso
             </UButton>
           </template>
 
-          <!-- Alternar tema (canto mais à direita) -->
-          <button
-            class="ml-1 text-primary/60 hover:text-primary hover:bg-primary/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10 transition-colors cursor-pointer p-2 rounded-full"
-            :title="isDark ? 'Modo claro' : 'Modo escuro'"
-            @click="toggleColorMode"
-          >
-            <UIcon
-              :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"
-              class="size-5"
-            />
-          </button>
         </div>
 
         <!-- Botão hambúrguer (mobile) -->
         <button
-          class="md:hidden text-primary/70 hover:text-primary dark:text-white/80 dark:hover:text-white transition-colors cursor-pointer p-1"
+          class="md:hidden text-primary/70 hover:text-primary transition-colors cursor-pointer p-1"
           :aria-expanded="menuOpen"
           aria-label="Abrir menu"
           @click="menuOpen = !menuOpen"
@@ -222,11 +195,11 @@ watch(
     >
       <div
         v-show="menuOpen"
-        class="md:hidden border-t border-gray-200 dark:border-white/10 bg-white/95 dark:bg-primary/95 backdrop-blur-xl"
+        class="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-xl"
       >
         <div
           v-if="isLoggedIn"
-          class="flex items-center gap-3 px-5 py-4 border-b border-gray-200 dark:border-white/10"
+          class="flex items-center gap-3 px-5 py-4 border-b border-gray-200"
         >
           <div
             class="flex items-center justify-center size-10 rounded-full bg-accent text-white font-semibold"
@@ -234,10 +207,10 @@ watch(
             {{ userInitials }}
           </div>
           <div class="flex flex-col min-w-0">
-            <span class="text-primary dark:text-white font-medium text-sm">{{
+            <span class="text-primary font-medium text-sm">{{
               user?.name
             }}</span>
-            <span class="text-primary/50 dark:text-white/50 text-xs truncate">{{
+            <span class="text-primary/50 text-xs truncate">{{
               user?.email
             }}</span>
           </div>
@@ -249,20 +222,20 @@ watch(
             :key="item.to"
             :to="item.to"
             :target="item.target"
-            class="flex items-center gap-3 px-5 py-3 transition-colors text-primary/70 hover:text-primary hover:bg-primary/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10 aria-[current=page]:text-primary aria-[current=page]:bg-primary/5 dark:aria-[current=page]:text-white dark:aria-[current=page]:bg-white/5"
+            class="flex items-center gap-3 px-5 py-3 transition-colors text-primary/70 hover:text-primary hover:bg-primary/5 aria-[current=page]:text-primary aria-[current=page]:bg-primary/5"
             @click="menuOpen = false"
           >
             <UIcon :name="item.icon" class="size-5 shrink-0" />
             <span>{{ item.label }}</span>
           </NuxtLink>
 
-          <div class="my-2 mx-5 border-t border-gray-200 dark:border-white/15" />
+          <div class="my-2 mx-5 border-t border-gray-200" />
 
           <NuxtLink
             v-for="item in accountItems"
             :key="item.to"
             :to="item.to"
-            class="flex items-center gap-3 px-5 py-3 transition-colors text-primary/70 hover:text-primary hover:bg-primary/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10"
+            class="flex items-center gap-3 px-5 py-3 transition-colors text-primary/70 hover:text-primary hover:bg-primary/5"
             @click="menuOpen = false"
           >
             <UIcon :name="item.icon" class="size-5 shrink-0" />
@@ -270,19 +243,8 @@ watch(
           </NuxtLink>
 
           <button
-            class="flex items-center gap-3 px-5 py-3 transition-colors w-full cursor-pointer text-primary/70 hover:text-primary hover:bg-primary/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10"
-            @click="toggleColorMode"
-          >
-            <UIcon
-              :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"
-              class="size-5 shrink-0"
-            />
-            <span>{{ isDark ? "Modo claro" : "Modo escuro" }}</span>
-          </button>
-
-          <button
             v-if="isLoggedIn"
-            class="flex items-center gap-3 px-5 py-3 transition-colors w-full cursor-pointer text-primary/70 hover:text-primary hover:bg-primary/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10 border-t border-gray-200 dark:border-white/10 mt-1"
+            class="flex items-center gap-3 px-5 py-3 transition-colors w-full cursor-pointer text-primary/70 hover:text-primary hover:bg-primary/5 border-t border-gray-200 mt-1"
             @click="handleLogout"
           >
             <UIcon

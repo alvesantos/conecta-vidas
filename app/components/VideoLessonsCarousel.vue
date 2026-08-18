@@ -20,12 +20,12 @@ function openWhatsApp() {
 
 <template>
   <section id="videoaulas" class="scroll-mt-6">
-    <UCard :ui="{ body: 'bg-foreground dark:bg-transparent' }">
+    <UCard :ui="{ body: 'bg-foreground' }">
       <div class="text-center mb-4 px-2">
-        <h3 class="text-primary dark:text-gray-100 text-xl sm:text-2xl lg:text-3xl font-semibold">
+        <h3 class="text-primary text-xl sm:text-2xl lg:text-3xl font-semibold">
           Conheça nossas videoaulas
         </h3>
-        <p class="text-primary/70 dark:text-gray-400 text-xs sm:text-sm lg:text-base mt-1">
+        <p class="text-primary/70 text-xs sm:text-sm lg:text-base mt-1">
           Toque em qualquer imagem para falar com a gente no WhatsApp.
         </p>
       </div>

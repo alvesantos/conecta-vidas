@@ -36,8 +36,8 @@ function formatCurrency(value: number) {
 <template>
   <div>
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Carteira</h1>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Acompanhe seu saldo e repasses</p>
+      <h1 class="text-2xl font-bold text-gray-800">Carteira</h1>
+      <p class="text-gray-500 text-sm mt-1">Acompanhe seu saldo e repasses</p>
     </div>
 
     <UAlert
@@ -51,23 +51,23 @@ function formatCurrency(value: number) {
     <div v-if="pending" class="text-center text-gray-400 py-12">Carregando...</div>
 
     <div v-else-if="balance" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Saldo disponível</p>
+      <div class="bg-white rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 mb-1">Saldo disponível</p>
         <p class="text-2xl font-bold text-green-600">{{ formatCurrency(balance.available_amount) }}</p>
       </div>
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">A receber</p>
+      <div class="bg-white rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 mb-1">A receber</p>
         <p class="text-2xl font-bold text-yellow-600">{{ formatCurrency(balance.waiting_funds_amount) }}</p>
       </div>
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total transferido</p>
+      <div class="bg-white rounded-xl shadow p-6">
+        <p class="text-sm text-gray-500 mb-1">Total transferido</p>
         <p class="text-2xl font-bold text-blue-600">{{ formatCurrency(balance.transferred_amount) }}</p>
       </div>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+    <div class="bg-white rounded-xl shadow p-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Histórico de repasses</h2>
+        <h2 class="text-lg font-semibold text-gray-800">Histórico de repasses</h2>
         <UButton
           variant="soft"
           color="primary"

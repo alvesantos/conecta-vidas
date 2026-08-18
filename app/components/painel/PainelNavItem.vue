@@ -19,8 +19,8 @@ const active = computed(() =>
     :aria-label="collapsed ? item.label : undefined"
     :aria-current="active ? 'page' : undefined"
     :title="collapsed ? item.label : undefined"
-    class="relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-body-muted transition-colors hover:bg-black/5 hover:text-body-strong dark:hover:bg-white/10"
-    :class="{ 'font-semibold text-body-strong bg-black/5 dark:bg-white/10': active, 'justify-center': collapsed }"
+    class="relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm text-body-muted transition-colors hover:bg-black/5 hover:text-body-strong"
+    :class="{ 'font-semibold text-body-strong bg-black/5': active, 'justify-center': collapsed }"
   >
     <span v-if="active" class="absolute inset-y-2 left-0 w-0.75 rounded-full bg-[var(--portal-accent)]" />
     <UIcon :name="item.icon" class="size-5 shrink-0" />

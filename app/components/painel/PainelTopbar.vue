@@ -43,15 +43,14 @@ const accountItems = computed(() => [
 </script>
 
 <template>
-  <header class="sticky top-0 z-30 border-b border-gray-200 bg-white/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#071b30]/90">
+  <header class="sticky top-0 z-30 border-b border-gray-200 bg-white/90 backdrop-blur-xl">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-18 lg:px-8">
     <div class="flex min-w-0 items-center gap-3">
-      <button class="flex size-11 items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/10 lg:hidden" aria-label="Abrir navegação" @click="$emit('menu')">
+      <button class="flex size-11 items-center justify-center rounded-lg hover:bg-black/5 lg:hidden" aria-label="Abrir navegação" @click="$emit('menu')">
         <UIcon name="i-heroicons-bars-3" class="size-6" />
       </button>
       <NuxtLink v-if="portal === 'cliente'" to="/painel/cliente" class="flex shrink-0 items-center" aria-label="Portal do Cliente">
-        <img src="/icons/logo-claro.png" alt="ConectaVidas" class="h-16 w-auto dark:hidden lg:h-18" />
-        <img src="/icons/logo-escuro.png" alt="ConectaVidas" class="hidden h-16 w-auto dark:block lg:h-18" />
+        <img src="/icons/logo-claro.png" alt="ConectaVidas" class="h-16 w-auto lg:h-18" />
       </NuxtLink>
       <h1 v-else class="truncate text-base font-semibold text-body-strong">{{ currentItem?.label ?? definition.label }}</h1>
     </div>
@@ -64,14 +63,14 @@ const accountItems = computed(() => [
           class="flex min-h-10 items-center gap-2 rounded-full px-3 text-sm font-medium transition lg:px-4"
           :class="route.path === item.to || (item.to !== '/painel/cliente' && route.path.startsWith(`${item.to}/`))
             ? 'bg-[var(--portal-accent)] text-white'
-            : 'text-body-muted hover:bg-black/5 hover:text-body-strong dark:hover:bg-white/10'"
+            : 'text-body-muted hover:bg-black/5 hover:text-body-strong'"
         >
           <UIcon :name="item.icon" class="size-4" />
           {{ item.label }}
         </NuxtLink>
       </nav>
       <UDropdownMenu :items="accountItems" :content="{ align: 'end' }">
-      <button class="flex min-h-11 items-center gap-2 rounded-full px-1.5 pr-3 hover:bg-black/5 dark:hover:bg-white/10">
+      <button class="flex min-h-11 items-center gap-2 rounded-full px-1.5 pr-3 hover:bg-black/5">
         <span class="flex size-8 items-center justify-center rounded-full bg-[var(--portal-accent)] text-xs font-semibold text-white">{{ initials }}</span>
         <span class="hidden min-w-0 sm:block">
           <span class="block max-w-36 truncate text-sm font-medium leading-4 text-body-strong">{{ user?.name }}</span>

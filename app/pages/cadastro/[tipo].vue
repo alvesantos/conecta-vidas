@@ -96,7 +96,7 @@ async function submit() {
   <div class="min-h-screen px-4 py-10">
     <UCard class="mx-auto max-w-2xl">
       <div v-if="completed" class="flex flex-col items-center py-12 text-center">
-        <span class="flex size-20 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-500/10">
+        <span class="flex size-20 items-center justify-center rounded-full bg-green-100 text-green-600">
           <UIcon name="i-heroicons-check-circle" class="size-11" />
         </span>
         <h1 class="mt-6 text-2xl font-bold text-body-strong">Recebemos seu cadastro</h1>

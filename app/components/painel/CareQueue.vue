@@ -50,7 +50,7 @@ onBeforeUnmount(() => { if (interval) clearInterval(interval) })
       <div class="flex items-center justify-between"><div><p class="text-sm font-semibold text-[var(--portal-accent)]">Pronto atendimento</p><h2 class="text-lg font-bold text-body-strong">Fila aguardando</h2></div><UBadge :label="String(items.length)" color="info" variant="soft" /></div>
     </template>
     <USkeleton v-if="pending" class="h-20 rounded-xl" />
-    <div v-else-if="items.length" class="divide-y divide-gray-200 dark:divide-white/10">
+    <div v-else-if="items.length" class="divide-y divide-gray-200">
       <div v-for="item in items" :key="item.id" class="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
         <span class="flex size-11 shrink-0 items-center justify-center rounded-full" :class="item.priority > 0 ? 'bg-amber-100 text-amber-700' : 'bg-blue-50 text-blue-700'"><UIcon :name="item.priority > 0 ? 'i-heroicons-exclamation-triangle' : (portal === 'medico' ? 'i-heroicons-user' : 'i-mdi-paw')" class="size-6" /></span>
         <div class="min-w-0 flex-1"><p class="font-semibold text-body-strong">{{ portal === 'medico' ? (item.dependent_name || item.owner_name) : item.pet_name }}</p><p class="text-sm text-body-muted">{{ portal === 'medico' ? 'Titular: ' + item.owner_name : 'Tutor: ' + item.owner_name }} · aguardando {{ waiting(item.joined_at) }}</p><p v-if="item.notes" class="mt-1 truncate text-xs text-body-muted">{{ item.notes }}</p></div>

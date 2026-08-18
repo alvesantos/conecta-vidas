@@ -91,9 +91,9 @@ function formatDate(value: string) {
   return new Date(value.length === 10 ? `${value}T12:00:00` : value).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
 }
 function eventMeta(item: TimelineEvent) {
-  if (item.type === 'consulta') return { icon: 'i-mdi-stethoscope', color: 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300' }
-  if (item.type === 'receita') return { icon: 'i-heroicons-document-text', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' }
-  return { icon: 'i-heroicons-beaker', color: 'bg-violet-100 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300' }
+  if (item.type === 'consulta') return { icon: 'i-mdi-stethoscope', color: 'bg-blue-100 text-blue-700' }
+  if (item.type === 'receita') return { icon: 'i-heroicons-document-text', color: 'bg-emerald-100 text-emerald-700' }
+  return { icon: 'i-heroicons-beaker', color: 'bg-violet-100 text-violet-700' }
 }
 function statusLabel(value?: string) {
   const labels: Record<string, string> = {
@@ -146,18 +146,18 @@ onMounted(async () => {
 
     <UAlert v-if="error" color="error" variant="soft" :description="error" />
     <div v-if="pendingTimeline" class="space-y-4"><USkeleton v-for="n in 3" :key="n" class="h-32 rounded-2xl" /></div>
-    <section v-else-if="timeline.items.length" class="relative space-y-4 before:absolute before:bottom-6 before:left-6 before:top-6 before:w-px before:bg-gray-200 dark:before:bg-white/10">
-      <article v-for="item in timeline.items" :key="`${item.type}:${item.id}`" class="relative flex gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#071b30] sm:p-5">
-        <span class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full ring-4 ring-gray-50 dark:ring-[#011428]" :class="eventMeta(item).color"><UIcon :name="eventMeta(item).icon" class="size-6" /></span>
+    <section v-else-if="timeline.items.length" class="relative space-y-4 before:absolute before:bottom-6 before:left-6 before:top-6 before:w-px before:bg-gray-200">
+      <article v-for="item in timeline.items" :key="`${item.type}:${item.id}`" class="relative flex gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+        <span class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full ring-4 ring-gray-50" :class="eventMeta(item).color"><UIcon :name="eventMeta(item).icon" class="size-6" /></span>
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-start justify-between gap-2">
-            <div><p class="text-xs font-semibold uppercase tracking-wide text-[var(--portal-accent)] dark:text-blue-300">{{ item.type }}</p><h2 class="font-bold text-body-strong">{{ item.title }}</h2></div>
+            <div><p class="text-xs font-semibold uppercase tracking-wide text-[var(--portal-accent)]">{{ item.type }}</p><h2 class="font-bold text-body-strong">{{ item.title }}</h2></div>
             <div class="text-right"><p class="text-sm font-medium text-body-strong">{{ formatDate(item.occurred_at) }}</p><p v-if="item.time" class="text-xs text-body-muted">{{ item.time.slice(0, 5) }}</p></div>
           </div>
           <p v-if="item.professional_name" class="mt-2 text-sm text-body-muted">Profissional: {{ item.professional_name }}</p>
           <UBadge v-if="item.status" :label="statusLabel(item.status)" variant="soft" color="info" class="mt-2" />
-          <div v-if="item.notes" class="mt-3 rounded-xl bg-gray-50 p-3 text-sm text-body-muted dark:bg-white/5"><strong class="mb-1 block text-body-strong">Evolução compartilhada</strong>{{ item.notes }}</div>
-          <div v-if="item.content" class="mt-3 whitespace-pre-line rounded-xl bg-gray-50 p-3 text-sm text-body-muted dark:bg-white/5">{{ item.content }}</div>
+          <div v-if="item.notes" class="mt-3 rounded-xl bg-gray-50 p-3 text-sm text-body-muted"><strong class="mb-1 block text-body-strong">Evolução compartilhada</strong>{{ item.notes }}</div>
+          <div v-if="item.content" class="mt-3 whitespace-pre-line rounded-xl bg-gray-50 p-3 text-sm text-body-muted">{{ item.content }}</div>
           <p v-if="item.instructions" class="mt-3 text-sm text-body-muted">{{ item.instructions }}</p>
           <UButton v-if="item.result_url" :to="item.result_url" target="_blank" label="Ver resultado" icon="i-heroicons-arrow-down-tray" variant="outline" size="sm" class="mt-3" />
         </div>

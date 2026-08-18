@@ -62,11 +62,11 @@ const {
         <template #header>
           <div class="flex items-center justify-between">
             <h3
-              class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2"
+              class="text-lg font-semibold text-gray-800 flex items-center gap-2"
             >
               <UIcon
                 name="i-heroicons-video-camera"
-                class="text-primary dark:text-white size-6"
+                class="text-primary size-6"
               />
               Sala de Consulta
             </h3>
@@ -85,7 +85,7 @@ const {
         <div class="flex flex-col gap-6 overflow-y-auto pr-2 pb-4">
           <!-- Info do Paciente e Tutor -->
           <div
-            class="grid grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700"
+            class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-100"
           >
             <div>
               <p
@@ -93,7 +93,7 @@ const {
               >
                 Tutor (Responsável)
               </p>
-              <p class="text-base font-medium text-gray-800 dark:text-gray-100">
+              <p class="text-base font-medium text-gray-800">
                 {{ active.tutor_name }}
               </p>
             </div>
@@ -103,7 +103,7 @@ const {
               >
                 Paciente (Pet)
               </p>
-              <p class="text-base font-medium text-gray-800 dark:text-gray-100">
+              <p class="text-base font-medium text-gray-800">
                 {{ active.pet_name || "—" }}
               </p>
             </div>
@@ -115,10 +115,10 @@ const {
             class="bg-primary/5 border border-primary/20 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
             <div class="min-w-0">
-              <p class="font-semibold text-primary dark:text-primary-400">
+              <p class="font-semibold text-primary">
                 Videoconferência
               </p>
-              <p class="text-sm text-gray-600 dark:text-gray-300">
+              <p class="text-sm text-gray-600">
                 Prepare uma sala exclusiva e aleatória para este atendimento.
               </p>
             </div>
@@ -135,7 +135,7 @@ const {
           <!-- Bloco de Notas / Prontuário Ao Vivo -->
           <div class="flex flex-col gap-2 h-64">
             <div class="flex items-center justify-between">
-              <label class="font-semibold text-gray-700 dark:text-gray-200"
+              <label class="font-semibold text-gray-700"
                 >Anotações (Evolução / Prontuário)</label
               >
               <UButton
@@ -154,7 +154,7 @@ const {
               class="w-full flex-1"
               textarea-class="h-full resize-none"
             />
-            <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+            <label class="flex items-center gap-2 text-sm text-gray-600">
               <UCheckbox v-model="active.notes_visible_to_patient" />
               Compartilhar esta evolução com o paciente ou tutor
             </label>
@@ -167,7 +167,7 @@ const {
 
         <template #footer>
           <div
-            class="flex justify-between items-center border-t border-gray-100 dark:border-gray-800 pt-4"
+            class="flex justify-between items-center border-t border-gray-100 pt-4"
           >
             <UButton
               color="neutral"

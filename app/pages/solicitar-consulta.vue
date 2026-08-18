@@ -4,17 +4,17 @@
       Solicitar consulta
     </h1>
 
-    <div class="flex items-center gap-2 mb-8 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
+    <div class="flex items-center gap-2 mb-8 p-1 bg-gray-100 rounded-lg shadow-inner">
       <button
         class="px-6 py-2 rounded-md text-sm font-medium transition-colors"
-        :class="consultaType === 'humana' ? 'bg-white dark:bg-gray-700 text-primary shadow' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+        :class="consultaType === 'humana' ? 'bg-white text-primary shadow' : 'text-gray-500 hover:text-gray-700'"
         @click="consultaType = 'humana'"
       >
         Consulta Humana
       </button>
       <button
         class="px-6 py-2 rounded-md text-sm font-medium transition-colors"
-        :class="consultaType === 'vet' ? 'bg-white dark:bg-gray-700 text-primary shadow' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+        :class="consultaType === 'vet' ? 'bg-white text-primary shadow' : 'text-gray-500 hover:text-gray-700'"
         @click="consultaType = 'vet'"
       >
         Consulta Veterinária
@@ -45,17 +45,17 @@
     </div>
 
     <div v-else class="w-full flex flex-col items-center">
-      <div class="flex items-center gap-2 mb-6 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
+      <div class="flex items-center gap-2 mb-6 p-1 bg-gray-100 rounded-lg shadow-inner">
         <button
           class="px-6 py-2 rounded-md text-sm font-medium transition-colors"
-          :class="activeTab === 'agendar' ? 'bg-white dark:bg-gray-700 text-primary shadow' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+          :class="activeTab === 'agendar' ? 'bg-white text-primary shadow' : 'text-gray-500 hover:text-gray-700'"
           @click="activeTab = 'agendar'"
         >
           Agendar Agora
         </button>
         <button
           class="px-6 py-2 rounded-md text-sm font-medium transition-colors"
-          :class="activeTab === 'whatsapp' ? 'bg-white dark:bg-gray-700 text-success shadow' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+          :class="activeTab === 'whatsapp' ? 'bg-white text-success shadow' : 'text-gray-500 hover:text-gray-700'"
           @click="activeTab = 'whatsapp'"
         >
           Falar no WhatsApp
@@ -65,8 +65,8 @@
       <div v-if="activeTab === 'agendar'" class="w-full">
         <UCard class="w-full">
           <template #header>
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Nova Consulta</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Preencha os dados abaixo para agendar</p>
+            <h2 class="text-lg font-semibold text-gray-800">Nova Consulta</h2>
+            <p class="text-sm text-gray-500">Preencha os dados abaixo para agendar</p>
           </template>
           <form @submit.prevent="submitRequest" class="flex flex-col gap-6">
             <UFormField label="Pet (Opcional)">
@@ -77,7 +77,7 @@
               <UFormField label="Data">
                 <UInput v-model="form.date" type="date" required size="lg" class="w-full" />
               </UFormField>
-              
+
               <UFormField label="Horário">
                 <UInput v-model="form.time" type="time" required size="lg" class="w-full" />
               </UFormField>

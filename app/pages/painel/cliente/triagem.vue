@@ -105,8 +105,8 @@ onMounted(initialize)
 
     <div class="flex items-center gap-3" aria-label="Progresso da triagem">
       <template v-for="(label, index) in ['Sintomas', 'Revisão', 'Orientação']" :key="label">
-        <span class="flex size-8 items-center justify-center rounded-full text-sm font-bold" :class="(['selection', 'review', 'result'].indexOf(step) >= index) ? 'bg-[var(--portal-accent)] text-white' : 'bg-gray-200 text-gray-500 dark:bg-white/10'">{{ index + 1 }}</span>
-        <span v-if="index < 2" class="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+        <span class="flex size-8 items-center justify-center rounded-full text-sm font-bold" :class="(['selection', 'review', 'result'].indexOf(step) >= index) ? 'bg-[var(--portal-accent)] text-white' : 'bg-gray-200 text-gray-500'">{{ index + 1 }}</span>
+        <span v-if="index < 2" class="h-px flex-1 bg-gray-200" />
       </template>
     </div>
 
@@ -116,7 +116,7 @@ onMounted(initialize)
     <UCard v-else-if="step === 'selection'">
       <template #header><div><h2 class="font-bold text-body-strong">Selecione de 2 a 3 sintomas principais</h2><p class="text-sm text-body-muted">{{ selected.length }} de 3 selecionados</p></div></template>
       <div class="grid gap-3 sm:grid-cols-2">
-        <button v-for="item in symptoms" :key="item.id" type="button" class="flex min-h-16 items-center gap-3 rounded-xl border p-4 text-left transition" :class="selected.includes(item.id) ? 'border-[var(--portal-accent)] bg-blue-50/60 dark:bg-blue-500/10' : 'border-gray-200 hover:border-gray-400 dark:border-white/10'" @click="toggleSymptom(item.id)">
+        <button v-for="item in symptoms" :key="item.id" type="button" class="flex min-h-16 items-center gap-3 rounded-xl border p-4 text-left transition" :class="selected.includes(item.id) ? 'border-[var(--portal-accent)] bg-blue-50/60' : 'border-gray-200 hover:border-gray-400'" @click="toggleSymptom(item.id)">
           <span class="flex size-7 shrink-0 items-center justify-center rounded-full border" :class="selected.includes(item.id) ? 'border-[var(--portal-accent)] bg-[var(--portal-accent)] text-white' : 'border-gray-300'"><UIcon v-if="selected.includes(item.id)" name="i-heroicons-check" class="size-4" /></span>
           <span class="font-medium text-body-strong">{{ item.label }}</span>
           <UIcon v-if="item.severity === 'emergency'" name="i-heroicons-exclamation-triangle" class="ml-auto size-5 text-red-600" />
@@ -143,8 +143,8 @@ onMounted(initialize)
         <h2 class="mt-4 text-xl font-bold text-body-strong">{{ result.emergency ? 'Procure atendimento presencial imediatamente' : 'Triagem concluída' }}</h2>
         <p class="mx-auto mt-2 max-w-xl text-sm text-body-muted">{{ result.emergency ? 'Os sinais informados podem exigir recursos que a telemedicina não oferece. A solicitação online não foi colocada em fila.' : 'Sua solicitação de pronto atendimento foi registrada para o perfil selecionado.' }}</p>
       </div>
-      <div v-if="result.guidance.length" class="space-y-2 rounded-xl bg-gray-50 p-4 dark:bg-white/5"><p v-for="guidance in result.guidance" :key="guidance" class="text-sm font-medium text-body-strong">{{ guidance }}</p></div>
-      <div v-if="result.quote" class="mt-4 flex items-center justify-between rounded-xl border border-gray-200 p-4 dark:border-white/10"><span class="text-sm text-body-muted">Valor do atendimento</span><strong class="text-body-strong">{{ formatPrice(result.quote.price) }}</strong></div>
+      <div v-if="result.guidance.length" class="space-y-2 rounded-xl bg-gray-50 p-4"><p v-for="guidance in result.guidance" :key="guidance" class="text-sm font-medium text-body-strong">{{ guidance }}</p></div>
+      <div v-if="result.quote" class="mt-4 flex items-center justify-between rounded-xl border border-gray-200 p-4"><span class="text-sm text-body-muted">Valor do atendimento</span><strong class="text-body-strong">{{ formatPrice(result.quote.price) }}</strong></div>
       <UAlert class="mt-4" color="neutral" variant="soft" :description="result.disclaimer" />
       <div class="mt-5 flex justify-center"><UButton :to="result.emergency ? '/painel/cliente' : `/painel/cliente/fila/${result.consultation?.id}`" :label="result.emergency ? 'Voltar ao painel' : 'Entrar na sala de espera'" /></div>
     </UCard>

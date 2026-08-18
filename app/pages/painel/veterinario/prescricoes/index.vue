@@ -128,36 +128,36 @@ const columns = [
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Prescrições</h1>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Crie e consulte as prescrições emitidas</p>
+        <h1 class="text-2xl font-bold text-gray-800">Prescrições</h1>
+        <p class="text-gray-500 text-sm mt-1">Crie e consulte as prescrições emitidas</p>
       </div>
       <UButton
         label="Nova Prescrição"
         icon="i-heroicons-plus"
         color="primary"
-        class="dark:text-white"
+
         to="/painel/veterinario/prescricoes/nova"
       />
     </div>
 
     <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow">
+    <div class="bg-white rounded-xl shadow">
       <UTable :data="prescriptions" :columns="columns" :loading="pending" class="w-full">
         <template #date-cell="{ row }">
-          <span class="text-gray-800 dark:text-gray-100">{{ formatDate(row.original.date) }}</span>
+          <span class="text-gray-800">{{ formatDate(row.original.date) }}</span>
         </template>
 
         <template #responsible_name-cell="{ row }">
-          <span class="font-medium text-gray-800 dark:text-gray-100">{{ row.original.responsible_name }}</span>
+          <span class="font-medium text-gray-800">{{ row.original.responsible_name }}</span>
         </template>
 
         <template #pet_name-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">{{ row.original.pet_name || '—' }}</span>
+          <span class="text-gray-600">{{ row.original.pet_name || '—' }}</span>
         </template>
 
         <template #content-cell="{ row }">
-          <span class="text-gray-600 dark:text-gray-300">{{ excerpt(row.original.content) }}</span>
+          <span class="text-gray-600">{{ excerpt(row.original.content) }}</span>
         </template>
 
         <template #actions-cell="{ row }">
@@ -168,7 +168,7 @@ const columns = [
               color="primary"
               icon="i-heroicons-arrow-down-tray"
               label="Baixar PDF"
-              class="dark:text-white"
+
               :loading="downloadingId === row.original.id"
               @click="downloadPdf(row.original.id)"
             />
@@ -185,7 +185,7 @@ const columns = [
         </template>
 
         <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
             <UIcon name="i-heroicons-document-text" class="size-10 mb-2" />
             <p class="text-sm">Nenhuma prescrição emitida ainda.</p>
           </div>
@@ -199,9 +199,9 @@ const columns = [
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" @click="confirmDeleteId = null"></div>
         <UCard class="relative w-full max-w-md shadow-2xl z-10">
           <template #header>
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Remover prescrição</h3>
+            <h3 class="text-lg font-semibold text-gray-800">Remover prescrição</h3>
           </template>
-          <p class="text-gray-600 dark:text-gray-300">
+          <p class="text-gray-600">
             Tem certeza que deseja remover esta prescrição? Esta ação não pode ser desfeita.
           </p>
           <template #footer>
