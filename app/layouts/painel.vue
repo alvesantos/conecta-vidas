@@ -8,8 +8,8 @@ const portal = computed<PortalKey>(() =>
 </script>
 
 <template>
-  <PainelPainelShell :portal="portal">
+  <PainelShell :portal="portal">
     <slot />
-  </PainelPainelShell>
+  </PainelShell>
   <ConsultationSession v-if="portal === 'medico' || portal === 'veterinario'" />
 </template>

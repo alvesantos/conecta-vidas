@@ -54,7 +54,7 @@ const portalItems = computed(() => [availablePortals.value.map(portal => ({
           {{ group.label }}
         </p>
         <div class="space-y-1">
-          <PainelPainelNavItem
+          <PainelNavItem
             v-for="item in group.items"
             :key="item.to"
             :item="item"

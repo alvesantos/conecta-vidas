@@ -171,7 +171,7 @@ onMounted(loadDashboard)
       </div>
     </section>
 
-    <section class="rounded-2xl bg-[var(--portal-accent)] p-5 text-white shadow-sm sm:p-6">
+    <section class="rounded-2xl bg-[#01193A] p-5 text-white shadow-sm dark:bg-[#014496] sm:p-6">
       <p class="text-sm font-medium text-white/70">Novo atendimento</p>
       <h2 class="mt-1 text-xl font-bold sm:text-2xl">Quem vamos cuidar hoje?</h2>
       <div class="mt-5 grid gap-3 sm:grid-cols-2">
