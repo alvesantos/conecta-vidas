@@ -31,9 +31,10 @@ const errorMsg = ref('');
 async function loadUsers() {
   pending.value = true;
   try {
-    users.value = await api<AdminUserRow[]>('/admin/users');
+    const data = await api<AdminUserRow[]>('/admin/users');
+    users.value = data.filter(u => u.type === 'tutor');
   } catch {
-    errorMsg.value = 'Erro ao carregar usuários.';
+    errorMsg.value = 'Erro ao carregar clientes.';
   } finally {
     pending.value = false;
   }
@@ -54,7 +55,13 @@ onMounted(async () => {
 // --- Editar usuário ---
 const editOpen = ref(false);
 const editTarget = ref<AdminUserRow | null>(null);
-const editForm = reactive({ name: '', email: '', type: 'tutor' as AdminUserRow['type'], address: '' });
+const editForm = reactive({ 
+  name: '', 
+  email: '', 
+  type: 'tutor' as AdminUserRow['type'], 
+  address: '',
+  status: 'active' as AdminUserRow['status'] 
+});
 const editSaving = ref(false);
 const editError = ref('');
 
@@ -64,6 +71,7 @@ function openEdit(row: AdminUserRow) {
   editForm.email = row.email;
   editForm.type = row.type;
   editForm.address = row.address ?? '';
+  editForm.status = row.status ?? 'active';
   editError.value = '';
   editOpen.value = true;
 }
@@ -80,6 +88,7 @@ async function saveEdit() {
         email: editForm.email,
         type: editForm.type,
         address: editForm.address || null,
+        status: editForm.status,
       },
     });
     editOpen.value = false;
@@ -182,8 +191,8 @@ const columns = [
   <div>
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Usuários</h1>
-        <p class="text-gray-500 text-sm mt-1">Lista completa de clientes, médicos, veterinários e administradores</p>
+        <h1 class="text-2xl font-bold text-gray-800">Clientes</h1>
+        <p class="text-gray-500 text-sm mt-1">Lista completa de clientes gerenciados na plataforma</p>
       </div>
     </div>
 
@@ -282,6 +291,17 @@ const columns = [
                 { label: 'Médico', value: 'medico' },
                 { label: 'Veterinário', value: 'veterinario' },
                 { label: 'Administrador', value: 'admin' },
+              ]"
+            />
+          </UFormField>
+          <UFormField label="Status">
+            <USelect
+              v-model="editForm.status"
+              :items="[
+                { label: 'Ativo', value: 'active' },
+                { label: 'Pendente', value: 'pending' },
+                { label: 'Inativo (Suspenso)', value: 'suspended' },
+                { label: 'Rejeitado', value: 'rejected' }
               ]"
             />
           </UFormField>

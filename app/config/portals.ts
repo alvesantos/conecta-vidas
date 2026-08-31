@@ -117,7 +117,7 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       { label: null, items: [{ label: 'Dashboard', to: '/painel/adm', icon: 'i-heroicons-squares-2x2' }] },
       { label: 'Pessoas', items: [
         { label: 'Aprovações', to: '/painel/adm/aprovacoes', icon: 'i-heroicons-user-plus', badge: 'aprovacoes-pendentes' },
-        { label: 'Usuários', to: '/painel/adm/usuarios', icon: 'i-heroicons-users' },
+        { label: 'Clientes', to: '/painel/adm/clientes', icon: 'i-heroicons-users' },
         { label: 'Médicos', to: '/painel/adm/medicos', icon: 'i-mdi-doctor' },
         { label: 'Veterinários', to: '/painel/adm/veterinarios', icon: 'i-mdi-stethoscope' },
       ] },

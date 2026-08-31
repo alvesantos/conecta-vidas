@@ -1,28 +1,38 @@
 <script setup lang="ts">
-import { vMaska } from 'maska/vue';
+import type { Plan } from '../../interfaces/plans';
 
 definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
-interface VetRow {
+interface AdminUserRow {
   id: string;
   name: string;
-  cnpj: string;
   email: string;
-  crmv: string | null;
-  recipient_id: string | null;
+  cpf: string | null;
+  address: string | null;
+  type: 'tutor' | 'admin' | 'veterinario' | 'medico';
+  status?: 'pending' | 'active' | 'rejected' | 'suspended';
   created_at: string;
+  subscription_id: string | null;
+  plan_id: string | null;
+  paid_value: string | number | null;
+  plan_title: string | null;
+  plan_price: string | number | null;
+  plan_color: string | null;
 }
 
 const { api } = useApi();
+const { user: me } = useAuth();
 
-const vets = ref<VetRow[]>([]);
+const users = ref<AdminUserRow[]>([]);
+const plans = ref<Plan[]>([]);
 const pending = ref(true);
 const errorMsg = ref('');
 
-async function loadVets() {
+async function loadUsers() {
   pending.value = true;
   try {
-    vets.value = await api<VetRow[]>('/admin/veterinarios');
+    const data = await api<AdminUserRow[]>('/admin/users');
+    users.value = data.filter(u => u.type === 'veterinario' && u.status !== 'pending');
   } catch {
     errorMsg.value = 'Erro ao carregar veterinários.';
   } finally {
@@ -30,228 +40,153 @@ async function loadVets() {
   }
 }
 
-onMounted(loadVets);
+async function loadPlans() {
+  try {
+    plans.value = await api<Plan[]>('/admin/plans');
+  } catch {
+    plans.value = [];
+  }
+}
 
-const modalOpen = ref(false);
-const saving = ref(false);
-const formError = ref('');
-const showPassword = ref(false);
-const showPasswordConfirm = ref(false);
-
-const form = reactive({
-  name: '',
-  cnpj: '',
-  email: '',
-  crmv: '',
-  password: '',
-  password_confirm: '',
-  pix_type: 'cpf',
-  pix_key: '',
-  bank_code: '',
-  bank_name: '',
-  bank_agency: '',
-  bank_account_number: '',
-  bank_account_digit: '',
-  bank_account_type: 'corrente',
-  bank_holder_type: 'individual',
-  billing_cep: '',
-  billing_street: '',
-  billing_number: '',
-  billing_complement: '',
-  billing_neighborhood: '',
-  billing_city: '',
-  billing_state: '',
+onMounted(async () => {
+  await Promise.all([loadUsers(), loadPlans()]);
 });
 
-function resetForm() {
-  form.name = '';
-  form.cnpj = '';
-  form.email = '';
-  form.crmv = '';
-  form.password = '';
-  form.password_confirm = '';
-  form.pix_type = 'cpf';
-  form.pix_key = '';
-  form.bank_code = '';
-  form.bank_name = '';
-  form.bank_agency = '';
-  form.bank_account_number = '';
-  form.bank_account_digit = '';
-  form.bank_account_type = 'corrente';
-  form.bank_holder_type = 'individual';
-  form.billing_cep = '';
-  form.billing_street = '';
-  form.billing_number = '';
-  form.billing_complement = '';
-  form.billing_neighborhood = '';
-  form.billing_city = '';
-  form.billing_state = '';
-  formError.value = '';
+// --- Editar usuário ---
+const editOpen = ref(false);
+const editTarget = ref<AdminUserRow | null>(null);
+const editForm = reactive({ 
+  name: '', 
+  email: '', 
+  type: 'veterinario' as AdminUserRow['type'], 
+  address: '',
+  status: 'active' as AdminUserRow['status'] 
+});
+const editSaving = ref(false);
+const editError = ref('');
+
+function openEdit(row: AdminUserRow) {
+  editTarget.value = row;
+  editForm.name = row.name;
+  editForm.email = row.email;
+  editForm.type = row.type;
+  editForm.address = row.address ?? '';
+  editForm.status = row.status ?? 'active';
+  editError.value = '';
+  editOpen.value = true;
 }
 
-function openCreate() {
-  resetForm();
-  modalOpen.value = true;
-}
-
-const pixTypeOptions = [
-  { label: 'CPF', value: 'cpf' },
-  { label: 'CNPJ', value: 'cnpj' },
-  { label: 'E-mail', value: 'email' },
-  { label: 'Telefone', value: 'telefone' },
-  { label: 'Aleatória', value: 'aleatoria' },
-];
-
-const accountTypeOptions = [
-  { label: 'Conta Corrente', value: 'corrente' },
-  { label: 'Conta Poupança', value: 'poupanca' },
-];
-
-const holderTypeOptions = [
-  { label: 'Pessoa Física', value: 'individual' },
-  { label: 'Pessoa Jurídica', value: 'company' },
-];
-
-const stateOptions = [
-  'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA',
-  'PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO',
-].map((s) => ({ label: s, value: s }));
-
-const loadingCep = ref(false);
-
-async function fetchCep() {
-  const cep = form.billing_cep.replace(/\D/g, '');
-  if (cep.length !== 8) return;
-
-  loadingCep.value = true;
+async function saveEdit() {
+  if (!editTarget.value) return;
+  editSaving.value = true;
+  editError.value = '';
   try {
-    const data = await $fetch<Record<string, string>>(`https://viacep.com.br/ws/${cep}/json/`);
-    if (data.erro) return;
-    form.billing_street = data.logradouro || '';
-    form.billing_neighborhood = data.bairro || '';
-    form.billing_city = data.localidade || '';
-    form.billing_state = data.uf || '';
-  } catch {
-    // silently fail
-  } finally {
-    loadingCep.value = false;
-  }
-}
-
-async function save() {
-  formError.value = '';
-
-  if (!form.name || !form.cnpj || !form.email || !form.password) {
-    formError.value = 'Preencha todos os campos obrigatórios.';
-    return;
-  }
-  if (form.password !== form.password_confirm) {
-    formError.value = 'As senhas não coincidem.';
-    return;
-  }
-  if (form.password.length < 6) {
-    formError.value = 'A senha deve ter pelo menos 6 caracteres.';
-    return;
-  }
-
-  saving.value = true;
-  try {
-    const { password_confirm: _, ...payload } = form;
-    await api('/admin/veterinarios', {
-      method: 'POST',
-      body: payload,
-    });
-    modalOpen.value = false;
-    await loadVets();
-  } catch (err: unknown) {
-    const fetchErr = err as { data?: { error?: string } };
-    formError.value = fetchErr?.data?.error ?? 'Erro ao criar veterinário.';
-  } finally {
-    saving.value = false;
-  }
-}
-
-// --- Editar veterinário ---
-const editVetOpen = ref(false);
-const editVetTarget = ref<VetRow | null>(null);
-const editVetForm = reactive({ name: '', email: '', crmv: '' });
-const editVetSaving = ref(false);
-const editVetError = ref('');
-
-function openEditVet(row: VetRow) {
-  editVetTarget.value = row;
-  editVetForm.name = row.name;
-  editVetForm.email = row.email;
-  editVetForm.crmv = row.crmv ?? '';
-  editVetError.value = '';
-  editVetOpen.value = true;
-}
-
-async function saveEditVet() {
-  if (!editVetTarget.value) return;
-  editVetSaving.value = true;
-  editVetError.value = '';
-  try {
-    await api(`/admin/veterinarios/${editVetTarget.value.id}`, {
+    await api(`/admin/users/${editTarget.value.id}`, {
       method: 'PUT',
       body: {
-        name: editVetForm.name,
-        email: editVetForm.email,
-        crmv: editVetForm.crmv || null,
+        name: editForm.name,
+        email: editForm.email,
+        type: editForm.type,
+        address: editForm.address || null,
+        status: editForm.status,
       },
     });
-    editVetOpen.value = false;
-    await loadVets();
+    editOpen.value = false;
+    await loadUsers();
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
-    editVetError.value = fetchErr?.data?.error ?? 'Erro ao salvar.';
+    editError.value = fetchErr?.data?.error ?? 'Erro ao salvar alterações.';
   } finally {
-    editVetSaving.value = false;
+    editSaving.value = false;
   }
 }
 
-// --- Excluir veterinário ---
-const deleteVetOpen = ref(false);
-const deleteVetTarget = ref<VetRow | null>(null);
-const deleteVetLoading = ref(false);
+// --- Excluir usuário ---
+const deleteOpen = ref(false);
+const deleteTarget = ref<AdminUserRow | null>(null);
+const deleteLoading = ref(false);
 
-function openDeleteVet(row: VetRow) {
-  deleteVetTarget.value = row;
-  deleteVetOpen.value = true;
+function openDelete(row: AdminUserRow) {
+  deleteTarget.value = row;
+  deleteOpen.value = true;
 }
 
-async function confirmDeleteVet() {
-  if (!deleteVetTarget.value) return;
-  deleteVetLoading.value = true;
+async function confirmDelete() {
+  if (!deleteTarget.value) return;
+  deleteLoading.value = true;
   try {
-    await api(`/admin/veterinarios/${deleteVetTarget.value.id}`, { method: 'DELETE' });
-    deleteVetOpen.value = false;
-    await loadVets();
+    await api(`/admin/users/${deleteTarget.value.id}`, { method: 'DELETE' });
+    deleteOpen.value = false;
+    await loadUsers();
+  } catch {
+    useToast().add({ title: 'Erro', description: 'Não foi possível excluir.', color: 'error' });
   } finally {
-    deleteVetLoading.value = false;
+    deleteLoading.value = false;
   }
 }
 
-function formatCnpj(cnpj: string) {
-  const c = cnpj?.replace(/\D/g, '') ?? '';
-  if (c.length !== 14) return cnpj;
-  return `${c.slice(0,2)}.${c.slice(2,5)}.${c.slice(5,8)}/${c.slice(8,12)}-${c.slice(12)}`;
+// --- Planos ---
+const planOpen = ref(false);
+const planTarget = ref<AdminUserRow | null>(null);
+const planSaving = ref(false);
+const planError = ref('');
+
+function openPlanModal(row: AdminUserRow) {
+  planTarget.value = row;
+  planError.value = '';
+  planOpen.value = true;
 }
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('pt-BR');
+async function assignPlan(plan: Plan) {
+  if (!planTarget.value) return;
+  planSaving.value = true;
+  planError.value = '';
+  try {
+    await api(`/admin/users/${planTarget.value.id}/subscription`, {
+      method: 'POST',
+      body: { plan_id: plan.id },
+    });
+    planOpen.value = false;
+    await loadUsers();
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } };
+    planError.value = fetchErr?.data?.error ?? 'Erro ao atribuir plano.';
+  } finally {
+    planSaving.value = false;
+  }
 }
 
-function statusLabel(recipientId: string | null) {
-  return recipientId ? 'Ativo' : 'Pendente';
+async function clearPlan() {
+  if (!planTarget.value) return;
+  planSaving.value = true;
+  planError.value = '';
+  try {
+    await api(`/admin/users/${planTarget.value.id}/subscription`, {
+      method: 'DELETE',
+    });
+    planOpen.value = false;
+    await loadUsers();
+  } catch (err: unknown) {
+    const fetchErr = err as { data?: { error?: string } };
+    planError.value = fetchErr?.data?.error ?? 'Erro ao remover plano.';
+  } finally {
+    planSaving.value = false;
+  }
+}
+
+function typeLabel(type: AdminUserRow['type']) {
+  if (type === 'admin') return 'Administrador';
+  if (type === 'medico') return 'Médico';
+  if (type === 'veterinario') return 'Veterinário';
+  return 'Cliente';
 }
 
 const columns = [
   { accessorKey: 'name', header: 'Nome' },
-  { accessorKey: 'cnpj', header: 'CNPJ' },
   { accessorKey: 'email', header: 'E-mail' },
-  { accessorKey: 'recipient_id', header: 'Status' },
-  { accessorKey: 'created_at', header: 'Data de cadastro' },
+  { accessorKey: 'type', header: 'Tipo' },
+  { accessorKey: 'status', header: 'Status' },
+  { accessorKey: 'plan_title', header: 'Plano' },
   { id: 'actions', header: '' },
 ];
 </script>
@@ -261,15 +196,8 @@ const columns = [
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Veterinários</h1>
-        <p class="text-gray-500 text-sm mt-1">Gerencie os veterinários cadastrados no sistema</p>
+        <p class="text-gray-500 text-sm mt-1">Lista completa de veterinários cadastrados na plataforma</p>
       </div>
-      <UButton
-        label="Adicionar Veterinário"
-        icon="i-heroicons-plus"
-        color="primary"
-
-        @click="openCreate"
-      />
     </div>
 
     <UAlert
@@ -282,29 +210,42 @@ const columns = [
 
     <div class="bg-white rounded-xl shadow">
       <UTable
-        :data="vets"
+        :data="users"
         :columns="columns"
         :loading="pending"
         class="w-full"
       >
         <template #name-cell="{ row }">
-          <span class="font-medium text-gray-800">{{ row.original.name }}</span>
+          <span class="font-medium text-gray-800">
+            {{ row.original.name }}
+            <span v-if="me?.id === row.original.id" class="text-xs text-accent ml-1">(você)</span>
+          </span>
         </template>
 
-        <template #cnpj-cell="{ row }">
-          {{ formatCnpj(row.original.cnpj) }}
-        </template>
-
-        <template #recipient_id-cell="{ row }">
+        <template #type-cell="{ row }">
           <UBadge
-            :label="statusLabel(row.original.recipient_id)"
-            :color="row.original.recipient_id ? 'success' : 'warning'"
+            :label="typeLabel(row.original.type)"
+            :color="row.original.type === 'admin' ? 'purple' : row.original.type === 'medico' ? 'warning' : row.original.type === 'veterinario' ? 'success' : 'info'"
             variant="subtle"
           />
         </template>
 
-        <template #created_at-cell="{ row }">
-          {{ formatDate(row.original.created_at) }}
+        <template #status-cell="{ row }">
+          <UBadge
+            :label="row.original.status === 'pending' ? 'Pendente' : row.original.status === 'rejected' ? 'Rejeitado' : row.original.status === 'suspended' ? 'Suspenso' : 'Ativo'"
+            :color="row.original.status === 'pending' ? 'warning' : row.original.status === 'active' || !row.original.status ? 'success' : 'error'"
+            variant="subtle"
+          />
+        </template>
+
+        <template #plan_title-cell="{ row }">
+          <UBadge
+            :label="row.original.plan_title || 'Free'"
+            :color="row.original.plan_title ? 'success' : 'neutral'"
+            variant="subtle"
+            class="cursor-pointer"
+            @click="openPlanModal(row.original)"
+          />
         </template>
 
         <template #actions-cell="{ row }">
@@ -312,8 +253,8 @@ const columns = [
             <UDropdownMenu
               :items="[
                 [
-                  { label: 'Editar', icon: 'i-heroicons-pencil-square', onSelect: () => openEditVet(row.original) },
-                  { label: 'Excluir', icon: 'i-heroicons-trash', color: 'error', onSelect: () => openDeleteVet(row.original) },
+                  { label: 'Editar', icon: 'i-heroicons-pencil-square', onSelect: () => openEdit(row.original) },
+                  { label: 'Excluir', icon: 'i-heroicons-trash', color: 'error', disabled: me?.id === row.original.id, onSelect: () => openDelete(row.original) },
                 ],
               ]"
             >
@@ -324,203 +265,126 @@ const columns = [
 
         <template #empty>
           <div class="flex flex-col items-center justify-center py-12 text-gray-400">
-            <UIcon name="i-mdi-stethoscope" class="size-10 mb-2" />
-            <p class="text-sm">Nenhum veterinário cadastrado.</p>
+            <UIcon name="i-heroicons-users" class="size-10 mb-2" />
+            <p class="text-sm">Nenhum usuário encontrado.</p>
           </div>
         </template>
       </UTable>
     </div>
 
-    <!-- Modal Editar Veterinário -->
-    <UModal v-model:open="editVetOpen">
+    <!-- Modal Editar -->
+    <UModal v-model:open="editOpen">
       <template #content>
         <div class="p-6 flex flex-col gap-4">
-          <h3 class="text-lg font-semibold text-gray-800">Editar veterinário</h3>
+          <h3 class="text-lg font-semibold text-gray-800">Editar usuário</h3>
 
           <UFormField label="Nome">
-            <UInput v-model="editVetForm.name" class="w-full" />
+            <UInput v-model="editForm.name" />
           </UFormField>
           <UFormField label="E-mail">
-            <UInput v-model="editVetForm.email" type="email" class="w-full" />
+            <UInput v-model="editForm.email" type="email" />
           </UFormField>
-          <UFormField label="CRMV">
-            <UInput v-model="editVetForm.crmv" placeholder="Ex: 78210-SP" class="w-full" />
+          <UFormField label="Endereço">
+            <UInput v-model="editForm.address" />
+          </UFormField>
+          <UFormField label="Tipo">
+            <USelect
+              v-model="editForm.type"
+              :items="[
+                { label: 'Cliente', value: 'tutor' },
+                { label: 'Médico', value: 'medico' },
+                { label: 'Veterinário', value: 'veterinario' },
+                { label: 'Administrador', value: 'admin' },
+              ]"
+            />
+          </UFormField>
+          <UFormField label="Status">
+            <USelect
+              v-model="editForm.status"
+              :items="[
+                { label: 'Ativo', value: 'active' },
+                { label: 'Pendente', value: 'pending' },
+                { label: 'Inativo (Suspenso)', value: 'suspended' },
+                { label: 'Rejeitado', value: 'rejected' }
+              ]"
+            />
           </UFormField>
 
-          <UAlert v-if="editVetError" color="error" variant="soft" :description="editVetError" />
+          <UAlert v-if="editError" color="error" variant="soft" :description="editError" />
 
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="editVetOpen = false" />
-            <UButton color="primary" label="Salvar" :loading="editVetSaving" @click="saveEditVet" />
+            <UButton variant="outline" label="Cancelar" @click="editOpen = false" />
+            <UButton color="primary" label="Salvar" :loading="editSaving" @click="saveEdit" />
           </div>
         </div>
       </template>
     </UModal>
 
-    <!-- Modal Excluir Veterinário -->
-    <UModal v-model:open="deleteVetOpen">
+    <!-- Modal Excluir -->
+    <UModal v-model:open="deleteOpen">
       <template #content>
         <div class="p-6 flex flex-col gap-4">
-          <h3 class="text-lg font-semibold text-gray-800">Excluir veterinário</h3>
+          <h3 class="text-lg font-semibold text-gray-800">Excluir usuário</h3>
           <p class="text-sm text-gray-600">
-            Esta ação é <strong>permanente</strong> e excluirá o cadastro de
-            <strong>{{ deleteVetTarget?.name }}</strong>. Deseja continuar?
+            Esta ação é <strong>permanente</strong> e excluirá também todos os pets e assinaturas
+            de <strong>{{ deleteTarget?.name }}</strong>. Deseja continuar?
           </p>
           <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="deleteVetOpen = false" />
-            <UButton color="error" label="Excluir" :loading="deleteVetLoading" @click="confirmDeleteVet" />
+            <UButton variant="outline" label="Cancelar" @click="deleteOpen = false" />
+            <UButton color="error" label="Excluir" :loading="deleteLoading" @click="confirmDelete" />
           </div>
         </div>
       </template>
     </UModal>
 
-    <!-- Modal Criar Veterinário -->
-    <UModal v-model:open="modalOpen" :ui="{ content: 'w-full max-w-full md:w-[70vw] md:max-w-[70vw]' }">
+    <!-- Modal Plano -->
+    <UModal v-model:open="planOpen">
       <template #content>
-        <div class="flex flex-col max-h-[90vh]">
-          <div class="flex items-center justify-between px-8 py-5 border-b border-gray-100 shrink-0">
-            <h3 class="text-xl font-semibold text-gray-800">Adicionar Veterinário</h3>
-            <UButton icon="i-heroicons-x-mark" variant="ghost" color="neutral" size="md" @click="modalOpen = false" />
-          </div>
-          <div class="px-8 py-6 flex flex-col gap-5 overflow-y-auto flex-1">
+        <div class="p-6 flex flex-col gap-4">
+          <h3 class="text-lg font-semibold text-gray-800">
+            Plano de {{ planTarget?.name }}
+          </h3>
+          <p v-if="planTarget?.plan_title" class="text-sm text-gray-600">
+            Plano atual: <strong>{{ planTarget.plan_title }}</strong>
+          </p>
+          <p v-else class="text-sm text-gray-600">
+            Este usuário está no plano <strong>Free</strong>.
+          </p>
 
-          <!-- Dados Básicos -->
-          <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Dados Básicos</h4>
-            <UFormField label="Nome / Razão Social *">
-              <UInput v-model="form.name" placeholder="Nome completo ou razão social" class="w-full" />
-            </UFormField>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="CNPJ *">
-                <UInput v-model="form.cnpj" v-maska="'##.###.###/####-##'" placeholder="00.000.000/0000-00" class="w-full" />
-              </UFormField>
-              <UFormField label="E-mail *">
-                <UInput v-model="form.email" type="email" placeholder="email@exemplo.com" class="w-full" />
-              </UFormField>
-            </div>
-            <UFormField label="CRMV">
-              <UInput v-model="form.crmv" placeholder="Ex: 78210-SP" class="w-full" />
-            </UFormField>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="Senha *">
-                <UInput v-model="form.password" :type="showPassword ? 'text' : 'password'" placeholder="******" class="w-full">
-                  <template #trailing>
-                    <UButton
-                      color="neutral"
-                      variant="link"
-                      :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-                      class="cursor-pointer"
-                      @click="showPassword = !showPassword"
-                    />
-                  </template>
-                </UInput>
-              </UFormField>
-              <UFormField label="Confirmar Senha *">
-                <UInput v-model="form.password_confirm" :type="showPasswordConfirm ? 'text' : 'password'" placeholder="******" class="w-full">
-                  <template #trailing>
-                    <UButton
-                      color="neutral"
-                      variant="link"
-                      :icon="showPasswordConfirm ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-                      class="cursor-pointer"
-                      @click="showPasswordConfirm = !showPasswordConfirm"
-                    />
-                  </template>
-                </UInput>
-              </UFormField>
-            </div>
+          <UAlert v-if="planError" color="error" variant="soft" :description="planError" />
+
+          <div class="flex flex-col gap-2">
+            <button
+              v-for="plan in plans"
+              :key="plan.id"
+              class="flex items-center justify-between border rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors text-left"
+              :class="planTarget?.plan_id === plan.id ? 'border-accent bg-accent/5' : 'border-gray-200'"
+              :disabled="planSaving"
+              @click="assignPlan(plan)"
+            >
+              <div>
+                <p class="font-medium text-gray-800">{{ plan.title }}</p>
+                <p class="text-xs text-gray-500">
+                  {{ Number(plan.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }} / mês
+                </p>
+              </div>
+              <UIcon
+                v-if="planTarget?.plan_id === plan.id"
+                name="i-heroicons-check-circle"
+                class="size-6 text-accent"
+              />
+            </button>
           </div>
 
-          <!-- Chave Pix -->
-          <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Chave Pix</h4>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="Tipo de chave">
-                <USelect v-model="form.pix_type" :items="pixTypeOptions" class="w-full" />
-              </UFormField>
-              <UFormField label="Valor da chave">
-                <UInput v-model="form.pix_key" placeholder="Informe a chave Pix" class="w-full" />
-              </UFormField>
-            </div>
-          </div>
-
-          <!-- Dados Bancários -->
-          <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Dados Bancários</h4>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="Código do banco">
-                <UInput v-model="form.bank_code" placeholder="001" class="w-full" />
-              </UFormField>
-              <UFormField label="Nome do banco">
-                <UInput v-model="form.bank_name" placeholder="Banco do Brasil" class="w-full" />
-              </UFormField>
-            </div>
-            <div class="grid grid-cols-3 gap-3">
-              <UFormField label="Agência">
-                <UInput v-model="form.bank_agency" placeholder="0001" class="w-full" />
-              </UFormField>
-              <UFormField label="Número da conta">
-                <UInput v-model="form.bank_account_number" placeholder="12345" class="w-full" />
-              </UFormField>
-              <UFormField label="Dígito">
-                <UInput v-model="form.bank_account_digit" placeholder="0" class="w-full" />
-              </UFormField>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="Tipo de conta">
-                <USelect v-model="form.bank_account_type" :items="accountTypeOptions" class="w-full" />
-              </UFormField>
-              <UFormField label="Tipo de titular">
-                <USelect v-model="form.bank_holder_type" :items="holderTypeOptions" class="w-full" />
-              </UFormField>
-            </div>
-          </div>
-
-          <!-- Endereço de Faturamento -->
-          <div class="flex flex-col gap-3">
-            <h4 class="text-sm font-semibold text-gray-600">Endereço de Faturamento</h4>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="CEP">
-                <UInput
-                  v-model="form.billing_cep"
-                  v-maska="'#####-###'"
-                  placeholder="00000-000"
-                  :loading="loadingCep"
-                  class="w-full"
-                  @blur="fetchCep"
-                />
-              </UFormField>
-              <UFormField label="Bairro">
-                <UInput v-model="form.billing_neighborhood" placeholder="Centro" class="w-full" />
-              </UFormField>
-            </div>
-            <UFormField label="Logradouro">
-              <UInput v-model="form.billing_street" placeholder="Rua, Avenida..." class="w-full" />
-            </UFormField>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="Número">
-                <UInput v-model="form.billing_number" placeholder="123" class="w-full" />
-              </UFormField>
-              <UFormField label="Complemento">
-                <UInput v-model="form.billing_complement" placeholder="Sala, Andar..." class="w-full" />
-              </UFormField>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <UFormField label="Cidade">
-                <UInput v-model="form.billing_city" placeholder="São Paulo" class="w-full" />
-              </UFormField>
-              <UFormField label="Estado">
-                <USelect v-model="form.billing_state" :items="stateOptions" placeholder="UF" class="w-full" />
-              </UFormField>
-            </div>
-          </div>
-
-          <UAlert v-if="formError" color="error" variant="soft" :description="formError" />
-
-          <div class="flex justify-end gap-2 mt-2">
-            <UButton variant="outline" label="Cancelar" @click="modalOpen = false" />
-            <UButton color="primary" label="Criar Veterinário" :loading="saving" @click="save" />
-          </div>
+          <div class="flex justify-between gap-2 mt-2">
+            <UButton
+              variant="ghost"
+              color="error"
+              label="Remover plano (Free)"
+              :disabled="!planTarget?.plan_id || planSaving"
+              @click="clearPlan"
+            />
+            <UButton variant="outline" label="Fechar" @click="planOpen = false" />
           </div>
         </div>
       </template>
