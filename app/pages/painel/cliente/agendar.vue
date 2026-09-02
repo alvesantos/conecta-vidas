@@ -38,6 +38,37 @@ const slotsPending = ref(false)
 const specialtyOptions = computed(() => specialties.value.map(item => ({ label: item.name, value: item.id })))
 const slotOptions = computed(() => slots.value.map(item => ({ label: `${item.time} · ${item.professional_name}`, value: `${item.professional_id}|${item.time}` })))
 
+
+watch(kind, async (newKind) => {
+  specialtyId.value = ''
+  if (!specialist.value) return
+  try {
+    specialties.value = await api(`/scheduling/specialties?kind=${newKind}`)
+  } catch (err) {
+    console.error(err)
+    specialties.value = []
+  }
+}, { immediate: true })
+
+watch([specialtyId, date], async ([s, d]) => {
+  if (!s || !d || !specialist.value) {
+    slots.value = []
+    slotKey.value = ''
+    return
+  }
+  slotsPending.value = true
+  slotKey.value = ''
+  try {
+    slots.value = await api(`/scheduling/slots?specialty_id=${s}&date=${d}`)
+  } catch (err) {
+    console.error(err)
+    slots.value = []
+  } finally {
+    slotsPending.value = false
+  }
+})
+
+
 const petOptions = computed(() => pets.value.map(pet => ({
   label: `${pet.name} · ${pet.breed}`,
   value: pet.id,
