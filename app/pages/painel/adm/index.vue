@@ -155,7 +155,7 @@ const humanBirthdayColumns = [
             <div class="flex items-center gap-3">
               <img
                 v-if="row.original.avatar_url"
-                :src="row.original.avatar_url.startsWith('http') ? row.original.avatar_url : config.public.apiBase.replace('/api', '') + row.original.avatar_url"
+                :src="row.original.avatar_url.startsWith('http') ? row.original.avatar_url : config.public.apiBase.replace(/\/api$/, '') + row.original.avatar_url"
                 :alt="row.original.name"
                 class="size-8 rounded-full object-cover shrink-0"
               />
