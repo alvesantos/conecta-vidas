@@ -188,25 +188,22 @@ onMounted(async () => {
   </div>
 
   <!-- ============ ASSINATURAS: VERSÃO COMPLETA ============ -->
-  <div v-else>
-    <UCard>
-      <h4 class="lg:block hidden lg:text-2xl font-semibold text-primary text-center mb-4">
-        Assine e tenha acesso a conteúdos exclusivos de primeiros socorros e cuidados com seu pet.
-      </h4>
-      <h4 class="block lg:hidden text-2xl font-semibold text-primary text-center mb-4">Assine já!</h4>
+  <!-- ============ ASSINATURAS: VERSÃO COMPLETA ============ -->
+  <div v-else class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-primary mb-6">
+        Evolua o cuidado do seu pet
+      </h2>
+      <p class="text-lg md:text-xl text-gray-600 mb-8">
+        Escolha o plano perfeito e tenha acesso a suporte 24h, consultas e mimos exclusivos.
+      </p>
 
-      <p
-        v-if="isSubscriptionView && isLoggedIn && subscription"
-        class="text-center text-sm text-primary mb-4"
-      >
-        Você está no plano <strong>{{ subscription.plan_title }}</strong>.
-      </p>
-      <p
-        v-else-if="isSubscriptionView && isLoggedIn && !subscription"
-        class="text-center text-sm text-primary/70 mb-4"
-      >
-        Você ainda não possui um plano (plano <strong>Free</strong>).
-      </p>
+      <div v-if="isLoggedIn" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-sm font-medium text-gray-700">
+        <UIcon name="i-heroicons-user" class="size-4" />
+        <span v-if="subscription">Seu plano atual: <strong class="text-primary">{{ subscription.plan_title }}</strong></span>
+        <span v-else>Você ainda não possui um plano (Free)</span>
+      </div>
 
       <UAlert
         v-if="actionError"
@@ -214,95 +211,98 @@ onMounted(async () => {
         variant="soft"
         :description="actionError"
         icon="i-heroicons-exclamation-circle"
-        class="mb-4"
+        class="mt-6 text-left"
       />
+    </div>
 
-      <section>
-        <div class="grid lg:grid-cols-3 gap-6">
-          <div v-for="plan in plans" :key="plan.id" class="flex">
-            <div
-              class="relative border-2 rounded-2xl shadow-lg flex flex-col flex-1"
-              :style="{ borderColor: plan.color }"
-            >
-              <!-- Badge plano atual -->
-              <span
-                v-if="isSubscriptionView && currentPlanId === plan.id"
-                class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full shadow"
-              >
-                PLANO ATUAL
-              </span>
+    <div class="grid md:grid-cols-3 gap-8 items-start">
+      <div 
+        v-for="(plan, index) in plans" 
+        :key="plan.id"
+        class="relative flex flex-col rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1"
+        :class="[
+          index === 2 ? 'bg-[#01193A] text-white shadow-2xl ring-1 ring-white/10' : 'bg-white text-gray-900 shadow-xl ring-1 ring-gray-200',
+          index === 1 ? 'md:-mt-4 md:mb-4 ring-2 ring-primary/60' : ''
+        ]"
+      >
+        <!-- Badge plano atual -->
+        <span
+          v-if="currentPlanId === plan.id"
+          class="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wider"
+        >
+          Seu Plano
+        </span>
+        <!-- Badge popular -->
+        <span
+          v-else-if="index === 1"
+          class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wider"
+        >
+          Mais Popular
+        </span>
 
-              <div
-                class="font-bold text-xl mb-4 rounded-t-xl px-2 py-3"
-                :class="plan.color === '#FAF9F6' ? 'text-primary' : 'text-foreground'"
-                :style="{ backgroundColor: plan.color }"
-              >
-                <div class="flex justify-center gap-2">
-                  <div>{{ plan.title }}</div>
-                </div>
-                <p
-                  class="lg:text-sm text-xs text-center font-normal"
-                  :class="plan.color === '#FAF9F6' ? 'text-primary/70' : 'text-foreground/70'"
-                >
-                  {{ plan.focus_desc }}
-                </p>
-              </div>
-
-              <div class="px-4 flex flex-col flex-1">
-                <p class="text-primary lg:text-4xl text-2xl font-bold text-center">
-                  {{ priceOf(plan).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}/mês
-                </p>
-                <p class="text-primary/60 font-semibold text-center mb-4 text-sm min-h-[3rem] line-clamp-2">
-                  {{ plan.focus }}
-                </p>
-
-                <ul class="space-y-2 mb-4 flex flex-col flex-1 justify-between">
-                  <li
-                    v-for="perk in displayedPerks(plan)"
-                    :key="perk.label"
-                    class="flex items-center gap-2"
-                    :class="{ 'cursor-pointer': perk.icon === 'i-ph-info' }"
-                    @click="perk.icon === 'i-ph-info' && navigateToRoute('/assinaturas')"
-                  >
-                    <div
-                      class="rounded-full px-3 py-3 flex items-center border"
-                      :style="{ backgroundColor: plan.color, borderColor: plan.color }"
-                    >
-                      <UIcon
-                        v-if="perk.icon"
-                        :name="perk.icon"
-                        class="size-6"
-                        :class="plan.color === '#FAF9F6' ? 'text-primary' : 'text-foreground'"
-                      />
-                    </div>
-                    <span class="text-primary text-xs lg:text-base">{{ perk.label }}</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <button
-                  class="cursor-pointer w-full py-3 rounded-b-xl font-semibold transition-all duration-200 border-2 hover:opacity-90 hover:scale-[1.01]"
-                  :class="plan.color === '#FAF9F6' ? 'text-primary' : 'text-foreground'"
-                  :style="{ backgroundColor: plan.color, borderColor: plan.color }"
-                  :disabled="loadingAction === String(plan.id)"
-                  @click="handlePrimaryAction(plan)"
-                >
-                  {{ loadingAction === String(plan.id) ? 'Processando...' : buttonLabel(plan) }}
-                </button>
-              </div>
-            </div>
-          </div>
+        <div class="mb-6">
+          <h3 class="text-2xl font-bold mb-2" :class="index === 2 ? 'text-white' : 'text-primary'">{{ plan.title }}</h3>
+          <p class="text-sm min-h-[3rem]" :class="index === 2 ? 'text-gray-300' : 'text-gray-500'">{{ plan.focus_desc }}</p>
         </div>
-      </section>
 
-      <div class="rounded-2xl border-dotted border-2 mt-4 py-2 flex flex-block">
-        <img src="/maffy_gift.png" class="ml-2 w-[20%] lg:w-[8%] h-auto object-contain lg:mr-20" />
-        <div class="flex flex-col justify-center px-4">
-          <p class="text-primary font-bold text-sm lg:text-3xl">PRESENTINHOS INCLUSOS!</p>
-          <p class="text-xs lg:text-xl">Presente Dia do Pai de Pet e Presente Dia da Mãe de Pet pelo MAFFYBOX!</p>
+        <div class="mb-8">
+          <p class="flex items-baseline gap-1">
+            <span class="text-4xl font-extrabold tracking-tight" :class="index === 2 ? 'text-white' : 'text-gray-900'">
+              {{ priceOf(plan).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+            </span>
+            <span class="text-sm font-medium" :class="index === 2 ? 'text-gray-400' : 'text-gray-500'">/mês</span>
+          </p>
+          <p class="mt-2 text-sm font-semibold" :class="index === 2 ? 'text-accent' : 'text-primary/80'">{{ plan.focus }}</p>
+        </div>
+
+        <button
+          class="w-full rounded-full py-3 px-4 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 mb-8"
+          :class="[
+            currentPlanId === plan.id 
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+              : index === 2 
+                ? 'bg-white text-[#01193A] hover:bg-gray-100' 
+                : index === 1 
+                  ? 'bg-primary text-white hover:bg-primary/90 shadow-md' 
+                  : 'bg-gray-900 text-white hover:bg-gray-800'
+          ]"
+          :disabled="loadingAction === String(plan.id) || currentPlanId === plan.id"
+          @click="handlePrimaryAction(plan)"
+        >
+          <UIcon v-if="loadingAction === String(plan.id)" name="i-heroicons-arrow-path" class="animate-spin size-4" />
+          {{ loadingAction === String(plan.id) ? 'Processando...' : buttonLabel(plan) }}
+        </button>
+
+        <div class="flex-1">
+          <ul class="space-y-4">
+            <li
+              v-for="perk in displayedPerks(plan)"
+              :key="perk.label"
+              class="flex items-start gap-3"
+            >
+              <UIcon
+                :name="perk.icon || 'i-heroicons-check'"
+                class="size-5 shrink-0 mt-0.5"
+                :class="index === 2 ? 'text-accent' : 'text-primary'"
+              />
+              <span class="text-sm leading-tight" :class="index === 2 ? 'text-gray-200' : 'text-gray-600'">
+                {{ perk.label }}
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
-    </UCard>
+    </div>
+
+    <!-- Maffybox Banner -->
+    <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 md:p-10 border border-blue-100 shadow-sm flex flex-col md:flex-row items-center gap-8 max-w-4xl mx-auto">
+      <img src="/maffy_gift.png" alt="Maffybox" class="w-32 md:w-40 object-contain hover:scale-105 transition-transform" />
+      <div class="text-center md:text-left">
+        <h4 class="text-2xl font-bold text-primary mb-2 tracking-tight">Mimos e Presentinhos Inclusos!</h4>
+        <p class="text-gray-600 text-lg">
+          Assinantes recebem surpresas especiais no <strong>Dia do Pai de Pet</strong> e <strong>Dia da Mãe de Pet</strong> através do nosso exclusivo MAFFYBOX. Seu pet vai amar!
+        </p>
+      </div>
+    </div>
   </div>
 </template>
