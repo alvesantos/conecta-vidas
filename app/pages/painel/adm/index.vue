@@ -97,44 +97,11 @@ const humanBirthdayColumns = [
     <h1 class="text-2xl font-bold text-gray-800">Painel Administrativo</h1>
     <p class="text-gray-500 text-sm mt-1">Visão geral do sistema</p>
 
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <NuxtLink
-        to="/painel/adm/usuarios"
-        class="bg-white rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
-      >
-        <UIcon name="i-heroicons-users" class="size-8 text-accent" />
-        <div>
-          <p class="font-semibold text-gray-800">Gerenciar usuários</p>
-          <p class="text-sm text-gray-500">Lista, edição, planos e exclusão</p>
-        </div>
-      </NuxtLink>
-      <NuxtLink
-        to="/painel/adm/pets"
-        class="bg-white rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
-      >
-        <UIcon name="i-mdi-paw" class="size-8 text-accent" />
-        <div>
-          <p class="font-semibold text-gray-800">Gerenciar pets</p>
-          <p class="text-sm text-gray-500">Visualizar pets cadastrados e responsáveis</p>
-        </div>
-      </NuxtLink>
-      <NuxtLink
-        to="/painel/adm/planos"
-        class="bg-white rounded-xl shadow hover:shadow-md transition-shadow p-6 flex items-center gap-4"
-      >
-        <UIcon name="i-heroicons-credit-card" class="size-8 text-accent" />
-        <div>
-          <p class="font-semibold text-gray-800">Gerenciar planos</p>
-          <p class="text-sm text-gray-500">Criar e editar planos disponíveis</p>
-        </div>
-      </NuxtLink>
-    </div>
-
-    <div v-if="pending" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+    <div v-if="pending" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
       <div v-for="i in 8" :key="i" class="bg-white rounded-xl shadow p-6 animate-pulse h-28" />
     </div>
 
-    <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+    <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
       <div class="bg-white rounded-xl shadow p-6">
         <p class="text-sm text-gray-500">Usuários</p>
         <p class="text-3xl font-bold text-primary mt-2">{{ totalUsers }}</p>
