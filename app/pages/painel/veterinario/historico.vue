@@ -23,9 +23,9 @@ onMounted(async () => {
 })
 
 const columns = [
-  { key: 'date', label: 'Data e Hora' },
-  { key: 'tutor_name', label: 'Paciente' },
-  { key: 'status', label: 'Status' },
+  { accessorKey: 'date', header: 'Data e Hora' },
+  { accessorKey: 'tutor_name', header: 'Paciente' },
+  { accessorKey: 'status', header: 'Status' },
 ]
 
 const rows = computed(() => {
@@ -42,10 +42,10 @@ const formatDate = (dateStr: string, timeStr: string) => {
 
 const statusColor = (status: string) => {
   switch (status) {
-    case 'realizada': return 'green'
-    case 'agendada': return 'blue'
-    case 'cancelada': return 'red'
-    default: return 'gray'
+    case 'realizada': return 'success'
+    case 'agendada': return 'info'
+    case 'cancelada': return 'error'
+    default: return 'neutral'
   }
 }
 </script>
@@ -58,22 +58,18 @@ const statusColor = (status: string) => {
     </div>
 
     <UCard>
-      <div v-if="pending" class="py-8 flex justify-center">
-        <UIcon name="i-heroicons-arrow-path" class="size-8 animate-spin text-gray-400" />
-      </div>
-      
-      <div v-else>
-        <UTable :rows="rows" :columns="columns" :empty-state="{ icon: 'i-heroicons-inbox', label: 'Nenhum atendimento encontrado.' }">
-          <template #date-data="{ row }">
-            {{ formatDate(row.date, row.time) }}
+      <div v-if="false"></div><div v-else>
+        <UTable :data="rows" :columns="columns" :empty-state="{ icon: 'i-heroicons-inbox', label: 'Nenhum atendimento encontrado.' }">
+          <template #date-cell="{ row }">
+            {{ formatDate(row.original.date, row.original.time) }}
           </template>
-          <template #tutor_name-data="{ row }">
-            <span class="font-medium text-gray-900">{{ row.tutor_name }}</span>
-            <span class="text-xs text-gray-500 ml-1" v-if="row.pet_name">({{ row.pet_name }})</span>
+          <template #tutor_name-cell="{ row }">
+            <span class="font-medium text-gray-900">{{ row.original.tutor_name }}</span>
+            <span class="text-xs text-gray-500 ml-1" v-if="row.original.pet_name">({{ row.original.pet_name }})</span>
           </template>
-          <template #status-data="{ row }">
-            <UBadge :color="statusColor(row.status)" variant="subtle" class="capitalize">
-              {{ row.status }}
+          <template #status-cell="{ row }">
+            <UBadge :color="statusColor(row.original.status)" variant="subtle" class="capitalize">
+              {{ row.original.status }}
             </UBadge>
           </template>
         </UTable>
