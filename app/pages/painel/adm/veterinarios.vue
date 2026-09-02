@@ -37,9 +37,6 @@ async function loadUsers() {
     pending.value = false;
   }
 }
-
-}
-
 onMounted(async () => {
   await loadUsers();
 });

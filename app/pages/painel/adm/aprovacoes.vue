@@ -127,7 +127,7 @@ async function setStatus(id: string, status: 'active' | 'rejected') {
               variant="solid"
               icon="i-heroicons-x-mark"
               :loading="isUpdating"
-              @click="setStatus(row.original.id, 'rejected')"
+              @click="setStatus(row.original.id, 'rejected')">
               Reprovar
             </UButton>
           </div>

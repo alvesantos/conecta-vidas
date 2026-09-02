@@ -3,31 +3,36 @@ definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'medico' });
 
 const { user } = useAuth();
 
-// Dados simulados para o layout básico inicial
-const stats = {
-  today: 4,
-  week: 18,
-  totalClients: 142,
-  pendingRecords: 2
-};
 
-const recentConsultations = [
-  { id: 1, patient: 'Maria Silva', time: '09:00', type: 'Rotina', status: 'Concluído' },
-  { id: 2, patient: 'João Pedro', time: '10:30', type: 'Retorno', status: 'Concluído' },
-  { id: 3, patient: 'Ana Carolina', time: '14:00', type: 'Emergência', status: 'Em andamento' },
-  { id: 4, patient: 'Carlos Eduardo', time: '16:00', type: 'Rotina', status: 'Agendado' },
-];
+const { api } = useApi();
+const stats = ref({ today: 0, week: 0, totalClients: 0, pendingRecords: 0 });
+const recentConsultations = ref<any[]>([]);
+const pending = ref(true);
+
+onMounted(async () => {
+  try {
+    const data = await api<any>('/medico/dashboard');
+    stats.value = data.stats;
+    recentConsultations.value = data.recentConsultations;
+  } catch (error) {
+    console.error('Erro ao buscar dashboard:', error);
+  } finally {
+    pending.value = false;
+  }
+});
+
 </script>
 
 <template>
   <div>
-    <div class="mb-8">
+    <div v-if="pending" class="py-12 flex justify-center"><UIcon name="i-heroicons-arrow-path" class="size-8 animate-spin text-gray-400" /></div>
+    <div v-else class="mb-8">
       <h1 class="text-2xl font-bold text-gray-800">Olá, Dr(a). {{ user?.name?.split(' ')[0] || 'Médico' }}!</h1>
       <p class="text-gray-500 text-sm mt-1">Aqui está o resumo dos seus atendimentos de hoje.</p>
     </div>
 
     <!-- Cards de Métricas -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div v-if="!pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
         <div class="size-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
           <UIcon name="i-heroicons-calendar-days" class="size-6 text-green-600" />
@@ -70,7 +75,7 @@ const recentConsultations = [
     </div>
 
     <!-- Tabela de Últimos Atendimentos -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div v-if="!pending" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="flex items-center justify-between p-6 border-b border-gray-100">
         <h2 class="text-lg font-bold text-gray-800">Últimos Atendimentos de Hoje</h2>
         <UButton variant="ghost" color="gray" size="sm" to="/painel/medico/consultas">Ver todos</UButton>
