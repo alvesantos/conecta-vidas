@@ -159,9 +159,10 @@ watch(
             <UButton
               to="/login"
               color="primary"
-              variant="ghost"
-              size="sm"
-              class="!text-primary/80 hover:!bg-primary/5"
+              variant="solid"
+              size="md"
+              icon="i-heroicons-lock-closed"
+              class="font-medium rounded-lg px-5 shadow-sm transition-transform hover:scale-105"
             >
               Acesso
             </UButton>
