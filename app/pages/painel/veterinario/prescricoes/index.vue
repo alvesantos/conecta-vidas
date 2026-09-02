@@ -13,14 +13,14 @@ interface PrescriptionRow {
 const { api } = useApi();
 const toast = useToast();
 
-const prescriptions = ref<PrescriptionRow[]>([]);
+const rows = ref<PrescriptionRow[]>([]);
 const pending = ref(true);
 const errorMsg = ref('');
 
 async function loadPrescriptions() {
   pending.value = true;
   try {
-    prescriptions.value = await api<PrescriptionRow[]>('/vet/prescriptions');
+    rows.value = await api<PrescriptionRow[]>('/vet/prescriptions');
   } catch {
     errorMsg.value = 'Erro ao carregar prescrições.';
   } finally {
@@ -95,7 +95,7 @@ async function removePrescription(id: string) {
   errorMsg.value = '';
   try {
     await api(`/vet/prescriptions/${id}`, { method: 'DELETE' });
-    prescriptions.value = prescriptions.value.filter((p) => p.id !== id);
+    rows.value = rows.value.filter((p) => p.id !== id);
     toast.add({ title: 'Prescrição removida', color: 'success' });
   } catch {
     toast.add({ title: 'Erro', description: 'Erro ao remover a prescrição.', color: 'error' });
@@ -110,88 +110,38 @@ function formatDate(dateStr: string) {
   const [year, month, day] = dateStr.slice(0, 10).split('-');
   return `${day}/${month}/${year}`;
 }
-
-function excerpt(text: string) {
-  return text.length > 80 ? `${text.slice(0, 80)}...` : text;
-}
-
-const columns = [
-  { accessorKey: 'date', header: 'Data' },
-  { accessorKey: 'responsible_name', header: 'Responsável' },
-  { accessorKey: 'pet_name', header: 'Pet' },
-  { accessorKey: 'content', header: 'Prescrição' },
-  { id: 'actions', header: '' },
-];
 </script>
 
 <template>
-  <div>
-    <div class="flex items-center justify-between mb-6">
+  <div class="mx-auto max-w-5xl space-y-6">
+    <div class="flex items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Prescrições</h1>
-        <p class="text-gray-500 text-sm mt-1">Crie e consulte as prescrições emitidas</p>
+        <h1 class="text-2xl font-bold text-body-strong">Prescrições veterinárias</h1>
+        <p class="text-sm text-body-muted">Prescrições emitidas para os pets.</p>
       </div>
-      <UButton
-        label="Nova Prescrição"
-        icon="i-heroicons-plus"
-        color="primary"
-
-        to="/painel/veterinario/prescricoes/nova"
-      />
+      <UButton to="/painel/veterinario/prescricoes/nova" label="Nova prescrição" icon="i-heroicons-plus" />
     </div>
 
-    <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" class="mb-4" />
+    <UAlert v-if="errorMsg" color="error" variant="soft" :description="errorMsg" />
 
-    <div class="bg-white rounded-xl shadow">
-      <UTable :data="prescriptions" :columns="columns" :loading="pending" class="w-full">
-        <template #date-cell="{ row }">
-          <span class="text-gray-800">{{ formatDate(row.original.date) }}</span>
-        </template>
-
-        <template #responsible_name-cell="{ row }">
-          <span class="font-medium text-gray-800">{{ row.original.responsible_name }}</span>
-        </template>
-
-        <template #pet_name-cell="{ row }">
-          <span class="text-gray-600">{{ row.original.pet_name || '—' }}</span>
-        </template>
-
-        <template #content-cell="{ row }">
-          <span class="text-gray-600">{{ excerpt(row.original.content) }}</span>
-        </template>
-
-        <template #actions-cell="{ row }">
-          <div class="flex justify-end gap-2">
-            <UButton
-              size="xs"
-              variant="soft"
-              color="primary"
-              icon="i-heroicons-arrow-down-tray"
-              label="Baixar PDF"
-
-              :loading="downloadingId === row.original.id"
-              @click="downloadPdf(row.original.id)"
-            />
-            <UButton
-              size="xs"
-              variant="soft"
-              color="error"
-              icon="i-heroicons-trash"
-              :loading="deletingId === row.original.id"
-              title="Remover prescrição"
-              @click="confirmDeleteId = row.original.id"
-            />
+    <USkeleton v-if="pending" class="h-40 rounded-xl" />
+    <div v-else-if="rows.length" class="grid gap-4 md:grid-cols-2">
+      <UCard v-for="row in rows" :key="row.id">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-semibold text-body-strong">{{ row.responsible_name }}</p>
+            <p class="text-xs text-body-muted">{{ row.pet_name || 'Pet não informado' }}</p>
           </div>
-        </template>
-
-        <template #empty>
-          <div class="flex flex-col items-center justify-center py-12 text-gray-400">
-            <UIcon name="i-heroicons-document-text" class="size-10 mb-2" />
-            <p class="text-sm">Nenhuma prescrição emitida ainda.</p>
+          <div class="flex gap-2">
+            <UButton size="xs" variant="ghost" color="primary" icon="i-heroicons-arrow-down-tray" :loading="downloadingId === row.id" @click="downloadPdf(row.id)" />
+            <UButton size="xs" variant="ghost" color="error" icon="i-heroicons-trash" :loading="deletingId === row.id" @click="confirmDeleteId = row.id" />
           </div>
-        </template>
-      </UTable>
+        </div>
+        <p class="mt-2 line-clamp-3 whitespace-pre-line text-sm text-body-muted">{{ row.content }}</p>
+        <p class="mt-4 text-xs text-body-muted">{{ formatDate(row.date) }}</p>
+      </UCard>
     </div>
+    <UCard v-else><div class="py-10 text-center text-body-muted">Nenhuma prescrição emitida.</div></UCard>
 
     <!-- Confirmação de remoção -->
     <Teleport to="body">

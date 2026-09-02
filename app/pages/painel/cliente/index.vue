@@ -145,6 +145,33 @@ function profileSubtitle(profile: (typeof profiles.value)[number]) {
   return profile.kind === 'humana' ? 'Dependente · Humano' : 'Pet · Veterinário'
 }
 
+
+const queueOpen = ref(false)
+const queueTime = ref(0)
+const queueKind = ref<'humana'|'veterinaria'>('humana')
+let queueTimer: any
+
+const startQueue = (kind: 'humana' | 'veterinaria') => {
+  queueKind.value = kind
+  queueOpen.value = true
+  queueTime.value = 0
+  clearInterval(queueTimer)
+  queueTimer = setInterval(() => {
+    queueTime.value++
+  }, 1000)
+}
+const stopQueue = () => {
+  queueOpen.value = false
+  clearInterval(queueTimer)
+}
+onUnmounted(() => clearInterval(queueTimer))
+
+const formatQueueTime = computed(() => {
+  const m = Math.floor(queueTime.value / 60).toString().padStart(2, '0')
+  const s = (queueTime.value % 60).toString().padStart(2, '0')
+  return `${m}:${s}`
+})
+
 onMounted(loadDashboard)
 </script>
 
@@ -156,7 +183,7 @@ onMounted(loadDashboard)
         <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">Olá, {{ firstName }}</h1>
         <p class="mt-1 text-sm text-body-muted">Cuidados de hoje para {{ activeProfile.label }}.</p>
       </div>
-      <UButton label="Conecta" icon="i-heroicons-plus" size="lg" class="hidden text-white sm:flex" :style="{ backgroundColor: 'var(--portal-accent)' }" @click="showConecta" />
+      
     </header>
 
     <UAlert v-if="errorMsg" color="warning" variant="soft" :description="errorMsg" />
@@ -171,14 +198,35 @@ onMounted(loadDashboard)
       </div>
     </section>
 
+    
     <section class="rounded-2xl bg-[#01193A] p-5 text-white shadow-sm sm:p-6">
-      <p class="text-sm font-medium text-white/70">Novo atendimento</p>
-      <h2 class="mt-1 text-xl font-bold sm:text-2xl">Quem vamos cuidar hoje?</h2>
-      <div class="mt-5 grid gap-3 sm:grid-cols-2">
-        <button type="button" class="flex items-center gap-4 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('humana')"><UIcon name="i-mdi-doctor" class="size-7" /><span><strong class="block">Humano</strong><span class="text-xs text-gray-600">Consulta médica</span></span><UIcon name="i-heroicons-arrow-right" class="ml-auto size-5" /></button>
-        <button type="button" class="flex items-center gap-4 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('veterinaria')"><UIcon name="i-mdi-paw" class="size-7" /><span><strong class="block">Pet</strong><span class="text-xs text-gray-600">{{ pets.length ? 'Consulta veterinária' : 'Cadastre um pet' }}</span></span><UIcon name="i-heroicons-arrow-right" class="ml-auto size-5" /></button>
+      <h2 class="text-xl font-bold sm:text-2xl">Solicite</h2>
+      <p class="mt-1 text-sm font-medium text-white/70">Atendimentos rápidos ou agendamentos comuns.</p>
+      <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        
+        <button type="button" class="flex flex-col gap-2 rounded-xl bg-red-500 p-4 text-left text-white shadow-lg transition hover:-translate-y-0.5 border border-red-400" @click="startQueue('humana')">
+          <div class="flex w-full items-center justify-between"><UIcon name="i-heroicons-bolt" class="size-7" /><UIcon name="i-heroicons-arrow-right" class="size-5" /></div>
+          <span><strong class="block text-lg">Pronto Atendimento para Humano (Urgente)</strong><span class="text-xs text-red-100">Um de nossos médicos irá se prontificar o quanto antes.</span></span>
+        </button>
+
+        <button v-if="pets.length > 0" type="button" class="flex flex-col gap-2 rounded-xl bg-orange-500 p-4 text-left text-white shadow-lg transition hover:-translate-y-0.5 border border-orange-400" @click="startQueue('veterinaria')">
+          <div class="flex w-full items-center justify-between"><UIcon name="i-mdi-paw" class="size-7" /><UIcon name="i-heroicons-arrow-right" class="size-5" /></div>
+          <span><strong class="block text-lg">Pronto Atendimento para Animais (Urgente)</strong><span class="text-xs text-orange-100">Um veterinário irá se prontificar o quanto antes.</span></span>
+        </button>
+
+        <button type="button" class="flex flex-col gap-2 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('humana')">
+          <div class="flex w-full items-center justify-between"><UIcon name="i-mdi-doctor" class="size-7" /><UIcon name="i-heroicons-arrow-right" class="size-5" /></div>
+          <span><strong class="block text-lg">Atendimento Humano</strong><span class="text-xs text-gray-500">Agendar consulta médica comum.</span></span>
+        </button>
+
+        <button v-if="pets.length > 0" type="button" class="flex flex-col gap-2 rounded-xl bg-white p-4 text-left text-[#01193A] transition hover:-translate-y-0.5" @click="schedule('veterinaria')">
+          <div class="flex w-full items-center justify-between"><UIcon name="i-mdi-paw" class="size-7" /><UIcon name="i-heroicons-arrow-right" class="size-5" /></div>
+          <span><strong class="block text-lg">Atendimento Veterinário</strong><span class="text-xs text-gray-500">Agendar consulta veterinária comum.</span></span>
+        </button>
+
       </div>
     </section>
+
 
     <section v-if="pending" class="grid gap-4 lg:grid-cols-3"><USkeleton v-for="n in 3" :key="n" class="h-36 rounded-2xl" /></section>
     <section v-else class="grid gap-4 lg:grid-cols-3">
