@@ -23,24 +23,36 @@ interface BirthdayPet {
   owner_email?: string | null;
 }
 
+interface BirthdayHuman {
+  id: string;
+  name: string;
+  contact?: string | null;
+  relationship: string;
+  birth_date: string;
+  type: string;
+}
+
 const users = ref<AdminUserRow[]>([]);
 const pets = ref<PetRow[]>([]);
 const plans = ref<PlanRow[]>([]);
 const birthdayPets = ref<BirthdayPet[]>([]);
+const birthdayHumans = ref<BirthdayHuman[]>([]);
 const pending = ref(true);
 
 onMounted(async () => {
   try {
-    const [u, p, pl, bp] = await Promise.all([
+    const [u, p, pl, bp, bh] = await Promise.all([
       api<AdminUserRow[]>('/admin/users'),
       api<PetRow[]>('/admin/pets'),
       api<PlanRow[]>('/admin/plans'),
       api<BirthdayPet[]>('/admin/pets/birthdays'),
+      api<BirthdayHuman[]>('/admin/users/birthdays'),
     ]);
     users.value = u;
     pets.value = p;
     plans.value = pl;
     birthdayPets.value = bp;
+    birthdayHumans.value = bh;
   } finally {
     pending.value = false;
   }
@@ -64,12 +76,19 @@ function calcAge(dateStr: string) {
 
 const currentMonthName = new Date().toLocaleDateString('pt-BR', { month: 'long' });
 
-const birthdayColumns = [
+const petBirthdayColumns = [
   { accessorKey: 'name', header: 'Nome' },
   { accessorKey: 'breed', header: 'Raça' },
   { id: 'age', accessorFn: (row: BirthdayPet) => calcAge(row.birth_date), header: 'Idade' },
   { accessorKey: 'owner_name', header: 'Responsável' },
   { accessorKey: 'owner_email', header: 'E-mail do Responsável' },
+];
+
+const humanBirthdayColumns = [
+  { accessorKey: 'name', header: 'Nome' },
+  { id: 'age', accessorFn: (row: BirthdayHuman) => calcAge(row.birth_date), header: 'Idade' },
+  { accessorKey: 'relationship', header: 'Vínculo' },
+  { accessorKey: 'contact', header: 'Contato (E-mail/Tel)' },
 ];
 </script>
 
@@ -151,16 +170,17 @@ const birthdayColumns = [
     </div>
 
     <div v-if="!pending" class="mt-8 grid grid-cols-12 gap-4">
-      <div class="col-span-12 md:col-span-6 bg-white rounded-xl shadow">
+      <!-- Tabela Pets -->
+      <div class="col-span-12 xl:col-span-6 bg-white rounded-xl shadow">
         <div class="flex items-center gap-2 p-6 pb-4 border-b border-gray-100">
           <UIcon name="i-heroicons-cake" class="size-5 text-amber-500" />
-          <h2 class="font-semibold text-gray-800 capitalize">Aniversariantes de {{ currentMonthName }}</h2>
+          <h2 class="font-semibold text-gray-800 capitalize">Pets Aniversariantes de {{ currentMonthName }}</h2>
           <UBadge :label="String(birthdayPets.length)" color="amber" variant="subtle" class="ml-auto" />
         </div>
 
         <UTable
           :data="birthdayPets"
-          :columns="birthdayColumns"
+          :columns="petBirthdayColumns"
           class="w-full"
         >
           <template #name-cell="{ row }">
@@ -181,7 +201,38 @@ const birthdayColumns = [
           <template #empty>
             <div class="flex flex-col items-center justify-center py-12 text-gray-400">
               <UIcon name="i-heroicons-cake" class="size-10 mb-2" />
-              <p class="text-sm">Nenhum aniversariante em {{ currentMonthName }}</p>
+              <p class="text-sm">Nenhum pet aniversariante em {{ currentMonthName }}</p>
+            </div>
+          </template>
+        </UTable>
+      </div>
+
+      <!-- Tabela Humanos -->
+      <div class="col-span-12 xl:col-span-6 bg-white rounded-xl shadow">
+        <div class="flex items-center gap-2 p-6 pb-4 border-b border-gray-100">
+          <UIcon name="i-heroicons-gift" class="size-5 text-indigo-500" />
+          <h2 class="font-semibold text-gray-800 capitalize">Humanos Aniversariantes de {{ currentMonthName }}</h2>
+          <UBadge :label="String(birthdayHumans.length)" color="indigo" variant="subtle" class="ml-auto" />
+        </div>
+
+        <UTable
+          :data="birthdayHumans"
+          :columns="humanBirthdayColumns"
+          class="w-full"
+        >
+          <template #name-cell="{ row }">
+            <div class="flex items-center gap-3">
+              <div class="size-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                <UIcon name="i-heroicons-user" class="size-4 text-indigo-500" />
+              </div>
+              <span class="font-medium text-gray-800">{{ row.original.name }}</span>
+            </div>
+          </template>
+
+          <template #empty>
+            <div class="flex flex-col items-center justify-center py-12 text-gray-400">
+              <UIcon name="i-heroicons-gift" class="size-10 mb-2" />
+              <p class="text-sm">Nenhum humano aniversariante em {{ currentMonthName }}</p>
             </div>
           </template>
         </UTable>
