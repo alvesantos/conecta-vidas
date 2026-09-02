@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Plan } from '../../interfaces/plans';
 
 definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
@@ -24,7 +23,6 @@ const { api } = useApi();
 const { user: me } = useAuth();
 
 const users = ref<AdminUserRow[]>([]);
-const plans = ref<Plan[]>([]);
 const pending = ref(true);
 const errorMsg = ref('');
 
@@ -40,16 +38,10 @@ async function loadUsers() {
   }
 }
 
-async function loadPlans() {
-  try {
-    plans.value = await api<Plan[]>('/admin/plans');
-  } catch {
-    plans.value = [];
-  }
 }
 
 onMounted(async () => {
-  await Promise.all([loadUsers(), loadPlans()]);
+  await loadUsers();
 });
 
 // --- Editar usuário ---
@@ -125,55 +117,6 @@ async function confirmDelete() {
   }
 }
 
-// --- Planos ---
-const planOpen = ref(false);
-const planTarget = ref<AdminUserRow | null>(null);
-const planSaving = ref(false);
-const planError = ref('');
-
-function openPlanModal(row: AdminUserRow) {
-  planTarget.value = row;
-  planError.value = '';
-  planOpen.value = true;
-}
-
-async function assignPlan(plan: Plan) {
-  if (!planTarget.value) return;
-  planSaving.value = true;
-  planError.value = '';
-  try {
-    await api(`/admin/users/${planTarget.value.id}/subscription`, {
-      method: 'POST',
-      body: { plan_id: plan.id },
-    });
-    planOpen.value = false;
-    await loadUsers();
-  } catch (err: unknown) {
-    const fetchErr = err as { data?: { error?: string } };
-    planError.value = fetchErr?.data?.error ?? 'Erro ao atribuir plano.';
-  } finally {
-    planSaving.value = false;
-  }
-}
-
-async function clearPlan() {
-  if (!planTarget.value) return;
-  planSaving.value = true;
-  planError.value = '';
-  try {
-    await api(`/admin/users/${planTarget.value.id}/subscription`, {
-      method: 'DELETE',
-    });
-    planOpen.value = false;
-    await loadUsers();
-  } catch (err: unknown) {
-    const fetchErr = err as { data?: { error?: string } };
-    planError.value = fetchErr?.data?.error ?? 'Erro ao remover plano.';
-  } finally {
-    planSaving.value = false;
-  }
-}
-
 function typeLabel(type: AdminUserRow['type']) {
   if (type === 'admin') return 'Administrador';
   if (type === 'medico') return 'Médico';
@@ -186,8 +129,7 @@ const columns = [
   { accessorKey: 'email', header: 'E-mail' },
   { accessorKey: 'type', header: 'Tipo' },
   { accessorKey: 'status', header: 'Status' },
-  { accessorKey: 'plan_title', header: 'Plano' },
-  { id: 'actions', header: '' },
+    { id: 'actions', header: '' },
 ];
 </script>
 
@@ -238,15 +180,6 @@ const columns = [
           />
         </template>
 
-        <template #plan_title-cell="{ row }">
-          <UBadge
-            :label="row.original.plan_title || 'Free'"
-            :color="row.original.plan_title ? 'success' : 'neutral'"
-            variant="subtle"
-            class="cursor-pointer"
-            @click="openPlanModal(row.original)"
-          />
-        </template>
 
         <template #actions-cell="{ row }">
           <div class="flex justify-end">
@@ -337,57 +270,5 @@ const columns = [
       </template>
     </UModal>
 
-    <!-- Modal Plano -->
-    <UModal v-model:open="planOpen">
-      <template #content>
-        <div class="p-6 flex flex-col gap-4">
-          <h3 class="text-lg font-semibold text-gray-800">
-            Plano de {{ planTarget?.name }}
-          </h3>
-          <p v-if="planTarget?.plan_title" class="text-sm text-gray-600">
-            Plano atual: <strong>{{ planTarget.plan_title }}</strong>
-          </p>
-          <p v-else class="text-sm text-gray-600">
-            Este usuário está no plano <strong>Free</strong>.
-          </p>
-
-          <UAlert v-if="planError" color="error" variant="soft" :description="planError" />
-
-          <div class="flex flex-col gap-2">
-            <button
-              v-for="plan in plans"
-              :key="plan.id"
-              class="flex items-center justify-between border rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors text-left"
-              :class="planTarget?.plan_id === plan.id ? 'border-accent bg-accent/5' : 'border-gray-200'"
-              :disabled="planSaving"
-              @click="assignPlan(plan)"
-            >
-              <div>
-                <p class="font-medium text-gray-800">{{ plan.title }}</p>
-                <p class="text-xs text-gray-500">
-                  {{ Number(plan.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }} / mês
-                </p>
-              </div>
-              <UIcon
-                v-if="planTarget?.plan_id === plan.id"
-                name="i-heroicons-check-circle"
-                class="size-6 text-accent"
-              />
-            </button>
-          </div>
-
-          <div class="flex justify-between gap-2 mt-2">
-            <UButton
-              variant="ghost"
-              color="error"
-              label="Remover plano (Free)"
-              :disabled="!planTarget?.plan_id || planSaving"
-              @click="clearPlan"
-            />
-            <UButton variant="outline" label="Fechar" @click="planOpen = false" />
-          </div>
-        </div>
-      </template>
-    </UModal>
   </div>
 </template>

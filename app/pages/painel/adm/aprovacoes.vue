@@ -110,25 +110,25 @@ async function setStatus(id: string, status: 'active' | 'rejected') {
         </template>
 
         <template #actions-cell="{ row }">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-3">
             <UButton
-              size="sm"
+              size="md"
               color="green"
-              icon="i-heroicons-check-circle"
-              :loading="isUpdating"
+              variant="solid"
+              icon="i-heroicons-check"
+              class="rounded-full px-4 font-semibold shadow-sm transition-transform hover:scale-105 bg-green-500 hover:bg-green-600 text-white"
               @click="setStatus(row.original.id, 'active')"
             >
               Aprovar
             </UButton>
             <UButton
-              size="sm"
+              size="md"
               color="red"
-              variant="soft"
-              icon="i-heroicons-x-circle"
+              variant="solid"
+              icon="i-heroicons-x-mark"
               :loading="isUpdating"
               @click="setStatus(row.original.id, 'rejected')"
-            >
-              Rejeitar
+              Reprovar
             </UButton>
           </div>
         </template>
