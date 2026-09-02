@@ -2,6 +2,7 @@
 definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'adm' });
 
 const { api } = useApi();
+const config = useRuntimeConfig();
 
 interface AdminUserRow {
   id: string;
@@ -66,7 +67,7 @@ const totalVets = computed(() => users.value.filter((u) => u.type === 'veterinar
 const totalSubscribed = computed(() => users.value.filter((u) => !!u.plan_title).length);
 
 function calcAge(dateStr: string) {
-  const birth = new Date(dateStr + 'T00:00:00');
+  const birth = new Date(dateStr.slice(0, 10) + 'T12:00:00Z');
   const now = new Date();
   let age = now.getFullYear() - birth.getFullYear();
   const m = now.getMonth() - birth.getMonth();
@@ -154,7 +155,7 @@ const humanBirthdayColumns = [
             <div class="flex items-center gap-3">
               <img
                 v-if="row.original.avatar_url"
-                :src="row.original.avatar_url"
+                :src="row.original.avatar_url.startsWith('http') ? row.original.avatar_url : config.public.apiBase.replace('/api', '') + row.original.avatar_url"
                 :alt="row.original.name"
                 class="size-8 rounded-full object-cover shrink-0"
               />

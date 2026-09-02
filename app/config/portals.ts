@@ -126,8 +126,6 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       { label: 'Gestão', items: [
         { label: 'Planos', to: '/painel/adm/planos', icon: 'i-heroicons-credit-card' },
         { label: 'Financeiro', to: '/painel/adm/financeiro', icon: 'i-heroicons-banknotes' },
-        { label: 'Relatórios', to: '/painel/adm/relatorios', icon: 'i-heroicons-chart-bar' },
-        { label: 'Configurações', to: '/painel/adm/configuracoes', icon: 'i-heroicons-cog-6-tooth' },
       ] },
     ],
   },
