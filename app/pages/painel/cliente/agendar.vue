@@ -17,8 +17,8 @@ const specialtyId = ref('')
 const slotKey = ref('')
 const notes = ref('')
 const pending = ref(false)
-const specialist = computed(() => route.query.atendimento === 'especialista')
 const urgent = computed(() => route.query.atendimento === 'pronto')
+const specialist = computed(() => !urgent.value)
 const careMode = computed<'pronto' | 'especialista'>(() => urgent.value ? 'pronto' : 'especialista')
 interface Quote {
   hasActivePlan: boolean
@@ -39,34 +39,6 @@ const specialtyOptions = computed(() => specialties.value.map(item => ({ label: 
 const slotOptions = computed(() => slots.value.map(item => ({ label: `${item.time} · ${item.professional_name}`, value: `${item.professional_id}|${item.time}` })))
 
 
-watch(kind, async (newKind) => {
-  specialtyId.value = ''
-  if (!specialist.value) return
-  try {
-    specialties.value = await api(`/scheduling/specialties?kind=${newKind}`)
-  } catch (err) {
-    console.error(err)
-    specialties.value = []
-  }
-}, { immediate: true })
-
-watch([specialtyId, date], async ([s, d]) => {
-  if (!s || !d || !specialist.value) {
-    slots.value = []
-    slotKey.value = ''
-    return
-  }
-  slotsPending.value = true
-  slotKey.value = ''
-  try {
-    slots.value = await api(`/scheduling/slots?specialty_id=${s}&date=${d}`)
-  } catch (err) {
-    console.error(err)
-    slots.value = []
-  } finally {
-    slotsPending.value = false
-  }
-})
 
 
 const petOptions = computed(() => pets.value.map(pet => ({
