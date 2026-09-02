@@ -33,7 +33,7 @@ async function save() {
   saving.value = true
   try {
     await api('/scheduling/mine', { method: 'PUT', body: { specialty_ids: selected.value, availability: availability.value } })
-    toast.add({ title: 'Agenda atualizada', description: 'Os novos horários já podem ser escolhidos pelos pacientes.', color: 'success' })
+    toast.add({ title: 'Disponibilidade atualizada', description: 'Os novos horários já podem ser escolhidos pelos pacientes.', color: 'success' })
   } catch (err) {
     toast.add({ title: 'Não foi possível salvar', description: (err as { data?: { error?: string } }).data?.error, color: 'error' })
   } finally { saving.value = false }
@@ -43,7 +43,7 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-5xl space-y-6">
-    <div><h1 class="text-2xl font-bold text-body-strong">Minha agenda</h1><p class="mt-1 text-sm text-body-muted">Escolha suas especialidades e os períodos recorrentes de atendimento.</p></div>
+    <div><h1 class="text-2xl font-bold text-body-strong">Minha disponibilidade</h1><p class="mt-1 text-sm text-body-muted">Escolha suas especialidades e os períodos recorrentes de atendimento.</p></div>
     <USkeleton v-if="pending" class="h-80 rounded-xl" />
     <template v-else>
       <UCard>
@@ -67,7 +67,7 @@ onMounted(load)
         </div>
         <p v-else class="py-8 text-center text-sm text-body-muted">Adicione ao menos um período para aparecer no agendamento.</p>
       </UCard>
-      <div class="flex justify-end"><UButton label="Salvar agenda" icon="i-heroicons-check" :loading="saving" @click="save" /></div>
+      <div class="flex justify-end"><UButton label="Salvar disponibilidade" icon="i-heroicons-check" :loading="saving" @click="save" /></div>
     </template>
   </div>
 </template>

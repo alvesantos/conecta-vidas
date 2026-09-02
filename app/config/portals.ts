@@ -42,7 +42,6 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
         { label: 'Consultas', to: '/painel/cliente/consultas', icon: 'i-heroicons-calendar-days' },
         { label: 'Prontuários', to: '/painel/cliente/prontuarios', icon: 'i-heroicons-clipboard-document-list' },
         { label: 'Receitas', to: '/painel/cliente/receitas', icon: 'i-heroicons-document-text' },
-        { label: 'Exames', to: '/painel/cliente/exames', icon: 'i-heroicons-beaker' },
       ] },
       { label: 'Cadastros', items: [
         { label: 'Perfil', to: '/painel/cliente/perfil', icon: 'i-heroicons-identification' },
@@ -67,13 +66,12 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
     nav: [
       { label: null, items: [{ label: 'Dashboard', to: '/painel/medico', icon: 'i-heroicons-squares-2x2' }] },
       { label: 'Atendimento', items: [
-        { label: 'Agenda', to: '/painel/medico/agenda', icon: 'i-heroicons-calendar-days' },
         { label: 'Consultas', to: '/painel/medico/consultas', icon: 'i-mdi-stethoscope' },
         { label: 'Prontuários', to: '/painel/medico/prontuarios', icon: 'i-heroicons-clipboard-document-list' },
+        { label: 'Disponibilidade', to: '/painel/medico/agenda', icon: 'i-heroicons-calendar-days' },
       ] },
       { label: 'Documentos', items: [
         { label: 'Receitas', to: '/painel/medico/receitas', icon: 'i-heroicons-document-text' },
-        { label: 'Exames', to: '/painel/medico/exames', icon: 'i-heroicons-beaker' },
       ] },
       { label: null, items: [{ label: 'Histórico', to: '/painel/medico/historico', icon: 'i-heroicons-clock' }] },
     ],
@@ -90,17 +88,15 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
     nav: [
       { label: null, items: [{ label: 'Dashboard', to: '/painel/veterinario', icon: 'i-heroicons-squares-2x2' }] },
       { label: 'Atendimento', items: [
-        { label: 'Agenda', to: '/painel/veterinario/agenda', icon: 'i-heroicons-calendar-days' },
         { label: 'Consultas', to: '/painel/veterinario/consultas', icon: 'i-mdi-stethoscope' },
         { label: 'Prontuários', to: '/painel/veterinario/prontuarios', icon: 'i-heroicons-clipboard-document-list' },
+        { label: 'Disponibilidade', to: '/painel/veterinario/agenda', icon: 'i-heroicons-calendar-days' },
       ] },
       { label: 'Documentos', items: [
         { label: 'Prescrições', to: '/painel/veterinario/prescricoes', icon: 'i-heroicons-document-text' },
-        { label: 'Exames', to: '/painel/veterinario/exames', icon: 'i-heroicons-beaker' },
       ] },
       { label: 'Conta', items: [
-        { label: 'Carteira', to: '/painel/veterinario/carteira', icon: 'i-heroicons-banknotes' },
-        { label: 'Configurações', to: '/painel/veterinario/configuracoes', icon: 'i-heroicons-cog-6-tooth' },
+        { label: 'Financeiro', to: '/painel/veterinario/financeiro', icon: 'i-heroicons-banknotes' },
       ] },
     ],
   },
