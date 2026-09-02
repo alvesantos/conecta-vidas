@@ -97,7 +97,9 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       ] },
       { label: 'Conta', items: [
         { label: 'Financeiro', to: '/painel/veterinario/financeiro', icon: 'i-heroicons-banknotes' },
+        { label: 'Configurações', to: '/painel/veterinario/configuracoes', icon: 'i-heroicons-cog-6-tooth' },
       ] },
+      { label: null, items: [{ label: 'Histórico', to: '/painel/veterinario/historico', icon: 'i-heroicons-clock' }] },
     ],
   },
   adm: {

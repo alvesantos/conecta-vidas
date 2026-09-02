@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { format } from 'date-fns'
 
-definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'medico' })
+definePageMeta({ layout: 'painel', middleware: 'painel', portal: 'veterinario' })
 
 const { api } = useApi()
 const pending = ref(true)
@@ -12,7 +12,7 @@ const pageCount = 10
 
 onMounted(async () => {
   try {
-    const data = await api<any[]>('/medico/consultations')
+    const data = await api<any[]>('/vet/consultations')
     // Optionally filter only past/realizada, but let's show all
     consultations.value = data
   } catch (error) {
@@ -24,7 +24,7 @@ onMounted(async () => {
 
 const columns = [
   { key: 'date', label: 'Data e Hora' },
-  { key: 'patient_name', label: 'Paciente' },
+  { key: 'tutor_name', label: 'Paciente' },
   { key: 'status', label: 'Status' },
 ]
 
@@ -67,8 +67,9 @@ const statusColor = (status: string) => {
           <template #date-data="{ row }">
             {{ formatDate(row.date, row.time) }}
           </template>
-          <template #patient_name-data="{ row }">
-            <span class="font-medium text-gray-900">{{ row.patient_name }}</span>
+          <template #tutor_name-data="{ row }">
+            <span class="font-medium text-gray-900">{{ row.tutor_name }}</span>
+            <span class="text-xs text-gray-500 ml-1" v-if="row.pet_name">({{ row.pet_name }})</span>
           </template>
           <template #status-data="{ row }">
             <UBadge :color="statusColor(row.status)" variant="subtle" class="capitalize">
