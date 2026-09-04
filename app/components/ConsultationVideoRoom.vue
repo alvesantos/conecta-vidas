@@ -131,10 +131,10 @@ onBeforeUnmount(() => {
         <UButton label="Tentar novamente" size="xs" color="error" variant="outline" @click="connect" />
       </template>
     </UAlert>
-    <USkeleton v-if="pending" class="h-[55vh] min-h-96 rounded-xl" />
+    <USkeleton v-if="pending" class="h-[80vh] min-h-[560px] rounded-xl" />
     <div
       ref="container"
-      class="h-[55vh] min-h-96 overflow-hidden rounded-xl bg-gray-950"
+      class="h-[80vh] min-h-[560px] overflow-hidden rounded-xl bg-gray-950"
       :class="{ hidden: pending || errorMessage }"
     />
     <p class="text-xs text-body-muted">

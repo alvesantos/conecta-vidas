@@ -6,7 +6,7 @@ const consultationId = computed(() => String(route.params.id))
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl space-y-5">
+  <div class="mx-auto max-w-[1600px] space-y-5">
     <div>
       <p class="text-sm font-semibold text-[var(--portal-accent)]">Atendimento online</p>
       <h1 class="mt-1 text-2xl font-bold text-body-strong">Sala de consulta</h1>
