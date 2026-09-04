@@ -5,7 +5,7 @@ const { user } = useAuth();
 
 
 const { api } = useApi();
-const stats = ref({ today: 0, week: 0, totalClients: 0, pendingRecords: 0 });
+const stats = ref({ today: 0, totalClients: 0, pendingConsultations: 0 });
 const recentConsultations = ref<any[]>([]);
 const pending = ref(true);
 
@@ -28,11 +28,11 @@ onMounted(async () => {
     <div v-if="pending" class="py-12 flex justify-center"><UIcon name="i-heroicons-arrow-path" class="size-8 animate-spin text-gray-400" /></div>
     <div v-else class="mb-8">
       <h1 class="text-2xl font-bold text-gray-800">Olá, Dr(a). {{ user?.name?.split(' ')[0] || 'Médico' }}!</h1>
-      <p class="text-gray-500 text-sm mt-1">Aqui está o resumo dos seus atendimentos de hoje.</p>
+      <p class="text-gray-500 text-sm mt-1">Aqui está o resumo dos seus atendimentos.</p>
     </div>
 
     <!-- Cards de Métricas -->
-    <div v-if="!pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div v-if="!pending" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
         <div class="size-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
           <UIcon name="i-heroicons-calendar-days" class="size-6 text-green-600" />
@@ -42,7 +42,7 @@ onMounted(async () => {
           <p class="text-3xl font-bold text-gray-800">{{ stats.today }}</p>
         </div>
       </div>
-      
+
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
         <div class="size-12 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
           <UIcon name="i-heroicons-users" class="size-6 text-blue-600" />
@@ -54,22 +54,12 @@ onMounted(async () => {
       </div>
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
-        <div class="size-12 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
-          <UIcon name="i-heroicons-chart-bar" class="size-6 text-purple-600" />
-        </div>
-        <div>
-          <p class="text-sm font-medium text-gray-500">Na Semana</p>
-          <p class="text-3xl font-bold text-gray-800">{{ stats.week }}</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
         <div class="size-12 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
           <UIcon name="i-heroicons-clipboard-document-list" class="size-6 text-orange-600" />
         </div>
         <div>
-          <p class="text-sm font-medium text-gray-500">Prontuários Pendentes</p>
-          <p class="text-3xl font-bold text-gray-800">{{ stats.pendingRecords }}</p>
+          <p class="text-sm font-medium text-gray-500">Atendimentos Pendentes</p>
+          <p class="text-3xl font-bold text-gray-800">{{ stats.pendingConsultations }}</p>
         </div>
       </div>
     </div>
