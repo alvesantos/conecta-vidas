@@ -20,7 +20,7 @@ export interface Subscription {
   user_id: string
   plan_id: string
   paid_value: number | string
-  status: 'active' | 'canceled'
+  status: 'pending_payment' | 'active' | 'canceled'
   started_at?: string
   plan_title?: string
   plan_price?: number | string

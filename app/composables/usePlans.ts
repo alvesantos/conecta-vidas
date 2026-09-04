@@ -16,10 +16,9 @@ export function usePlans() {
     return api<Subscription | null>('/subscriptions/me')
   }
 
-  function subscribe(plan_id: string, paid_value = 0) {
-    return api<Subscription>('/subscriptions', {
+  function checkout(plan_id: string) {
+    return api<{ subscriptionId: string; checkoutUrl: string }>(`/patient/plans/${plan_id}/checkout`, {
       method: 'POST',
-      body: { plan_id, paid_value },
     })
   }
 
@@ -39,7 +38,7 @@ export function usePlans() {
     listPublic,
     listAdmin,
     getMySubscription,
-    subscribe,
+    checkout,
     createPlan,
     updatePlan,
     deletePlan,

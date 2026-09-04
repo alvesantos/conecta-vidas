@@ -6,7 +6,7 @@ import { ref, computed, onMounted } from 'vue';
 
 const router = useRouter();
 const { isLoggedIn } = useAuth();
-const { listPublic, getMySubscription, subscribe } = usePlans();
+const { listPublic, getMySubscription, checkout } = usePlans();
 
 const props = defineProps({
   reduced: {
@@ -65,11 +65,12 @@ async function handlePrimaryAction(plan: Plan) {
   loadingAction.value = String(plan.id);
   actionError.value = '';
   try {
-    subscription.value = await subscribe(String(plan.id));
+    const { checkoutUrl } = await checkout(String(plan.id));
+    // Sai do SPA de propósito: o checkout é hospedado pelo próprio Asaas.
+    window.location.href = checkoutUrl;
   } catch (err: unknown) {
     const fetchErr = err as { data?: { error?: string } };
-    actionError.value = fetchErr?.data?.error ?? 'Não foi possível atualizar a assinatura.';
-  } finally {
+    actionError.value = fetchErr?.data?.error ?? 'Não foi possível iniciar o pagamento.';
     loadingAction.value = null;
   }
 }
@@ -78,7 +79,7 @@ function buttonLabel(plan: Plan) {
   if (!isSubscriptionView.value) return 'Adquirir plano';
   if (!isLoggedIn.value) return 'Entrar para assinar';
   if (currentPlanId.value === plan.id) return 'Plano atual';
-  return currentPlanId.value ? 'Trocar para este plano' : 'Adquirir plano';
+  return currentPlanId.value ? 'Trocar para este plano' : 'Assinar (cobrança anual)';
 }
 
 onMounted(async () => {
@@ -253,6 +254,9 @@ onMounted(async () => {
             <span class="text-sm font-medium" :class="index === 2 ? 'text-gray-400' : 'text-gray-500'">/mês</span>
           </p>
           <p class="mt-2 text-sm font-semibold" :class="index === 2 ? 'text-accent' : 'text-primary/80'">{{ plan.focus }}</p>
+          <p v-if="isSubscriptionView" class="mt-1 text-xs" :class="index === 2 ? 'text-gray-400' : 'text-gray-500'">
+            Cobrança anual de {{ (priceOf(plan) * 12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }} · Pix, boleto ou cartão parcelado
+          </p>
         </div>
 
         <button

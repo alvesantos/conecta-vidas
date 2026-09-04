@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? "http://localhost:3001/api",
       maffyStoreUrl: process.env.NUXT_PUBLIC_MAFFY_STORE_URL ?? "https://maffy.com.br",
+      trialVersion: process.env.NUXT_PUBLIC_TRIAL_VERSION === "true",
     },
   },
   devtools: { enabled: true },
