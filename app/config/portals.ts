@@ -73,6 +73,9 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
       { label: 'Documentos', items: [
         { label: 'Receitas', to: '/painel/medico/receitas', icon: 'i-heroicons-document-text' },
       ] },
+      { label: 'Conta', items: [
+        { label: 'Financeiro', to: '/painel/medico/financeiro', icon: 'i-heroicons-banknotes' },
+      ] },
       { label: null, items: [{ label: 'Histórico', to: '/painel/medico/historico', icon: 'i-heroicons-clock' }] },
     ],
   },

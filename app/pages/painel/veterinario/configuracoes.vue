@@ -6,16 +6,6 @@ interface VetProfile {
   name: string;
   cnpj: string;
   email: string;
-  pix_type: string | null;
-  pix_key: string | null;
-  bank_name: string | null;
-  bank_agency: string | null;
-  bank_account_number: string | null;
-  billing_street: string | null;
-  billing_number: string | null;
-  billing_city: string | null;
-  billing_state: string | null;
-  billing_cep: string | null;
 }
 
 const { api } = useApi();
@@ -89,14 +79,6 @@ function formatCnpj(cnpj: string) {
   if (c.length !== 14) return cnpj;
   return `${c.slice(0, 2)}.${c.slice(2, 5)}.${c.slice(5, 8)}/${c.slice(8, 12)}-${c.slice(12)}`;
 }
-
-const pixTypeLabels: Record<string, string> = {
-  cpf: 'CPF',
-  cnpj: 'CNPJ',
-  email: 'E-mail',
-  telefone: 'Telefone',
-  aleatoria: 'Aleatória',
-};
 </script>
 
 <template>
@@ -132,26 +114,6 @@ const pixTypeLabels: Record<string, string> = {
           <div>
             <p class="text-xs text-gray-400 uppercase tracking-wide">E-mail</p>
             <p class="text-gray-800 font-medium">{{ profile.email }}</p>
-          </div>
-          <div v-if="profile.pix_key">
-            <p class="text-xs text-gray-400 uppercase tracking-wide">Chave Pix ({{ pixTypeLabels[profile.pix_type ?? ''] ?? profile.pix_type }})</p>
-            <p class="text-gray-800 font-medium">{{ profile.pix_key }}</p>
-          </div>
-          <div v-if="profile.bank_name">
-            <p class="text-xs text-gray-400 uppercase tracking-wide">Banco</p>
-            <p class="text-gray-800 font-medium">{{ profile.bank_name }}</p>
-          </div>
-          <div v-if="profile.bank_agency">
-            <p class="text-xs text-gray-400 uppercase tracking-wide">Agência / Conta</p>
-            <p class="text-gray-800 font-medium">{{ profile.bank_agency }} / {{ profile.bank_account_number }}</p>
-          </div>
-          <div v-if="profile.billing_city" class="md:col-span-2">
-            <p class="text-xs text-gray-400 uppercase tracking-wide">Endereço</p>
-            <p class="text-gray-800 font-medium">
-              {{ profile.billing_street }}, {{ profile.billing_number }}
-              <template v-if="profile.billing_city"> - {{ profile.billing_city }}/{{ profile.billing_state }}</template>
-              <template v-if="profile.billing_cep"> - CEP {{ profile.billing_cep }}</template>
-            </p>
           </div>
         </div>
       </div>
