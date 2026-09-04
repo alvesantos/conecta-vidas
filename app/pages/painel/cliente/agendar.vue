@@ -17,9 +17,6 @@ const specialtyId = ref('')
 const slotKey = ref('')
 const notes = ref('')
 const pending = ref(false)
-const urgent = computed(() => route.query.atendimento === 'pronto')
-const specialist = computed(() => !urgent.value)
-const careMode = computed<'pronto' | 'especialista'>(() => urgent.value ? 'pronto' : 'especialista')
 interface Quote {
   hasActivePlan: boolean
   planTitle: string | null
@@ -72,7 +69,6 @@ function selectKind(value: 'humana' | 'veterinaria') {
 }
 
 async function loadSpecialties() {
-  if (!specialist.value) return
   specialties.value = await api<Specialty[]>(`/scheduling/specialties?kind=${kind.value}`)
 }
 async function loadSlots() {
@@ -86,7 +82,7 @@ async function loadSlots() {
 async function loadQuote() {
   quotePending.value = true
   try {
-    quote.value = await api<Quote>(`/consultations/quote?kind=${kind.value}&care_mode=${careMode.value}`)
+    quote.value = await api<Quote>(`/consultations/quote?kind=${kind.value}&care_mode=especialista`)
   } finally { quotePending.value = false }
 }
 
@@ -96,7 +92,7 @@ watch(petId, value => {
 watch(dependentId, value => {
   if (kind.value === 'humana') selectProfile(value ? `dependent:${value}` : 'human')
 })
-watch([kind, careMode], loadQuote)
+watch(kind, loadQuote)
 watch([specialtyId, date], loadSlots)
 
 onMounted(async () => {
@@ -107,11 +103,11 @@ onMounted(async () => {
 })
 
 async function submit() {
-  if (!urgent.value && !date.value) {
+  if (!date.value) {
     toast.add({ title: 'Preencha a data', color: 'warning' })
     return
   }
-  if (specialist.value && (!specialtyId.value || !slotKey.value)) {
+  if (!specialtyId.value || !slotKey.value) {
     toast.add({ title: 'Selecione especialidade e horário disponível', color: 'warning' })
     return
   }
@@ -122,9 +118,6 @@ async function submit() {
 
   pending.value = true
   try {
-    const now = new Date()
-    const urgentDate = now.toLocaleDateString('en-CA', { timeZone: 'America/Fortaleza' })
-    const urgentTime = now.toLocaleTimeString('pt-BR', { timeZone: 'America/Fortaleza', hour: '2-digit', minute: '2-digit', hour12: false })
     const [professionalId, selectedTime] = slotKey.value.split('|')
     await api('/consultations', {
       method: 'POST',
@@ -132,17 +125,16 @@ async function submit() {
         kind: kind.value,
         pet_id: kind.value === 'veterinaria' ? petId.value : null,
         dependent_id: kind.value === 'humana' ? dependentId.value || null : null,
-        date: urgent.value ? urgentDate : date.value,
-        time: urgent.value ? urgentTime : selectedTime || time.value,
-        specialty_id: specialist.value ? specialtyId.value : null,
-        professional_id: specialist.value ? professionalId : null,
+        date: date.value,
+        time: selectedTime || time.value,
+        specialty_id: specialtyId.value,
+        professional_id: professionalId,
         notes: notes.value,
-        care_mode: careMode.value,
       },
     })
     toast.add({
-      title: urgent.value ? 'Pronto atendimento solicitado' : 'Consulta agendada',
-      description: urgent.value ? 'Sua solicitação entrou na etapa de atendimento.' : 'Sua solicitação foi enviada.',
+      title: 'Consulta agendada',
+      description: 'Sua solicitação foi enviada.',
       color: 'success',
     })
     await router.push('/painel/cliente/consultas')
@@ -161,9 +153,9 @@ async function submit() {
 <template>
   <div class="mx-auto max-w-4xl space-y-6">
     <div>
-      <p class="text-sm font-medium text-[var(--portal-accent)]">{{ urgent ? 'Atendimento prioritário' : 'Atendimento especializado' }}</p>
-      <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">{{ urgent ? 'Pronto atendimento 24h' : 'Agendar especialista' }}</h1>
-      <p class="mt-2 text-sm text-body-muted">{{ urgent ? 'Confirme o paciente e descreva o que está acontecendo.' : 'Escolha a especialidade, a data e um horário disponível do profissional.' }}</p>
+      <p class="text-sm font-medium text-[var(--portal-accent)]">Atendimento especializado</p>
+      <h1 class="mt-1 text-2xl font-bold text-body-strong sm:text-3xl">Agendar especialista</h1>
+      <p class="mt-2 text-sm text-body-muted">Escolha a especialidade, a data e um horário disponível do profissional.</p>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">
@@ -213,7 +205,7 @@ async function submit() {
         <UFormField v-if="kind === 'veterinaria'" label="Pet *">
           <USelect v-model="petId" :items="petOptions" placeholder="Selecione o pet" class="w-full" size="lg" />
         </UFormField>
-        <div v-if="!urgent" class="space-y-4">
+        <div class="space-y-4">
           <UFormField label="Especialidade *"><USelect v-model="specialtyId" :items="specialtyOptions" placeholder="Selecione a especialidade" class="w-full" size="lg" /></UFormField>
           <div class="grid gap-4 sm:grid-cols-2">
             <UFormField label="Data *"><UInput v-model="date" type="date" :min="today" required class="w-full" size="lg" /></UFormField>
@@ -243,7 +235,7 @@ async function submit() {
         </UFormField>
         <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <UButton to="/painel/cliente" label="Cancelar" variant="outline" size="lg" class="justify-center" />
-          <UButton type="submit" :label="urgent ? 'Solicitar pronto atendimento' : 'Confirmar agendamento'" size="lg" class="justify-center" :loading="pending" />
+          <UButton type="submit" label="Confirmar agendamento" size="lg" class="justify-center" :loading="pending" />
         </div>
       </form>
     </UCard>

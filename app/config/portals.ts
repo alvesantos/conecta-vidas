@@ -123,6 +123,7 @@ export const PORTALS: Record<PortalKey, PortalDef> = {
         { label: 'Veterinários', to: '/painel/adm/veterinarios', icon: 'i-mdi-stethoscope' },
       ] },
       { label: 'Operação', items: [
+        { label: 'Fila de Atendimento', to: '/painel/adm/fila', icon: 'i-heroicons-bolt' },
         { label: 'Consultas', to: '/painel/adm/consultas', icon: 'i-heroicons-calendar-days' },
         { label: 'Pets', to: '/painel/adm/pets', icon: 'i-mdi-paw' },
       ] },

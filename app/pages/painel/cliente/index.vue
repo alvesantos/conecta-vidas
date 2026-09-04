@@ -146,31 +146,19 @@ function profileSubtitle(profile: (typeof profiles.value)[number]) {
 }
 
 
-const queueOpen = ref(false)
-const queueTime = ref(0)
-const queueKind = ref<'humana'|'veterinaria'>('humana')
-let queueTimer: any
-
-const startQueue = (kind: 'humana' | 'veterinaria') => {
-  queueKind.value = kind
-  queueOpen.value = true
-  queueTime.value = 0
-  clearInterval(queueTimer)
-  queueTimer = setInterval(() => {
-    queueTime.value++
-  }, 1000)
+function startQueue(kind: 'humana' | 'veterinaria') {
+  if (kind === 'veterinaria' && !pets.value.length) return router.push('/painel/cliente/pets')
+  const pet = activeProfile.value.petId || pets.value[0]?.id
+  router.push({
+    path: '/painel/cliente/triagem',
+    query: {
+      tipo: kind,
+      atendimento: 'pronto',
+      ...(kind === 'veterinaria' && pet ? { pet } : {}),
+      ...(kind === 'humana' && activeProfile.value.dependentId ? { dependente: activeProfile.value.dependentId } : {}),
+    },
+  })
 }
-const stopQueue = () => {
-  queueOpen.value = false
-  clearInterval(queueTimer)
-}
-onUnmounted(() => clearInterval(queueTimer))
-
-const formatQueueTime = computed(() => {
-  const m = Math.floor(queueTime.value / 60).toString().padStart(2, '0')
-  const s = (queueTime.value % 60).toString().padStart(2, '0')
-  return `${m}:${s}`
-})
 
 onMounted(loadDashboard)
 </script>

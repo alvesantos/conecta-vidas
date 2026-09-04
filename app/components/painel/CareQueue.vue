@@ -11,16 +11,40 @@ const items = ref<Array<{
   pet_name: string | null
   dependent_name: string | null
   notes: string | null
+  triage: { description: string | null; recommendation: string | null; symptoms: { label: string; severity: string }[] } | null
 }>>([])
 const pending = ref(true)
 const calling = ref('')
 let interval: ReturnType<typeof setInterval> | null = null
 const label = computed(() => props.portal === 'medico' ? 'Paciente' : 'Pet')
 
+const available = ref(false)
+const togglingAvailability = ref(false)
+
 async function load() {
   try {
     items.value = await api(`/` + `${props.portal}/queue`)
   } finally { pending.value = false }
+}
+
+async function loadAvailability() {
+  try {
+    const profile = await api<{ available_now: boolean }>(`/${props.portal}/profile`)
+    available.value = Boolean(profile.available_now)
+  } catch { /* silencioso: não bloqueia a fila se o profile falhar */ }
+}
+
+async function toggleAvailability() {
+  togglingAvailability.value = true
+  try {
+    const updated = await api<{ available_now: boolean }>(`/${props.portal}/availability`, {
+      method: 'PATCH',
+      body: { available: !available.value },
+    })
+    available.value = Boolean(updated.available_now)
+  } catch (err) {
+    toast.add({ title: 'Não foi possível atualizar disponibilidade', description: (err as { data?: { error?: string } }).data?.error, color: 'error' })
+  } finally { togglingAvailability.value = false }
 }
 async function call(item: (typeof items.value)[number]) {
   calling.value = item.id
@@ -39,6 +63,7 @@ function waiting(value: string) {
 
 onMounted(() => {
   load()
+  loadAvailability()
   interval = setInterval(load, 10000)
 })
 onBeforeUnmount(() => { if (interval) clearInterval(interval) })
@@ -47,13 +72,41 @@ onBeforeUnmount(() => { if (interval) clearInterval(interval) })
 <template>
   <UCard class="mb-6">
     <template #header>
-      <div class="flex items-center justify-between"><div><p class="text-sm font-semibold text-[var(--portal-accent)]">Pronto atendimento</p><h2 class="text-lg font-bold text-body-strong">Fila aguardando</h2></div><UBadge :label="String(items.length)" color="info" variant="soft" /></div>
+      <div class="flex items-center justify-between gap-3">
+        <div><p class="text-sm font-semibold text-[var(--portal-accent)]">Pronto atendimento</p><h2 class="text-lg font-bold text-body-strong">Fila aguardando</h2></div>
+        <div class="flex items-center gap-2">
+          <UButton
+            :label="available ? 'Disponível' : 'Indisponível'"
+            :color="available ? 'success' : 'neutral'"
+            variant="soft"
+            size="sm"
+            :loading="togglingAvailability"
+            @click="toggleAvailability"
+          />
+          <UBadge :label="String(items.length)" color="info" variant="soft" />
+        </div>
+      </div>
     </template>
     <USkeleton v-if="pending" class="h-20 rounded-xl" />
     <div v-else-if="items.length" class="divide-y divide-gray-200">
       <div v-for="item in items" :key="item.id" class="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
         <span class="flex size-11 shrink-0 items-center justify-center rounded-full" :class="item.priority > 0 ? 'bg-amber-100 text-amber-700' : 'bg-blue-50 text-blue-700'"><UIcon :name="item.priority > 0 ? 'i-heroicons-exclamation-triangle' : (portal === 'medico' ? 'i-heroicons-user' : 'i-mdi-paw')" class="size-6" /></span>
-        <div class="min-w-0 flex-1"><p class="font-semibold text-body-strong">{{ portal === 'medico' ? (item.dependent_name || item.owner_name) : item.pet_name }}</p><p class="text-sm text-body-muted">{{ portal === 'medico' ? 'Titular: ' + item.owner_name : 'Tutor: ' + item.owner_name }} · aguardando {{ waiting(item.joined_at) }}</p><p v-if="item.notes" class="mt-1 truncate text-xs text-body-muted">{{ item.notes }}</p></div>
+        <div class="min-w-0 flex-1">
+          <p class="font-semibold text-body-strong">{{ portal === 'medico' ? (item.dependent_name || item.owner_name) : item.pet_name }}</p>
+          <p class="text-sm text-body-muted">{{ portal === 'medico' ? 'Titular: ' + item.owner_name : 'Tutor: ' + item.owner_name }} · aguardando {{ waiting(item.joined_at) }}</p>
+          <p v-if="item.notes" class="mt-1 truncate text-xs text-body-muted">{{ item.notes }}</p>
+          <div v-if="item.triage?.symptoms?.length" class="mt-1 flex flex-wrap gap-1">
+            <UBadge
+              v-for="symptom in item.triage.symptoms"
+              :key="symptom.label"
+              :label="symptom.label"
+              :color="symptom.severity === 'warning' ? 'warning' : 'neutral'"
+              variant="soft"
+              size="sm"
+            />
+          </div>
+          <p v-if="item.triage?.description" class="mt-1 text-xs text-body-muted">{{ item.triage.description }}</p>
+        </div>
         <UButton :label="`Chamar ${label.toLowerCase()}`" icon="i-heroicons-bell-alert" :loading="calling === item.id" @click="call(item)" />
       </div>
     </div>
